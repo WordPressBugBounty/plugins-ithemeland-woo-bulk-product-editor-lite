@@ -10,7 +10,7 @@ class Filter_Helper
 {
     public static function get_active_filter_data()
     {
-        $search_repository = new SearchRepo();
+        $search_repository = SearchRepo::get_instance();
         $last_filter_data = (isset($search_repository->get_current_data()['last_filter_data'])) ? $search_repository->get_current_data()['last_filter_data'] : null;
         if (!is_null($last_filter_data)) {
             $filter_data = $last_filter_data;

@@ -5,7 +5,6 @@ namespace wcbel\classes\services\export;
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\helpers\Others;
-use wcbel\classes\helpers\Product_Helper;
 use wcbel\classes\repositories\Column;
 use wcbel\classes\repositories\Product;
 use wcbel\classes\repositories\Search;
@@ -83,10 +82,11 @@ class Export_Service
     {
         switch ($this->data['select_type']) {
             case 'all':
-                $search_repository = new Search();
+                $search_repository = Search::get_instance();
                 $last_filter_data = isset($search_repository->get_current_data()['last_filter_data']) ? $search_repository->get_current_data()['last_filter_data'] : null;
                 $product_filter_service = Product_Filter_Service::get_instance();
                 $filtered_products = $product_filter_service->get_filtered_products($last_filter_data, [
+                    'posts_per_page' => -1,
                     'order' => 'ASC',
                     'fields' => 'ids',
                 ]);
@@ -110,11 +110,11 @@ class Export_Service
 
     private function set_columns()
     {
-        $column_repository = new Column();
+        $column_repository = Column::get_instance();
         switch ($this->data['field_type']) {
             case 'all':
                 $product_meta_keys = $this->get_product_meta_keys();
-                $this->columns = (!empty($product_meta_keys) && is_array($product_meta_keys)) ? $column_repository->get_fields() + $product_meta_keys : $column_repository->get_fields();
+                $this->columns = (!empty($product_meta_keys) && is_array($product_meta_keys)) ? $column_repository->get_columns() + $product_meta_keys : $column_repository->get_columns();
                 break;
             case 'visible':
                 $this->columns = $column_repository->get_active_columns()['fields'];
@@ -142,7 +142,7 @@ class Export_Service
                 $attributes = $product_object->get_attributes();
                 if (!empty($attributes) && count($attributes)) {
                     foreach ($attributes as $attribute_name => $attribute) {
-                        if (empty($this->columns[$attribute_name]) && is_a($attribute, 'WC_Product_Attribute')) {
+                        if (empty($this->columns[$attribute_name]) && $this->data['field_type'] == 'all' && is_a($attribute, 'WC_Product_Attribute')) {
                             $this->columns[$attribute_name] = [
                                 'name' => $attribute_name,
                                 'label' => wc_attribute_label($attribute->get_name(), $product_object),
@@ -213,7 +213,7 @@ class Export_Service
                             break;
                         case 'taxonomy':
                         case 'attribute':
-                            if (in_array($field, ['product_cat', 'product_tag'])) {
+                            if (in_array($field, ['product_cat', 'product_tag', 'product_brand'])) {
                                 $wc_exporter = new \WC_Product_CSV_Exporter();
                                 $table_body[] = (!empty($wc_exporter) && !empty($product['taxonomy'][$field_encoded])) ? $wc_exporter->format_term_ids($product['taxonomy'][$field_encoded], $field) : '';
                             } else {
@@ -318,14 +318,14 @@ class Export_Service
 
     private function set_header()
     {
-        $file_name = "wcbel-product-export-" . time() . '.csv';
+        $file_name = "wcbe-product-export-" . time() . '.csv';
         header('Content-Encoding: UTF-8');
         header('Content-Type: text/csv; charset=utf-8');
         header("Content-Disposition: attachment; filename={$file_name}");
         header("Pragma: no-cache");
         header("Expires: 0");
         $this->export_file = fopen('php://output', 'w');
-        fwrite($this->export_file, chr(239) . chr(187) . chr(191)); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
+        fwrite($this->export_file, chr(239) . chr(187) . chr(191)); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite 
     }
 
     private function set_table_header()
@@ -349,7 +349,7 @@ class Export_Service
                         break;
                     case 'taxonomy':
                     case 'attribute':
-                        if (in_array($field, ['product_cat', 'product_tag'])) {
+                        if (in_array($field, ['product_cat', 'product_tag', 'product_brand'])) {
                             $table_header[] = (!empty($label)) ? $label : $column['label'];
                         } else {
                             $table_header[] = "Attribute {$attribute_counter} name";
@@ -415,6 +415,7 @@ class Export_Service
             'menu_order' => 'Position',
             'product_cat' => 'Categories',
             'product_tag' => 'Tags',
+            'product_brand' => 'Brand',
             'featured' => 'Is featured?',
         ];
     }
@@ -429,7 +430,7 @@ class Export_Service
         ON $wpdb->posts.ID = $wpdb->postmeta.post_id
         WHERE $wpdb->posts.post_type = '%s'";
 
-        $meta_keys = $wpdb->get_col($wpdb->prepare($query, 'product')); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        $meta_keys = $wpdb->get_col($wpdb->prepare($query, 'product')); //phpcs:ignore
         $output = [];
         if (!empty($meta_keys) && is_array($meta_keys)) {
             $except_meta_keys = $this->except_meta_keys();

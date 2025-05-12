@@ -1,0 +1,2 @@
+<span class="wcbe-schedule-jobs-status" data-status="done"><?php esc_html_e('Done', 'ithemeland-woo-bulk-product-editor-lite'); ?></span>
+<i class="wcbe-icon-info1" title="<?php esc_attr_e('The job applied changes completely and waiting for Revert Date.', 'ithemeland-woo-bulk-product-editor-lite'); ?>"></i>

@@ -2,15 +2,13 @@
 
 namespace wcbel\classes\helpers;
 
-defined('ABSPATH') || exit(); // Exit if accessed directly
-
-use wcbel\classes\repositories\Meta_Field as Meta_Field_Repo;
+use wcbel\classes\repositories\meta_field\Meta_Field_Main;
 
 class Meta_Field
 {
     public static function get_field_type_by_acf_type($acf_field)
     {
-        $supported_types = Meta_Field_Repo::get_supported_acf_field_types();
+        $supported_types = Meta_Field_Main::get_supported_acf_field_types();
         $output = [
             'main_type' => '',
             'sub_type' => '',
@@ -46,10 +44,35 @@ class Meta_Field
                     $output['sub_type'] = "number";
                     $output['column_type'] = "numeric";
                     break;
+                case 'image':
+                    $output['main_type'] = "image";
+                    $output['sub_type'] = "";
+                    $output['column_type'] = "image";
+                    break;
+                case 'password':
+                    $output['main_type'] = "password";
+                    $output['sub_type'] = "";
+                    $output['column_type'] = "text";
+                    break;
+                case 'email':
+                    $output['main_type'] = "email";
+                    $output['sub_type'] = "";
+                    $output['column_type'] = "text";
+                    break;
+                case 'url':
+                    $output['main_type'] = "url";
+                    $output['sub_type'] = "";
+                    $output['column_type'] = "text";
+                    break;
                 case 'multi_select':
                     $output['main_type'] = "multi_select";
                     $output['sub_type'] = "";
                     $output['column_type'] = "multi_select";
+                    break;
+                case 'file':
+                    $output['main_type'] = "file";
+                    $output['sub_type'] = "";
+                    $output['column_type'] = "file";
                     break;
                 case 'wysiwyg':
                 case 'textarea':

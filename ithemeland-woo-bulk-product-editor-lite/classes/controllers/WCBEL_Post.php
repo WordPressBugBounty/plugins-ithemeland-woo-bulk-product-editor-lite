@@ -5,10 +5,10 @@ namespace wcbel\classes\controllers;
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\helpers\Sanitizer;
-use wcbel\classes\repositories\Flush_Message;
+use wcbel\classes\repositories\flush_message\Flush_Message;
+use wcbe\framework\flush_message\GlobalFlushMessage;
 use wcbel\classes\repositories\Column;
 use wcbel\classes\repositories\Setting;
-use wcbel\classes\services\activation\Activation_Service;
 use wcbel\classes\services\export\Export_Service;
 
 class WCBEL_Post
@@ -26,57 +26,58 @@ class WCBEL_Post
 
     private function __construct()
     {
-        add_action('admin_post_wcbel_load_column_profile', [$this, 'load_column_profile']);
-        add_action('admin_post_wcbel_settings', [$this, 'settings']);
-        add_action('admin_post_wcbel_export_products', [$this, 'export_products']);
-        add_action('admin_post_wcbel_save_column_profile', [$this, 'save_column_profile']);
-        add_action('admin_post_wcbel_activation_plugin', [$this, 'activation_plugin']);
-        add_action('admin_post_wcbel_column_manager_new_preset', [$this, 'column_manager_new_preset']);
-        add_action('admin_post_wcbel_column_manager_edit_preset', [$this, 'column_manager_edit_preset']);
-        add_action('admin_post_wcbel_column_manager_delete_preset', [$this, 'column_manager_delete_preset']);
+        add_action('admin_post_wcbe_column_manager_new_preset', [$this, 'column_manager_new_preset']);
+        add_action('admin_post_wcbe_column_manager_edit_preset', [$this, 'column_manager_edit_preset']);
+        add_action('admin_post_wcbe_column_manager_delete_preset', [$this, 'column_manager_delete_preset']);
+        add_action('admin_post_wcbe_load_column_profile', [$this, 'load_column_profile']);
+        add_action('admin_post_wcbe_settings', [$this, 'settings']);
+        add_action('admin_post_wcbe_export_products', [$this, 'export_products']);
+        add_action('admin_post_wcbe_save_column_profile', [$this, 'save_column_profile']);
+        add_action('admin_post_wcbe_variation_attaching', [$this, 'variation_attaching']);
     }
 
     public function column_manager_new_preset()
     {
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'wcbel_post_nonce')) {
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'wcbe_post_nonce')) {
             die('403 Forbidden');
         }
 
-        if (isset($_POST['save_preset']) && !empty($_POST['field_name']) && is_array($_POST['field_name'])) {
-            $column_repository = new Column();
-            $fields = $column_repository->get_fields();
+        if (isset($_POST['save_preset']) && !empty($_POST['field_name']) && is_array($_POST['field_name']) && !empty($_POST['preset_name'])) {
+            $column_repository = Column::get_instance();
+            $fields = $column_repository->get_columns();
             if (!empty($fields)) {
-                $preset['name'] = esc_sql($_POST['preset_name']);
-                $preset['date_modified'] = date('Y-m-d H:i:s', time());
-                $preset['key'] = 'preset-' . rand(1000000, 9999999);
+                $preset['name'] = sanitize_text_field(wp_unslash($_POST['preset_name']));
+                $preset['date_modified'] = gmdate('Y-m-d H:i:s', time());
+                $preset['key'] = 'preset-' . wp_rand(1000000, 9999999);
                 if (!empty($_POST['field_name']) && is_array($_POST['field_name'])) {
                     for ($i = 0; $i < count($_POST['field_name']); $i++) {
                         if (isset($fields[$_POST['field_name'][$i]])) {
-                            $preset["fields"][esc_sql($_POST['field_name'][$i])] = [
-                                'name' => esc_sql($_POST['field_name'][$i]),
-                                'label' => esc_sql($_POST['field_label'][$i]),
-                                'title' => (!empty($_POST['field_title'][$i])) ? esc_sql($_POST['field_title'][$i]) : esc_sql($_POST['field_label'][$i]),
-                                'editable' => $fields[$_POST['field_name'][$i]]['editable'],
-                                'content_type' => $fields[$_POST['field_name'][$i]]['content_type'],
-                                'allowed_type' => $fields[$_POST['field_name'][$i]]['allowed_type'],
-                                'update_type' => $fields[$_POST['field_name'][$i]]['update_type'],
-                                'fetch_type' => $fields[$_POST['field_name'][$i]]['fetch_type'],
-                                'background_color' => $_POST['field_background_color'][$i],
-                                'text_color' => $_POST['field_text_color'][$i],
+                            $field_name = sanitize_text_field(wp_unslash($_POST['field_name'][$i]));
+                            $preset["fields"][$field_name] = [
+                                'name' => $field_name,
+                                'label' => (isset($_POST['field_label'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_label'][$i])) : '',
+                                'title' => (!empty($_POST['field_title'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_title'][$i])) : sanitize_text_field(wp_unslash($_POST['field_label'][$i])),
+                                'editable' => $fields[$field_name]['editable'],
+                                'content_type' => $fields[$field_name]['content_type'],
+                                'allowed_type' => $fields[$field_name]['allowed_type'],
+                                'update_type' => $fields[$field_name]['update_type'],
+                                'fetch_type' => $fields[$field_name]['fetch_type'],
+                                'background_color' => (!empty($_POST['field_background_color'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_background_color'][$i])) : '',
+                                'text_color' => (!empty($_POST['field_text_color'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_text_color'][$i])) : '',
                             ];
-                            if (isset($fields[$_POST['field_name'][$i]]['field_type'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['field_type'] = $fields[$_POST['field_name'][$i]]['field_type'];
+                            if (isset($fields[$field_name]['field_type'])) {
+                                $preset["fields"][$field_name]['field_type'] = $fields[$field_name]['field_type'];
                             }
-                            if (isset($fields[$_POST['field_name'][$i]]['sub_name'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['sub_name'] = $fields[$_POST['field_name'][$i]]['sub_name'];
+                            if (isset($fields[$field_name]['sub_name'])) {
+                                $preset["fields"][$field_name]['sub_name'] = $fields[$field_name]['sub_name'];
                             }
-                            if (isset($fields[$_POST['field_name'][$i]]['sortable'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['sortable'] = $fields[$_POST['field_name'][$i]]['sortable'];
+                            if (isset($fields[$field_name]['sortable'])) {
+                                $preset["fields"][$field_name]['sortable'] = $fields[$field_name]['sortable'];
                             }
-                            if (isset($fields[$_POST['field_name'][$i]]['options'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['options'] = $fields[$_POST['field_name'][$i]]['options'];
+                            if (isset($fields[$field_name]['options'])) {
+                                $preset["fields"][$field_name]['options'] = $fields[$field_name]['options'];
                             }
-                            $preset['checked'][] = esc_sql($_POST['field_name'][$i]);
+                            $preset['checked'][] = $field_name;
                         }
                     }
                     $column_repository->update($preset);
@@ -84,53 +85,56 @@ class WCBEL_Post
             }
         }
         $this->redirect([
-            'message' => __('Success !', 'ithemeland-woocommerce-bulk-product-editing-lite'),
+            'message' => esc_html__('Success !', 'ithemeland-woo-bulk-product-editor-lite'),
             'type' => 'success',
         ]);
     }
 
     public function column_manager_edit_preset()
     {
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'wcbel_post_nonce')) {
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'wcbe_post_nonce')) {
             die('403 Forbidden');
         }
 
-        if (isset($_POST['edit_preset'])) {
-            $column_repository = new Column();
-            $fields = $column_repository->get_fields();
+        if (isset($_POST['edit_preset']) && isset($_POST['preset_name']) && !empty($_POST['preset_key'])) {
+            $column_repository = Column::get_instance();
+            $fields = $column_repository->get_columns();
             if (!empty($fields)) {
                 $preset["fields"] = [];
-                $preset['name'] = esc_sql($_POST['preset_name']);
-                $preset['date_modified'] = date('Y-m-d H:i:s', time());
-                $preset['key'] = $_POST['preset_key'];
+                $preset['name'] = sanitize_text_field(wp_unslash($_POST['preset_name']));
+                $preset['date_modified'] = gmdate('Y-m-d H:i:s', time());
+                $preset['key'] = sanitize_text_field(wp_unslash($_POST['preset_key']));
                 if (!empty($_POST['field_name']) && is_array($_POST['field_name'])) {
                     for ($i = 0; $i < count($_POST['field_name']); $i++) {
-                        if (isset($fields[$_POST['field_name'][$i]])) {
-                            $preset["fields"][esc_sql($_POST['field_name'][$i])] = [
-                                'name' => esc_sql($_POST['field_name'][$i]),
-                                'label' => esc_sql($_POST['field_label'][$i]),
-                                'title' => (!empty($_POST['field_title'][$i])) ? esc_sql($_POST['field_title'][$i]) : esc_sql($_POST['field_label'][$i]),
-                                'editable' => $fields[$_POST['field_name'][$i]]['editable'],
-                                'content_type' => $fields[$_POST['field_name'][$i]]['content_type'],
-                                'allowed_type' => $fields[$_POST['field_name'][$i]]['allowed_type'],
-                                'update_type' => $fields[$_POST['field_name'][$i]]['update_type'],
-                                'fetch_type' => $fields[$_POST['field_name'][$i]]['fetch_type'],
-                                'background_color' => $_POST['field_background_color'][$i],
-                                'text_color' => $_POST['field_text_color'][$i],
-                            ];
-                            if (isset($fields[$_POST['field_name'][$i]]['sortable'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['sortable'] = $fields[$_POST['field_name'][$i]]['sortable'];
+                        if (!empty($_POST['field_name'][$i])) {
+                            $field_name = sanitize_text_field(wp_unslash($_POST['field_name'][$i]));
+                            if (isset($fields[$_POST['field_name'][$i]])) {
+                                $preset["fields"][$field_name] = [
+                                    'name' => $field_name,
+                                    'label' => (!empty($_POST['field_label'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_label'][$i])) : $field_name,
+                                    'title' => (!empty($_POST['field_title'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_title'][$i])) : $field_name,
+                                    'editable' => $fields[$field_name]['editable'],
+                                    'content_type' => $fields[$field_name]['content_type'],
+                                    'allowed_type' => $fields[$field_name]['allowed_type'],
+                                    'update_type' => $fields[$field_name]['update_type'],
+                                    'fetch_type' => $fields[$field_name]['fetch_type'],
+                                    'background_color' => (!empty($_POST['field_background_color'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_background_color'][$i])) : '',
+                                    'text_color' => (!empty($_POST['field_text_color'][$i])) ? sanitize_text_field(wp_unslash($_POST['field_text_color'][$i])) : '',
+                                ];
+                                if (isset($fields[$field_name]['sortable'])) {
+                                    $preset["fields"][$field_name]['sortable'] = $fields[$field_name]['sortable'];
+                                }
+                                if (isset($fields[$field_name]['sub_name'])) {
+                                    $preset["fields"][$field_name]['sub_name'] = $fields[$field_name]['sub_name'];
+                                }
+                                if (isset($fields[$field_name]['options'])) {
+                                    $preset["fields"][$field_name]['options'] = $fields[$field_name]['options'];
+                                }
+                                if (isset($fields[$field_name]['field_type'])) {
+                                    $preset["fields"][$field_name]['field_type'] = $fields[$field_name]['field_type'];
+                                }
+                                $preset['checked'][] = $field_name;
                             }
-                            if (isset($fields[$_POST['field_name'][$i]]['sub_name'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['sub_name'] = $fields[$_POST['field_name'][$i]]['sub_name'];
-                            }
-                            if (isset($fields[$_POST['field_name'][$i]]['options'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['options'] = $fields[$_POST['field_name'][$i]]['options'];
-                            }
-                            if (isset($fields[$_POST['field_name'][$i]]['field_type'])) {
-                                $preset["fields"][esc_sql($_POST['field_name'][$i])]['field_type'] = $fields[$_POST['field_name'][$i]]['field_type'];
-                            }
-                            $preset['checked'][] = esc_sql($_POST['field_name'][$i]);
                         }
                     }
                     $column_repository->update($preset);
@@ -139,50 +143,54 @@ class WCBEL_Post
             }
         }
         $this->redirect([
-            'message' => __('Success !', 'ithemeland-woocommerce-bulk-product-editing-lite'),
+            'message' => esc_html__('Success !', 'ithemeland-woo-bulk-product-editor-lite'),
             'type' => 'success',
         ]);
     }
 
     public function column_manager_delete_preset()
     {
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'wcbel_post_nonce')) {
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'wcbe_post_nonce')) {
             die('403 Forbidden');
         }
 
-        $column_repository = new Column();
+        $column_repository = Column::get_instance();
         if (isset($_POST['delete_key'])) {
             if ($column_repository->get_active_columns()['name'] == $_POST['delete_key']) {
                 $column_repository->delete_active_columns();
             }
-            $column_repository->delete(esc_sql($_POST['delete_key']));
+            $column_repository->delete(sanitize_text_field(wp_unslash($_POST['delete_key'])));
         }
 
         $this->redirect([
-            'message' => __('Success !', 'ithemeland-woocommerce-bulk-product-editing-lite'),
+            'message' => esc_html__('Success !', 'ithemeland-woo-bulk-product-editor-lite'),
             'type' => 'success',
         ]);
     }
 
     public function load_column_profile()
     {
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'wcbel_post_nonce')) {
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'wcbe_post_nonce')) {
             die('403 Forbidden');
         }
 
         if (isset($_POST['preset_key'])) {
-            $preset_key = sanitize_text_field($_POST['preset_key']);
-            $checked_columns = Sanitizer::array($_POST["columns"]);
+            $preset_key = sanitize_text_field(wp_unslash($_POST['preset_key']));
+            $checked_columns = (!empty($_POST["columns"])) ? Sanitizer::array($_POST["columns"]) : []; //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            if (!is_array($checked_columns)) {
+                return false;
+            }
             $checked_columns = array_combine($checked_columns, $checked_columns);
-            $column_repository = new Column();
+            $column_repository = Column::get_instance();
             $columns = [];
-            $fields = $column_repository->get_fields();
+            $fields = $column_repository->get_columns();
             $preset_columns = $column_repository->get_preset($preset_key);
             if (!empty($checked_columns) && is_array($checked_columns)) {
                 if (!empty($preset_columns['fields'])) {
                     foreach ($preset_columns['fields'] as $column_key => $preset_column) {
-                        if (isset($checked_columns[$column_key])) {
-                            $columns[$column_key] = $preset_column;
+                        if (isset($checked_columns[$column_key]) && isset($fields[$column_key])) {
+                            $columns[$column_key] = $fields[$column_key];
+                            $columns[$column_key]['title'] = (isset($fields[$column_key]['label'])) ? $fields[$column_key]['label'] : $column_key;
                             unset($checked_columns[$column_key]);
                         }
                     }
@@ -191,13 +199,14 @@ class WCBEL_Post
                     foreach ($checked_columns as $diff_item) {
                         if (isset($fields[$diff_item])) {
                             $checked_column = [
-                                'name' => $fields[$diff_item]['name'],
-                                'label' => $fields[$diff_item]['label'],
-                                'title' => $fields[$diff_item]['label'],
+                                'name' => sanitize_text_field(wp_unslash($fields[$diff_item]['name'])),
+                                'label' => sanitize_text_field(wp_unslash($fields[$diff_item]['label'])),
+                                'title' => sanitize_text_field(wp_unslash($fields[$diff_item]['label'])),
                                 'editable' => $fields[$diff_item]['editable'],
                                 'content_type' => $fields[$diff_item]['content_type'],
                                 'allowed_type' => $fields[$diff_item]['allowed_type'],
                                 'update_type' => $fields[$diff_item]['update_type'],
+                                'fetch_type' => $fields[$diff_item]['fetch_type'],
                                 'background_color' => '#fff',
                                 'text_color' => '#444',
                             ];
@@ -226,98 +235,61 @@ class WCBEL_Post
 
     public function settings()
     {
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'wcbel_post_nonce')) {
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'wcbe_post_nonce')) {
             die('403 Forbidden');
         }
 
         if (isset($_POST['settings'])) {
-            $setting_repository = new Setting();
-            $setting_repository->update(Sanitizer::array($_POST['settings']));
+            $setting_repository = Setting::get_instance();
+            $setting_repository->update(Sanitizer::array($_POST['settings'])); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         }
 
         $this->redirect([
-            'message' => __('Success !', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            'message' => esc_html__('Success !', 'ithemeland-woo-bulk-product-editor-lite'),
             'type' => 'success',
         ]);
     }
 
     public function export_products()
     {
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'wcbel_post_nonce')) {
+        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])), 'wcbe_post_nonce')) {
             die('403 Forbidden');
         }
 
         if (empty($_POST['products']) || empty($_POST['fields'])) {
             $this->redirect([
-                'message' => __('Error ! try again', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+                'message' => esc_html__('Error ! try again', 'ithemeland-woo-bulk-product-editor-lite'),
                 'type' => 'danger',
             ]);
         }
 
         $export_service = Export_Service::get_instance();
         $export_service->set_data([
-            'delimiter' => sanitize_text_field($_POST['wcbel_export_delimiter']),
-            'select_type' => sanitize_text_field($_POST['products']),
-            'field_type' => sanitize_text_field($_POST['fields']),
-            'selected_ids' => isset($_POST['item_ids']) ? Sanitizer::array($_POST['item_ids']) : [],
+            'delimiter' => (!empty($_POST['wcbe_export_delimiter'])) ? sanitize_text_field(wp_unslash($_POST['wcbe_export_delimiter'])) : ',',
+            'select_type' => sanitize_text_field(wp_unslash($_POST['products'])),
+            'field_type' => sanitize_text_field(wp_unslash($_POST['fields'])),
+            'selected_ids' => isset($_POST['item_ids']) ? Sanitizer::array($_POST['item_ids']) : [],  //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         ]);
         $export_service->perform();
 
         $this->redirect();
     }
 
-    public function activation_plugin()
+    private function redirect($notice = [], $page = 'main')
     {
-        if (!isset($_REQUEST['_wpnonce']) || !wp_verify_nonce($_REQUEST['_wpnonce'], 'wcbel_post_nonce')) {
-            die('403 Forbidden');
-        }
-
-        $message = "Error! Try again";
-
-        if (isset($_POST['activation_type'])) {
-            if ($_POST['activation_type'] == 'skip') {
-                update_option('wcbel_is_active', 'skipped');
-                return $this->redirect('bulk-edit');
-            } else {
-                if (!empty($_POST['email']) && !empty($_POST['industry'])) {
-                    $activation_service = new Activation_Service();
-                    $info = $activation_service->activation([
-                        'email' => sanitize_email($_POST['email']),
-                        'domain' => $_SERVER['SERVER_NAME'],
-                        'product_id' => 'wcbel',
-                        'product_name' => WCBEL_LABEL,
-                        'industry' => sanitize_text_field($_POST['industry']),
-                        'multi_site' => is_multisite(),
-                        'core_version' => null,
-                        'subsystem_version' => WCBEL_VERSION,
-                    ]);
-
-                    if (!empty($info) && is_array($info)) {
-                        if (!empty($info['result']) && $info['result'] == true) {
-                            update_option('wcbel_is_active', 'yes');
-                            $message = esc_html__('Success !', 'ithemeland-woocommerce-bulk-coupons-editing-lite');
-                        } else {
-                            update_option('wcbel_is_active', 'no');
-                            $message = (!empty($info['message'])) ? esc_html($info['message']) : esc_html__('System Error !', 'ithemeland-woocommerce-bulk-coupons-editing-lite');
-                        }
-                    } else {
-                        update_option('wcbel_is_active', 'no');
-                        $message = esc_html__('Connection Timeout! Please Try Again', 'ithemeland-woocommerce-bulk-coupons-editing-lite');
-                    }
-                }
+        if ($page == 'license') {
+            if (!empty($notice) && isset($notice['message'])) {
+                GlobalFlushMessage::set($notice);
             }
+            wp_redirect(WCBE_ACTIVATION_PAGE);
+            die();
+        } else {
+            if (!empty($notice) && isset($notice['message'])) {
+                $flush_message_repository = new Flush_Message();
+                $flush_message_repository->set($notice);
+            }
+            wp_redirect(WCBEL_PLUGIN_MAIN_PAGE);
+            die();
         }
-
-        $this->redirect($message);
-    }
-
-    private function redirect($notice = [])
-    {
-        if (!empty($notice) && isset($notice['message'])) {
-            $flush_message_repository = new Flush_Message();
-            $flush_message_repository->set($notice);
-        }
-
-        return wp_redirect(WCBEL_PLUGIN_MAIN_PAGE);
     }
 }

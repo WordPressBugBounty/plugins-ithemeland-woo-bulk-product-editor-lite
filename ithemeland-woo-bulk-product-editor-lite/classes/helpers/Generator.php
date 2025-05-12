@@ -2,15 +2,13 @@
 
 namespace wcbel\classes\helpers;
 
-defined('ABSPATH') || exit(); // Exit if accessed directly
-
 class Generator
 {
     public static function license_hash($license_data, $product_id)
     {
-        return (empty($license_data) || !isset($license_data['license_key']) || !isset($license_data['email']))
+        return (empty($license_data) || !isset($license_data['license_key']) || !isset($license_data['email']) || empty($_SERVER['SERVER_NAME']))
             ? md5(wp_rand(100000, 999999))
-            : md5($license_data['license_key'] . sanitize_text_field($product_id) . $license_data['email'] . $_SERVER['SERVER_NAME']);
+            : md5($license_data['license_key'] . sanitize_text_field($product_id) . sanitize_email($license_data['email']) . sanitize_text_field($_SERVER['SERVER_NAME'])); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
     }
 
     public static function div_field_start($attributes = [])
@@ -18,7 +16,7 @@ class Generator
         $output = "<div";
         $output .= self::get_field_attributes($attributes);
         $output .= ">";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function div_field_end()
@@ -35,7 +33,7 @@ class Generator
             $output .= esc_html($label_text);
         }
         $output .= "</label>";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function label_with_input_field($label_attributes, $label_text, $input_attributes, $input_position = 'before')
@@ -54,16 +52,16 @@ class Generator
             $output .= $input_field;
         }
         $output .= "</label>";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function help_icon($text)
     {
         $output = "";
         if (!empty($text)) {
-            $output = "<span class='wcbel-field-help dashicons dashicons-info' title='{$text}'></span>";
+            $output = "<span class='wcbe-field-help dashicons dashicons-info' title='{$text}'></span>";
         }
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function select_field($attributes, $options, $first_select_option = false)
@@ -72,7 +70,7 @@ class Generator
         $output .= self::get_field_attributes($attributes);
         $output .= ">";
         if ($first_select_option) {
-            $output .= "<option value=''>" . __('Select', 'ithemeland-bulk-product-editing-lite-for-woocommerce') . "</option>";
+            $output .= "<option value=''>" . esc_html__('Select', 'ithemeland-woo-bulk-product-editor-lite') . "</option>";
         }
         if (!empty($options) && is_array($options)) {
             foreach ($options as $key => $value) {
@@ -81,7 +79,7 @@ class Generator
         }
         $output .= "</select>";
 
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function textarea_field($attributes, $value = "")
@@ -93,7 +91,7 @@ class Generator
             $output .= $value;
         }
         $output .= "</textarea>";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function input_field($attributes)
@@ -101,7 +99,7 @@ class Generator
         $output = "<input";
         $output .= self::get_field_attributes($attributes);
         $output .= ">";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function span_field($text, $attributes = [])
@@ -111,7 +109,7 @@ class Generator
         $output .= ">";
         $output .= esc_html($text);
         $output .= "</span>";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function strong_field($text, $attributes = [])
@@ -121,7 +119,7 @@ class Generator
         $output .= ">";
         $output .= esc_html($text);
         $output .= "</strong>";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function hr($attributes = [])
@@ -130,7 +128,7 @@ class Generator
         $output .= self::get_field_attributes($attributes);
         $output .= ">";
         $output .= "</hr>";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     public static function button($text, $attributes = [])
@@ -140,7 +138,7 @@ class Generator
         $output .= ">";
         $output .= esc_html($text);
         $output .= "</button>";
-        return sprintf('%s', $output);
+        return wp_kses($output, Sanitizer::allowed_html());
     }
 
     private static function get_field_attributes($attributes = [])

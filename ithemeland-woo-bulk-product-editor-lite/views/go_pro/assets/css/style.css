@@ -1,0 +1,311 @@
+/*** GO PRO Section ***/
+
+.wcbe-btp {
+    border-top: 1px solid #e2e2e2 !important;
+}
+
+.wcbe-br-tpl {
+    border-radius: 10px 0 0 0 !important;
+}
+
+.wcbe-br-tpr {
+    border-radius: 0 10px 0 0 !important;
+}
+
+.wcbe-icon-go-pro {
+    animation: beat .25s infinite alternate;
+    transform-origin: center;
+}
+
+@keyframes wcbe-icon-go-pro {
+    to {
+        transform: scale(1.2);
+    }
+}
+
+.wcbe-get-pro-button {
+    width: auto !important;
+    height: auto !important;
+    font-size: 13px;
+    margin-right: 5px !important;
+    padding: 0 10px;
+    background-color: #35ac6e;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    font-weight: 700;
+}
+
+.wcbe-get-pro-button:hover a {
+    color: #fff !important;
+}
+
+.wcbe-go-pro-wrap {
+    text-align: center;
+}
+
+.wcbe-go-pro-top {
+    font-weight: 600;
+    color: #6822b3;
+    font-size: 1.4rem;
+    letter-spacing: .025em
+}
+
+.wcbe-go-pro-title {
+    font-size: 2.5rem;
+}
+
+.wcbe-go-pro-description {
+    color: rgba(107, 114, 128, 0.9);
+    font-size: 1.25rem !important;
+    margin-bottom: 3rem !important;
+}
+
+.wcbe-go-pro-mini-card {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.wcbe-mini-card-body {
+    background-color: rgba(249, 250, 251, 1);
+    padding: 2.5rem !important;
+    border: 0 solid #d2d6dc;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05) !important;
+}
+
+.wcbe-mini-card-body:hover {
+    transition: 500ms;
+    transform: scale(1.05);
+}
+
+.wcbe-mini-card-title {
+    display: block;
+    width: 8rem !important;
+    margin: 0 auto !important;
+    letter-spacing: .025em;
+    text-transform: uppercase !important;
+    padding: 0.25rem 1rem;
+    line-height: 1.25rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    border-radius: 9999px !important;
+}
+
+.wcbe-bg-indiago-50 {
+    background-color: #eae0fb!important;
+}
+
+.wcbe-bg-indiago-100 {
+    background-color: #e0cffc !important;
+}
+
+.wcbe-bg-indiago-600 {
+    background-color: #5850ec!important;
+}
+
+.wcbe-indiago-100 {
+    color: #e0cffc !important;
+}
+
+.wcbe-indiago-600 {
+    color: #5850ec!important;
+}
+
+.wcbe-card-text {
+    display: block;
+    line-height: 1.75rem !important;
+    font-size: 1.25rem !important;
+    color: rgba(107, 114, 128, 1) !important;
+}
+
+.wcbe-mini-card-off-price {
+    display: block;
+    line-height: 1 !important;
+    font-size: 1.9rem !important;
+    opacity: 0.8;
+}
+
+.wcbe-mini-card-price {
+    display: block;
+    line-height: 1 !important;
+    font-size: 2.25rem !important;
+}
+
+.wcbe-mini-card-btn {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06) !important;
+    border-radius: .375rem !important;
+    box-sizing: border-box;
+    padding: .75rem 1.25rem !important;
+}
+
+.wcbe-mini-card-btn a {
+    font-size: 1rem !important;
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.wcbe-mini-card-btn:hover {
+    transition: 300ms;
+    background-color: #8681e0!important;
+    cursor: pointer;
+}
+
+.table>:not(caption)>*>* {
+    padding: 1.5rem .5rem;
+    background-color: var(--bs-table-bg);
+    border: none;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+table thead th,
+table tfoot th {
+    vertical-align: middle;
+}
+
+table thead th {
+    border: 1px #fff solid;
+    border-bottom: 1px #dbdbdb solid !important;
+}
+
+table th {
+    text-transform: uppercase;
+}
+
+th {
+    text-align: inherit;
+    text-align: -webkit-match-parent;
+}
+
+.table {
+    width: 100%;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    text-indent: initial;
+    border-radius: 10px;
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+    width: 0px;
+}
+
+.go-pro-button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    background-color: #5850ec;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.go-pro-button:hover {
+    background-color: #e0cffc;
+    border: none;
+    color: #5850ec;
+}
+
+.testimonial-go-pro {
+    display: flex;
+    column-gap: 30px;
+}
+
+.testimonial-card {
+    border-radius: 10px;
+}
+
+.go-pro-select-plan {
+    display: block !important;
+    width: 100%;
+    padding: 15px;
+    background-color: #5850ec;
+    color: #fff;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+}
+
+.go-pro-select-plan:hover {
+    background-color: #e0cffc;
+    color: #5850ec;
+}
+
+.other-plugins-card-section {
+    max-resolution: 0 auto;
+    display: flex;
+    column-gap: 30px;
+}
+
+.other-plugis-card {
+    width: 35%;
+}
+
+.other-plugins-card-body {
+    border-radius: 10px;
+    background: linear-gradient(to bottom left, #6600ff 0%, #9966ff 100%);
+    padding: 15px;
+    display: grid;
+    height: 380px;
+}
+
+.other-plugins-card-body:hover {
+    transition: 500ms;
+    transform: scale(1.02);
+}
+
+.other-plugins-card-title {
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+.other-plugins-card-text {
+    font-size: 1rem;
+    text-align: center;
+    color: #fff;
+    font-weight: 500;
+    line-height: 1.7rem;
+}
+
+.other-plugins-btn {
+    padding: 25px;
+}
+
+.other-plugins-btn a {
+    padding: 15px 50px;
+    border-radius: 10px;
+    background: #f3eff9;
+    color: #5850ec;
+    font-size: .9rem;
+    font-weight: 600;
+}
+
+.other-plugins-btn a:hover {
+    background: linear-gradient(to bottom left, #5850ec 0%, #7973e0 100%);
+    color: #f3eff9;
+}
+
+.other-plugins-vie-all-btn {
+    margin-top: 7rem;
+}
+
+.other-plugins-vie-all-btn a {
+    padding: 20px 60px;
+    border-radius: 10px;
+    background: #9258ff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f3eff9;
+}
+
+.other-plugins-vie-all-btn a:hover {
+    background: #655ee4;
+}

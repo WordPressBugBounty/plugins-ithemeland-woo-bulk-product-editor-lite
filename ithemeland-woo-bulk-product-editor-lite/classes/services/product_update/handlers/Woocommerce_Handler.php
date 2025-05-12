@@ -5,14 +5,11 @@ namespace wcbel\classes\services\product_update\handlers;
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\helpers\Product_Helper;
-use wcbel\classes\repositories\History;
 use wcbel\classes\repositories\Product;
-use wcbel\classes\services\product_update\Handler_Interface;
+use wcbel\classes\services\product_update\Product_Update_Handler;
 
-class Woocommerce_Handler implements Handler_Interface
+class Woocommerce_Handler extends Product_Update_Handler
 {
-    private static $instance;
-
     private $product;
     private $update_data;
     private $setter_method;
@@ -21,16 +18,7 @@ class Woocommerce_Handler implements Handler_Interface
     private $product_repository;
     private $current_field_value;
 
-    public static function get_instance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct()
+    public function __construct()
     {
         $this->product_repository = Product::get_instance();
     }
@@ -84,15 +72,16 @@ class Woocommerce_Handler implements Handler_Interface
                     ${$this->setter_method['object']}->save();
                 }
             } catch (\Exception $e) {
-                return false;
+                continue;
+            }
+
+            if (!empty($this->update_data['background_process'])) {
+                $this->add_completed_task(1);
             }
 
             // save history item
             if (!empty($this->update_data['history_id'])) {
-                $result = $this->save_history();
-                if (!$result) {
-                    return false;
-                }
+                $this->save_history();
             }
         }
 
@@ -153,6 +142,12 @@ class Woocommerce_Handler implements Handler_Interface
         $this->product->save();
     }
 
+    private function set_variation_enabled($value)
+    {
+        $this->product->set_status((!empty($value) && $value == 'yes') ? 'publish' : 'private');
+        $this->product->save();
+    }
+
     private function set_product_stock_quantity($value)
     {
         $this->product->set_manage_stock(true);
@@ -164,21 +159,22 @@ class Woocommerce_Handler implements Handler_Interface
     {
         if (is_array($value) && !empty($value['files_name']) && !empty($value['files_url'])) {
             $downloads = [];
-            $files_name = esc_sql($value['files_name']);
-            $files_url = esc_sql($value['files_url']);
+            $files_name = $value['files_name'];
+            $files_url = $value['files_url'];
             for ($i = 0; $i < count($files_name); $i++) {
                 $md5 = md5($files_url[$i]);
                 $download_file = new \WC_Product_Download();
                 $download_file->set_id($md5);
-                $download_file->set_name($files_name[$i]);
-                $download_file->set_file($files_url[$i]);
+                $download_file->set_name(sanitize_text_field($files_name[$i]));
+                $download_file->set_file(sanitize_text_field($files_url[$i]));
                 if ($download_file->is_allowed_filetype()) {
                     $downloads[$md5] = $download_file;
                 }
             }
+
             if (!empty($downloads)) {
                 $this->product->set_downloads($downloads);
-                $this->product->save();
+                return $this->product->save();
             }
         }
     }
@@ -213,18 +209,10 @@ class Woocommerce_Handler implements Handler_Interface
 
     private function get_setter_methods()
     {
-        return [
+        $items = [
             'title' => [
                 'object' => 'product',
                 'method' => 'set_name',
-            ],
-            'description' => [
-                'object' => 'product',
-                'method' => 'set_description',
-            ],
-            'short_description' => [
-                'object' => 'product',
-                'method' => 'set_short_description',
             ],
             'status' => [
                 'object' => 'product',
@@ -254,18 +242,6 @@ class Woocommerce_Handler implements Handler_Interface
                 'object' => 'product',
                 'method' => 'set_catalog_visibility',
             ],
-            'slug' => [
-                'object' => 'product',
-                'method' => 'set_slug',
-            ],
-            'sku' => [
-                'object' => 'product',
-                'method' => 'set_sku',
-            ],
-            'purchase_note' => [
-                'object' => 'product',
-                'method' => 'set_purchase_note',
-            ],
             'menu_order' => [
                 'object' => 'product',
                 'method' => 'set_menu_order',
@@ -273,30 +249,6 @@ class Woocommerce_Handler implements Handler_Interface
             'sold_individually' => [
                 'object' => 'product',
                 'method' => 'set_sold_individually',
-            ],
-            'reviews_allowed' => [
-                'object' => 'product',
-                'method' => 'set_reviews_allowed',
-            ],
-            'gallery_image_ids' => [
-                'object' => 'product',
-                'method' => 'set_gallery_image_ids',
-            ],
-            'date_on_sale_from' => [
-                'object' => 'this',
-                'method' => 'set_date_on_sale_from',
-            ],
-            'date_on_sale_to' => [
-                'object' => 'this',
-                'method' => 'set_date_on_sale_to',
-            ],
-            'tax_status' => [
-                'object' => 'product',
-                'method' => 'set_tax_status',
-            ],
-            'tax_class' => [
-                'object' => 'product',
-                'method' => 'set_tax_class',
             ],
             'shipping_class' => [
                 'object' => 'product',
@@ -318,49 +270,13 @@ class Woocommerce_Handler implements Handler_Interface
                 'object' => 'product',
                 'method' => 'set_weight',
             ],
-            'stock_status' => [
-                'object' => 'product',
-                'method' => 'set_stock_status',
-            ],
             'stock_quantity' => [
                 'object' => 'this',
                 'method' => 'set_product_stock_quantity',
             ],
-            'low_stock_amount' => [
-                'object' => 'product',
-                'method' => 'set_low_stock_amount',
-            ],
-            'product_type' => [
-                'object' => 'this',
-                'method' => 'set_product_type',
-            ],
-            'backorders' => [
-                'object' => 'product',
-                'method' => 'set_backorders',
-            ],
             'featured' => [
                 'object' => 'product',
                 'method' => 'set_featured',
-            ],
-            'virtual' => [
-                'object' => 'product',
-                'method' => 'set_virtual',
-            ],
-            'downloadable' => [
-                'object' => 'product',
-                'method' => 'set_downloadable',
-            ],
-            'downloadable_files' => [
-                'object' => 'this',
-                'method' => 'set_product_downloadable_files',
-            ],
-            'download_limit' => [
-                'object' => 'product',
-                'method' => 'set_download_limit',
-            ],
-            'download_expiry' => [
-                'object' => 'product',
-                'method' => 'set_download_expiry',
             ],
             'total_sales' => [
                 'object' => 'product',
@@ -386,7 +302,94 @@ class Woocommerce_Handler implements Handler_Interface
                 'object' => 'product',
                 'method' => 'set_default_attributes',
             ],
+            'enabled' => [
+                'object' => 'this',
+                'method' => 'set_variation_enabled',
+            ],
+            'description' => [
+                'object' => 'product',
+                'method' => 'set_description',
+            ],
+            'short_description' => [
+                'object' => 'product',
+                'method' => 'set_short_description',
+            ],
+            'catalog_visibility' => [
+                'object' => 'product',
+                'method' => 'set_catalog_visibility',
+            ],
+            'slug' => [
+                'object' => 'product',
+                'method' => 'set_slug',
+            ],
+            'sku' => [
+                'object' => 'product',
+                'method' => 'set_sku',
+            ],
+            'purchase_note' => [
+                'object' => 'product',
+                'method' => 'set_purchase_note',
+            ],
+            'reviews_allowed' => [
+                'object' => 'product',
+                'method' => 'set_reviews_allowed',
+            ],
+            'gallery_image_ids' => [
+                'object' => 'product',
+                'method' => 'set_gallery_image_ids',
+            ],
+            'date_on_sale_from' => [
+                'object' => 'this',
+                'method' => 'set_date_on_sale_from',
+            ],
+            'date_on_sale_to' => [
+                'object' => 'this',
+                'method' => 'set_date_on_sale_to',
+            ],
+            'tax_status' => [
+                'object' => 'product',
+                'method' => 'set_tax_status',
+            ],
+            'tax_class' => [
+                'object' => 'product',
+                'method' => 'set_tax_class',
+            ],
+            'stock_status' => [
+                'object' => 'product',
+                'method' => 'set_stock_status',
+            ],
+            'backorders' => [
+                'object' => 'product',
+                'method' => 'set_backorders',
+            ],
+            'product_type' => [
+                'object' => 'this',
+                'method' => 'set_product_type',
+            ],
+            'virtual' => [
+                'object' => 'product',
+                'method' => 'set_virtual',
+            ],
+            'downloadable' => [
+                'object' => 'product',
+                'method' => 'set_downloadable',
+            ],
+            'downloadable_files' => [
+                'object' => 'this',
+                'method' => 'set_product_downloadable_files',
+            ],
+            'download_limit' => [
+                'object' => 'product',
+                'method' => 'set_download_limit',
+            ],
+            'download_expiry' => [
+                'object' => 'product',
+                'method' => 'set_download_expiry',
+            ],
         ];
+
+        $items = apply_filters("wcbe_product_update_setter_methods", $items);
+        return $items;
     }
 
     private function get_woocommerce_getter_methods()
@@ -421,7 +424,6 @@ class Woocommerce_Handler implements Handler_Interface
             'weight' => 'get_weight',
             'stock_status' => 'get_stock_status',
             'stock_quantity' => 'get_stock_quantity',
-            'low_stock_amount' => 'get_low_stock_amount',
             'backorders' => 'get_backorders',
             'featured' => 'get_featured',
             'virtual' => 'get_virtual',
@@ -455,8 +457,7 @@ class Woocommerce_Handler implements Handler_Interface
         $prev_value = (!empty($data['prev_value'])) ? $data['prev_value'] : $this->current_field_value;
         $new_value = (!empty($data['new_value'])) ? sanitize_text_field($data['new_value']) : $this->update_data['value'];
 
-        $history_repository = History::get_instance();
-        return $history_repository->save_history_item([
+        return $this->save_history_item([
             'history_id' => $this->update_data['history_id'],
             'historiable_id' => $this->product->get_id(),
             'name' => $name,
@@ -466,6 +467,8 @@ class Woocommerce_Handler implements Handler_Interface
             'created_ids' => $this->created_ids,
             'prev_value' => $prev_value,
             'new_value' => $new_value,
+            'prev_total_count' => 1,
+            'new_total_count' => 1,
         ]);
     }
 }

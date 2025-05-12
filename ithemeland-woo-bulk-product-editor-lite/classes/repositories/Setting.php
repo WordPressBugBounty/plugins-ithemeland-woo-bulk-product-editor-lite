@@ -4,95 +4,81 @@ namespace wcbel\classes\repositories;
 
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
-class Setting
-{
-    private $settings_option_name;
-    private $current_settings_option_name;
+use wcbel\classes\repositories\setting\Setting_Main;
 
-    public function __construct()
+class Setting extends Setting_Main
+{
+    private static $instance;
+
+    private $settings;
+
+    const MAX_COUNT_PER_PAGE = 50;
+
+    public static function get_instance()
     {
-        $this->settings_option_name = "wcbel_settings";
-        $this->current_settings_option_name = "wcbel_current_settings";
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct()
+    {
+        $this->settings_option_name = "wcbe_settings";
+        $this->current_settings_option_name = "wcbe_current_settings";
     }
 
     public function update($data = [])
     {
-        $settings = [];
+        $this->settings = $this->get_settings();
         if (!empty($data)) {
             foreach ($data as $key => $value) {
-                $settings[sanitize_text_field($key)] = sanitize_text_field($value);
+                $this->settings[sanitize_text_field($key)] = sanitize_text_field($value);
             }
         }
 
-        $this->set_current_settings($settings);
-        update_option($this->settings_option_name, $settings);
+        update_option($this->settings_option_name, $this->settings);
         return $this->get_settings();
-    }
-
-    public function get_current_settings()
-    {
-        return get_option($this->current_settings_option_name, []);
-    }
-
-    public function update_current_settings($current_settings)
-    {
-        $old_current_settings = $this->get_current_settings();
-        if (!empty($current_settings)) {
-            foreach ($current_settings as $setting_key => $setting_value) {
-                $old_current_settings[$setting_key] = $setting_value;
-            }
-        }
-        update_option($this->current_settings_option_name, $old_current_settings);
-        return $this->get_current_settings();
-    }
-
-    public function delete_current_settings()
-    {
-        return delete_option($this->current_settings_option_name);
-    }
-
-    public function get_count_per_page_items()
-    {
-        return [
-            '10',
-            '25',
-            '50',
-            '75',
-            '100',
-            '500',
-            '1000',
-        ];
     }
 
     public function get_settings()
     {
-        $settings = get_option($this->settings_option_name, []);
+        if (empty($this->settings)) {
+            $this->set_settings();
+        }
 
-        if (empty($settings)) {
-            $settings = $this->set_default_settings();
+        return $this->settings;
+    }
+
+    private function set_settings()
+    {
+        $this->settings = get_option($this->settings_option_name, []);
+
+        if (empty($this->settings)) {
+            $this->settings = $this->set_default_settings();
         } else {
             $required_fields = $this->get_required_fields();
-            if (count($required_fields) > count($settings)) {
+            if (count($required_fields) > count($this->settings)) {
                 foreach ($required_fields as $setting => $value) {
-                    if (!isset($settings[$setting])) {
-                        $settings[$setting] = $value;
+                    if (!isset($this->settings[$setting])) {
+                        $this->settings[$setting] = $value;
                     }
                 }
             }
         }
-
-        return $settings;
     }
 
     public function set_default_settings()
     {
-        return $this->update($this->get_required_fields());
+        update_option($this->settings_option_name, $this->get_required_fields());
+        return $this->get_required_fields();
     }
 
     public function set_current_settings($settings)
     {
         $this->update_current_settings([
-            'count_per_page' => $settings['count_per_page'],
+            'count_per_page' => ($settings['count_per_page'] > self::MAX_COUNT_PER_PAGE) ? self::MAX_COUNT_PER_PAGE : intval($settings['count_per_page']),
         ]);
     }
 
@@ -100,7 +86,7 @@ class Setting
     {
         return [
             'count_per_page' => 10,
-            'default_sort_by' => 'id',
+            'default_sort_by' => 'ID',
             'default_sort' => "DESC",
             'close_popup_after_applying' => 'no',
             'sticky_first_columns' => 'yes',
@@ -109,6 +95,18 @@ class Setting
             'keep_filled_data_in_bulk_edit_form' => 'no',
             'show_only_filtered_variations' => 'no',
             'fetch_data_in_bulk' => 'no',
+            'enable_background_processing' => 'yes',
+            'display_cell_content' => 'long',
+            'enable_load_more_variations' => 'yes',
+        ];
+    }
+
+    public function get_count_per_page_items()
+    {
+        return [
+            '10',
+            '25',
+            '50',
         ];
     }
 }

@@ -6,33 +6,17 @@ defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\helpers\Sanitizer;
 use wcbel\classes\helpers\Product_Helper;
-use wcbel\classes\repositories\History;
 use wcbel\classes\repositories\Product;
-use wcbel\classes\services\product_update\Handler_Interface;
+use wcbel\classes\services\product_update\Product_Update_Handler;
 
-class Meta_Field_Handler implements Handler_Interface
+class Meta_Field_Handler extends Product_Update_Handler
 {
-    private static $instance;
-
     private $product_ids;
     private $product_repository;
     private $product;
     private $setter_method;
     private $update_data;
     private $current_field_value;
-
-    public static function get_instance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct()
-    {
-    }
 
     public function update($product_ids, $update_data)
     {
@@ -46,10 +30,11 @@ class Meta_Field_Handler implements Handler_Interface
             return false;
         };
 
-        $this->update_data = $update_data;
         $this->product_ids = $product_ids;
 
         foreach ($product_ids as $product_id) {
+            $this->update_data = $update_data;
+
             if (!isset($this->update_data['value'])) {
                 $this->update_data['value'] = '';
             }
@@ -69,8 +54,7 @@ class Meta_Field_Handler implements Handler_Interface
 
             // save history item
             if (!empty($this->update_data['history_id'])) {
-                $history_repository = History::get_instance();
-                $history_item_result = $history_repository->save_history_item([
+                $this->save_history_item([
                     'history_id' => $this->update_data['history_id'],
                     'historiable_id' => $this->product->get_id(),
                     'name' => $this->update_data['name'],
@@ -78,10 +62,13 @@ class Meta_Field_Handler implements Handler_Interface
                     'type' => $this->update_data['type'],
                     'prev_value' => $this->current_field_value,
                     'new_value' => $this->update_data['value'],
+                    'prev_total_count' => 1,
+                    'new_total_count' => 1,
                 ]);
-                if (!$history_item_result) {
-                    return false;
-                }
+            }
+
+            if (!empty($this->update_data['background_process'])) {
+                $this->add_completed_task(1);
             }
         }
 
@@ -155,6 +142,11 @@ class Meta_Field_Handler implements Handler_Interface
         // set value with operator
         if (!empty($this->update_data['operator'])) {
             $this->update_data['value'] = Product_Helper::apply_operator($this->current_field_value, $this->update_data);
+        }
+
+        // replace text variable
+        if (!is_numeric($this->update_data['value']) && !is_array($this->update_data['value'])) {
+            $this->update_data['value'] = Product_Helper::apply_variable($this->product, $this->update_data['value']);
         }
 
         return update_post_meta($this->product->get_id(), esc_sql($this->update_data['name']), esc_sql($this->update_data['value']));
@@ -289,7 +281,7 @@ class Meta_Field_Handler implements Handler_Interface
                     $tabs[] = [
                         'id' => strtolower(str_replace(' ', '-', sanitize_text_field($tab['title']))),
                         'title' => sanitize_text_field($tab['title']),
-                        'content' => (!empty($tab['content'])) ? sprintf('%s', $tab['content']) : '',
+                        'content' => (!empty($tab['content'])) ? wp_kses($tab['content'], Sanitizer::allowed_html()) : '',
                     ];
                     if (!empty($tab['global_tab'])) {
                         $global_tabs[] = [

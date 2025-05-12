@@ -4,8 +4,8 @@ Donate link: http://ithemelandco.com/
 Author URI: http://ithemelandco.com/
 Tags: 	variations bulk edit, bulk product edit, woocommerce bulk editing, prices bulk edit, woocommerce bulk edit
 Requires at least: 5.5
-Tested up to: 6.7
-Stable tag: 3.8.3
+Tested up to: 6.8
+Stable tag: 4.0.0
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -272,6 +272,13 @@ Please leave your message in our <a href="https://ithemelandco.com/support-cente
 4. Support All of Product's Fields
 
 == Changelog ==
+
+= 4.0.0 =
+* Changes to the core plugin
+* Implementing important security changes
+* Tested up to: WP 6.8.x
+* Tested up to: Woo 9.8.X
+* Fixed Some Issues
 
 = 3.8.3 =
 * Updated Support RTL themes

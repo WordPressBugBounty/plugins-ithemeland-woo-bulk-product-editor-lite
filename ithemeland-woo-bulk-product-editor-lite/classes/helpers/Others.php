@@ -36,19 +36,4 @@ class Others
             && count($array1) == count($array2)
             && array_diff($array1, $array2) === array_diff($array2, $array1));
     }
-
-    public static function isLocalhost()
-    {
-        return ($_SERVER['SERVER_NAME'] == 'localhost');
-    }
-
-    public static function isAllowedDomain()
-    {
-        return (in_array($_SERVER['SERVER_NAME'], [
-            // 'localhost',
-            'wordpress.local',
-            'ithemelandco.com',
-            'demos.ithemelandco.com'
-        ]));
-    }
 }

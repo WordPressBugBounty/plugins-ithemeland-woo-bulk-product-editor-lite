@@ -1,0 +1,104 @@
+#wcbe-deactivation-popup {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.6);
+    top: 0;
+    right: 0;
+    z-index: 999999999;
+    font-size: 14px;
+    color: #444;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-box {
+    width: 500px;
+    height: 255px;
+    background-color: #fff;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-header {
+    width: 100%;
+    padding: 15px;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 15px;
+    border-bottom: 1px #e3e3e3 solid;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-content {
+    width: 100%;
+    display: inline-block;
+    padding: 15px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-content span {
+    width: 100%;
+    display: inline-block;
+    padding-bottom: 20px;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-content label {
+    width: 100%;
+    display: inline-block;
+    margin: 0 0 10px 0;
+    cursor: pointer;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-footer {
+    width: 100%;
+    display: inline-block;
+    padding: 15px;
+    border-top: 1px #e3e3e3 solid;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-footer button {
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-footer button#wcbe-deactivation-popup-deactivate {
+    background-color: #603ecd !important;
+    border: 1px #603ecd solid !important;
+    color: #fff;
+    float: left;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-footer button#wcbe-deactivation-popup-close {
+    border: 1px #603ecd solid !important;
+    background-color: #fff !important;
+    color: #603ecd !important;
+    float: right;
+}
+
+#wcbe-deactivation-popup .wcbe-deactivation-popup-footer .wcbe-deactivation-loading {
+    display: none;
+    float: left;
+    margin: 6px 0 0 10px;
+    width: 18px;
+    height: auto;
+}

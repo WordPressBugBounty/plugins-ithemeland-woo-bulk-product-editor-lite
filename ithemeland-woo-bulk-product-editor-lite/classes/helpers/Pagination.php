@@ -2,8 +2,6 @@
 
 namespace wcbel\classes\helpers;
 
-defined('ABSPATH') || exit(); // Exit if accessed directly
-
 class Pagination
 {
     public static function init($current_page, $max_num_pages)
@@ -13,48 +11,48 @@ class Pagination
         $prev = max(1, $current_page - 1);
         $next = min($max_num_pages, $current_page + 1);
         $max_display = 3;
-        $output = "<div class='wcbel-top-nav-filters-paginate'>";
+        $output = "<div class='wcbe-top-nav-filters-paginate' data-last-page='" . esc_attr($max_num_pages) . "'>";
         if (isset($max_num_pages)) {
-            $output .= "<button type='button' data-index='" . esc_attr($prev) . "' class='wcbel-filter-form-action' data-search-action='pagination'><</button>";
+            $output .= "<a href='#' data-index='" . esc_attr($prev) . "' class='wcbe-filter-form-action' data-search-action='pagination'><</a>";
             if ($current_page < $max_display) {
                 for ($i = 1; $i <= min($max_display, $max_num_pages); $i++) {
                     $current = ($i == $current_page) ? 'current' : '';
-                    $output .= "<button type='button' data-index='" . esc_attr($i) . "' class='wcbel-filter-form-action " . esc_attr($current) . "' data-search-action='pagination'>" . esc_html($i) . "</button>";
+                    $output .= "<a href='#' data-index='" . esc_attr($i) . "' class='wcbe-filter-form-action " . esc_attr($current) . "' data-search-action='pagination'>" . esc_html($i) . "</a>";
                 }
                 if ($max_num_pages > ($max_display + 1)) {
                     $output .= "<span>...</span>";
                 }
                 if ($max_num_pages > $max_display) {
-                    $output .= "<button type='button' data-index='" . esc_attr($max_num_pages) . "' class='wcbel-filter-form-action' data-search-action='pagination'>" . esc_html($max_num_pages) . "</button>";
+                    $output .= "<a href='#' data-index='" . esc_attr($max_num_pages) . "' class='wcbe-filter-form-action' data-search-action='pagination'>" . esc_html($max_num_pages) . "</a>";
                 }
             } elseif ($current_page == $max_display) {
                 $max_num = ($max_display < $max_num_pages) ? $max_display + 1 : $max_display;
                 for ($i = 1; $i <= $max_num; $i++) {
                     $current = ($i == $current_page) ? 'current' : '';
-                    $output .= "<button type='button' data-index='" . esc_attr($i) . "' class='wcbel-filter-form-action " . esc_attr($current) . "' data-search-action='pagination'>" . esc_html($i) . "</button>";
+                    $output .= "<a href='#' data-index='" . esc_attr($i) . "' class='wcbe-filter-form-action " . esc_attr($current) . "' data-search-action='pagination'>" . esc_html($i) . "</a>";
                 }
                 if ($max_num_pages > ($current_page + 1)) {
                     $output .= "<span>...</span>";
-                    $output .= "<button type='button' data-index='" . esc_attr($max_num_pages) . "' class='wcbel-filter-form-action' data-search-action='pagination'>" . esc_html($max_num_pages) . "</button>";
+                    $output .= "<a href='#' data-index='" . esc_attr($max_num_pages) . "' class='wcbe-filter-form-action' data-search-action='pagination'>" . esc_html($max_num_pages) . "</a>";
                 }
             } else {
-                $output .= "<button type='button' data-index='1' class='wcbel-filter-form-action' data-search-action='pagination'>1</button>";
+                $output .= "<a href='#' data-index='1' class='wcbe-filter-form-action' data-search-action='pagination'>1</a>";
                 if ($max_num_pages > $max_display) {
                     $output .= "<span>...</span>";
                 }
                 for ($i = $current_page - 1; $i <= min($current_page + 1, $max_num_pages); $i++) {
                     $current = ($i == $current_page) ? 'current' : '';
-                    $output .= "<button type='button' data-index='" . esc_attr($i) . "' class='wcbel-filter-form-action " . esc_attr($current) . "' data-search-action='pagination'>" . esc_html($i) . "</button>";
+                    $output .= "<a href='#' data-index='" . esc_attr($i) . "' class='wcbe-filter-form-action " . esc_attr($current) . "' data-search-action='pagination'>" . esc_html($i) . "</a>";
                 }
                 if ($current_page + 1 < $max_num_pages) {
                     $output .= "<span>...</span>";
-                    $output .= "<button type='button' data-index='" . esc_attr($max_num_pages) . "' class='wcbel-filter-form-action' data-search-action='pagination'>" . esc_html($max_num_pages) . "</button>";
+                    $output .= "<a href='#' data-index='" . esc_attr($max_num_pages) . "' class='wcbe-filter-form-action' data-search-action='pagination'>" . esc_html($max_num_pages) . "</a>";
                 }
             }
-            $output .= "<button type='button' data-index='" . esc_attr($next) . "' class='wcbel-filter-form-action' data-search-action='pagination'>></button>";
+            $output .= "<a href='#' data-index='" . esc_attr($next) . "' class='wcbe-filter-form-action' data-search-action='pagination'>></a>";
         }
         $output .= "</div>";
-        $output .= '<div class="wcbel-pagination-loading"><img src="' . esc_url(WCBEL_IMAGES_URL) . 'loading.gif" alt="Loading" width="20" height="20"></div>';
+        $output .= '<div class="wcbe-pagination-loading"><img src="' . WCBEL_IMAGES_URL . 'loading.gif" alt="Loading" width="20" height="20"></div>';
         return $output;
     }
 }

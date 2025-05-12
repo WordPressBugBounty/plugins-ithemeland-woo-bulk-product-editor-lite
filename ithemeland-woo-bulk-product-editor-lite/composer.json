@@ -1,5 +1,5 @@
 {
-    "name": "ithemeland/ithemeland-bulk-product-editing-lite-for-woocommerce",
+    "name": "ithemeland/ithemeland-woo-bulk-product-editor-lite",
     "authors": [
         {
             "name": "iThemeland",
@@ -8,10 +8,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "wcbel\\classes\\": "classes/"
+            "wcbel\\classes\\": "classes/",
+            "wcbel\\framework\\": "framework/"
         }
     },
     "require": {
-        "khanhicetea/twigeval": "^1.4"
+        "php": "^7.4 || ^8.0",
+        "twig/twig": "^2.15",
+        "symfony/deprecation-contracts": "^2.5",
+        "khanhicetea/twigeval": "^1.3"
     }
 }

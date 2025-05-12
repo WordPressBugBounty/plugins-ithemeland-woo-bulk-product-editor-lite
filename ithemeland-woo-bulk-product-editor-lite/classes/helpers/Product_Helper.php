@@ -167,6 +167,9 @@ class Product_Helper
             case 'number_delete':
                 $data['value'] = str_replace($data['value'], '', $old_value);
                 break;
+            case 'text_clear':
+                $data['value'] = '';
+                break;
             case 'number_clear':
                 $data['value'] = '';
                 break;
@@ -233,16 +236,38 @@ class Product_Helper
     public static function get_text_variable_options()
     {
         return [
-            '' => __('Variable', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'title' => __('Title', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'id' => __('ID', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'sku' => __('SKU', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'menu_order' => __('Menu Order', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'parent_id' => __('Parent ID', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'parent_title' => __('Parent Title', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'parent_sku' => __('Parent SKU', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'regular_price' => __('Regular Price', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'sale_price' => __('Sale Price', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            '' => esc_html__('Variable', 'ithemeland-woo-bulk-product-editor-lite'),
+            'title' => esc_html__('Title', 'ithemeland-woo-bulk-product-editor-lite'),
+            'id' => esc_html__('ID', 'ithemeland-woo-bulk-product-editor-lite'),
+            'sku' => esc_html__('SKU', 'ithemeland-woo-bulk-product-editor-lite'),
+            'menu_order' => esc_html__('Menu Order', 'ithemeland-woo-bulk-product-editor-lite'),
+            'parent_id' => esc_html__('Parent ID', 'ithemeland-woo-bulk-product-editor-lite'),
+            'parent_title' => esc_html__('Parent Title', 'ithemeland-woo-bulk-product-editor-lite'),
+            'parent_sku' => esc_html__('Parent SKU', 'ithemeland-woo-bulk-product-editor-lite'),
+            'regular_price' => esc_html__('Regular Price', 'ithemeland-woo-bulk-product-editor-lite'),
+            'sale_price' => esc_html__('Sale Price', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
+    }
+
+    public static function get_combinations($arrays)
+    {
+        $counts = array_map("count", $arrays);
+        $total = array_product($counts);
+        $result = [];
+        $combinations = [];
+        $curCombs = $total;
+
+        foreach ($arrays as $key => $values) {
+            $curCombs = $curCombs / $counts[$key];
+            $combinations[$key] = $curCombs;
+        }
+
+        for ($i = 0; $i < $total; $i++) {
+            foreach ($arrays as $key => $values) {
+                $result[$i][$key] = $values[($i / $combinations[$key]) % $counts[$key]];
+            }
+        }
+
+        return $result;
     }
 }

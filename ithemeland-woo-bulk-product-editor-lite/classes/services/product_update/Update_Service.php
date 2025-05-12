@@ -15,6 +15,9 @@ class Update_Service
     private $save_history;
     private $operation_type;
     private $update_type;
+    private $is_processing;
+    private $history_id;
+    private $complete_actions;
 
     public static function get_instance()
     {
@@ -28,6 +31,12 @@ class Update_Service
     private function __construct()
     {
         $this->update_classes = $this->get_update_classes();
+        $this->is_processing = false;
+    }
+
+    public function is_processing()
+    {
+        return $this->is_processing;
     }
 
     public function set_update_data($data)
@@ -40,12 +49,15 @@ class Update_Service
         $this->product_data = $data['product_data'];
         $this->save_history = (!empty($data['save_history']));
         $this->update_type = sanitize_text_field($data['update_type']);
-
+        $this->complete_actions = (!empty($data['complete_actions'])) ? $data['complete_actions'] : null;
         if (isset($data['operation_type'])) {
             $this->operation_type = sanitize_text_field($data['operation_type']);
         } else {
             $this->operation_type = (count($this->product_ids) > 1) ? History::BULK_OPERATION : History::INLINE_OPERATION;
         }
+
+        $this->history_id = 0;
+        $this->is_processing = false;
 
         return true;
     }
@@ -63,9 +75,19 @@ class Update_Service
             'product_data' => $this->product_data,
             'save_history' => $this->save_history,
             'operation_type' => $this->operation_type,
+            'complete_actions' => $this->complete_actions
         ]);
 
-        return $update_object->perform();
+        $result = $update_object->perform();
+        $this->is_processing = $update_object->is_processing();
+        $this->history_id = $update_object->get_history_id();
+
+        return $result;
+    }
+
+    public function get_history_id()
+    {
+        return $this->history_id;
     }
 
     private function get_update_classes()

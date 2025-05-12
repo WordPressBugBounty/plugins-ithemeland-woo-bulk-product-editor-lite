@@ -11,4 +11,8 @@ interface Update_Interface
     public function set_update_data($update_data);
 
     public function perform();
+
+    public function is_processing();
+
+    public function get_history_id();
 }

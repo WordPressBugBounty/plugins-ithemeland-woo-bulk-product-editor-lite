@@ -1,0 +1,2 @@
+<span class="wcbe-schedule-jobs-status" data-status="pending"><?php esc_html_e('Pending', 'ithemeland-woo-bulk-product-editor-lite'); ?></span>
+<i class="wcbe-icon-info1" title="<?php esc_attr_e('The job is pending', 'ithemeland-woo-bulk-product-editor-lite'); ?>"></i>

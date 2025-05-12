@@ -5,28 +5,16 @@ namespace wcbel\classes\services\product_update\handlers;
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\helpers\Others;
-use wcbel\classes\repositories\History;
 use wcbel\classes\repositories\Product;
-use wcbel\classes\services\product_update\Handler_Interface;
+use wcbel\classes\services\product_update\Product_Update_Handler;
 
-class Remove_Duplicate_Handler implements Handler_Interface
+class Remove_Duplicate_Handler extends Product_Update_Handler
 {
-    private static $instance;
-
     private $deleted_ids;
     private $update_data;
     private $product_ids;
 
-    public static function get_instance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct()
+    public function __construct()
     {
         $this->deleted_ids = [];
     }
@@ -70,10 +58,13 @@ class Remove_Duplicate_Handler implements Handler_Interface
             }
         }
 
+        if (!empty($this->update_data['background_process'])) {
+            $this->add_completed_task(1);
+        }
+
         // save history item
         if (!empty($this->update_data['history_id'])) {
-            $history_repository = History::get_instance();
-            $history_item_result = $history_repository->save_history_item([
+            $this->save_history_item([
                 'history_id' => $this->update_data['history_id'],
                 'historiable_id' => 0,
                 'name' => $this->update_data['name'],
@@ -82,11 +73,9 @@ class Remove_Duplicate_Handler implements Handler_Interface
                 'deleted_ids' => $this->deleted_ids,
                 'prev_value' => 'untrash',
                 'new_value' => 'trash',
+                'prev_total_count' => count($this->deleted_ids),
+                'new_total_count' => count($this->deleted_ids),
             ]);
-
-            if (!$history_item_result) {
-                return false;
-            }
         }
 
         return true;

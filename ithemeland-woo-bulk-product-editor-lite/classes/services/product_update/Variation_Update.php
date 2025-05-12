@@ -21,6 +21,9 @@ class Variation_Update implements Update_Interface
     private $history_repository;
     private $prev_value;
     private $new_value;
+    private $is_processing;
+    private $history_id;
+    private $complete_actions;
 
     public static function get_instance()
     {
@@ -35,6 +38,17 @@ class Variation_Update implements Update_Interface
     {
         $this->product_repository = Product::get_instance();
         $this->history_repository = History::get_instance();
+        $this->is_processing = false;
+    }
+
+    public function is_processing()
+    {
+        return $this->is_processing;
+    }
+
+    public function get_history_id()
+    {
+        return $this->history_id;
     }
 
     public function set_update_data($data)
@@ -46,6 +60,7 @@ class Variation_Update implements Update_Interface
         $this->product_ids = array_unique($data['product_ids']);
         $this->update_data = $data['product_data'];
         $this->save_history = (!empty($data['save_history']));
+        $this->complete_actions = (!empty($data['complete_actions'])) ? $data['complete_actions'] : null;
     }
 
     public function perform()
@@ -61,8 +76,8 @@ class Variation_Update implements Update_Interface
 
             // save history
             if ($this->save_history) {
-                $history_id = $this->save_history();
-                if (empty($history_id)) {
+                $this->history_id = $this->save_history();
+                if (empty($this->history_id)) {
                     return false;
                 }
             }
@@ -106,9 +121,9 @@ class Variation_Update implements Update_Interface
                     $this->default_variation_update($update_data['value']['default_variation']);
                 }
 
-                if (!empty($history_id)) {
+                if (!empty($this->history_id)) {
                     $result = $this->save_history_item([
-                        'history_id' => intval($history_id),
+                        'history_id' => intval($this->history_id),
                         'product_id' => intval($this->product->get_id()),
                         'name' => 'bulk_variation_update',
                         'type' => 'variation',
@@ -118,6 +133,18 @@ class Variation_Update implements Update_Interface
 
                     if (!$result) {
                         return false;
+                    }
+                }
+            }
+        }
+
+        if (!empty($this->complete_actions)) {
+            foreach ($this->complete_actions as $action) {
+                if (!empty($action['hook'])) {
+                    if (!empty($action['data'])) {
+                        do_action($action['hook'], $action['data']);
+                    } else {
+                        do_action($action['hook']);
                     }
                 }
             }

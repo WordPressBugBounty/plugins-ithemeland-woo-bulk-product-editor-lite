@@ -2,8 +2,6 @@
 
 namespace wcbel\classes\helpers;
 
-defined('ABSPATH') || exit(); // Exit if accessed directly
-
 class Render
 {
     public static function html($file_dir, $data = [])

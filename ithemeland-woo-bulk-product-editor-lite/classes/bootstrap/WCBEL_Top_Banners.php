@@ -79,7 +79,7 @@ class WCBEL_Top_Banners
         $output .= '</a>';
         $output .= '</div></div>';
 
-        echo wp_kses($output, Sanitizer::allowed_html_tags());
+        echo wp_kses($output, Sanitizer::allowed_html());
     }
 
     public function black_friday_banner_dismiss()

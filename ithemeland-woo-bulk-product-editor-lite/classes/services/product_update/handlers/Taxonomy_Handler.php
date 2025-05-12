@@ -5,32 +5,17 @@ namespace wcbel\classes\services\product_update\handlers;
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\helpers\Product_Helper;
-use wcbel\classes\repositories\History;
 use wcbel\classes\repositories\Product;
-use wcbel\classes\services\product_update\Handler_Interface;
+use wcbel\classes\services\product_update\Product_Update_Handler;
 
-class Taxonomy_Handler implements Handler_Interface
+class Taxonomy_Handler extends Product_Update_Handler
 {
-    private static $instance;
-
     private $product_repository;
     private $product;
     private $setter_method;
     private $update_data;
     private $current_field_value;
-
-    public static function get_instance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct()
-    {
-    }
+    private $new_value;
 
     public function update($product_ids, $update_data)
     {
@@ -54,25 +39,32 @@ class Taxonomy_Handler implements Handler_Interface
 
             $this->product = $this->product_repository->get_product(intval($product_id));
             if (!($this->product instanceof \WC_Product)) {
-                return false;
+                continue;
             }
 
-            $this->current_field_value = (!empty($this->update_data['name'])) ? wp_get_post_terms($this->product->get_id(), $this->update_data['name'], ['fields' => 'ids']) : '';
+            if ($this->product->get_type() == 'variation') {
+                continue;
+            }
+
+            $this->current_field_value = (!empty($this->update_data['name'])) ? wp_get_post_terms($this->product->get_id(), $this->update_data['name'], ['fields' => ($this->update_data['name'] == 'product_tag') ? 'names' : 'ids']) : '';
 
             // run update method
             $this->{$this->setter_method}();
 
+            if (!empty($this->update_data['background_process'])) {
+                $this->add_completed_task(1);
+            }
+
             // save history item
             if (!empty($this->update_data['history_id'])) {
-                $history_repository = History::get_instance();
-                $history_item_result = $history_repository->save_history_item([
+                $this->save_history_item([
                     'history_id' => $this->update_data['history_id'],
                     'historiable_id' => $this->product->get_id(),
                     'name' => $this->update_data['name'],
                     'sub_name' => (!empty($this->update_data['sub_name'])) ? $this->update_data['sub_name'] : '',
                     'type' => $this->update_data['type'],
                     'prev_value' => $this->current_field_value,
-                    'new_value' => $this->update_data['value'],
+                    'new_value' => $this->new_value,
                     'extra_fields' => [
                         'used_for_variations' => [
                             'prev' => (isset($this->update_data['used_for_variations_prev'])) ? $this->update_data['used_for_variations_prev'] : '',
@@ -84,9 +76,6 @@ class Taxonomy_Handler implements Handler_Interface
                         ],
                     ],
                 ]);
-                if (!$history_item_result) {
-                    return false;
-                }
             }
         }
 
@@ -113,10 +102,11 @@ class Taxonomy_Handler implements Handler_Interface
 
     private function taxonomy_update()
     {
+        $this->new_value = $this->update_data['value'];
         if (!empty($this->update_data['operator'])) {
-            $this->update_data['value'] = Product_Helper::apply_operator($this->current_field_value, $this->update_data);
+            $this->new_value = Product_Helper::apply_operator($this->current_field_value, $this->update_data);
         }
-        return wp_set_post_terms($this->product->get_id(), $this->update_data['value'], $this->update_data['name'], false);
+        return wp_set_post_terms($this->product->get_id(), $this->new_value, $this->update_data['name'], false);
     }
 
     private function product_attribute_update()
@@ -126,19 +116,19 @@ class Taxonomy_Handler implements Handler_Interface
         $product_attributes = (!empty($attributes_result) ? $attributes_result : []);
         $attribute_taxonomies = wc_get_attribute_taxonomies();
         $this->update_data['value'] = (!empty($this->update_data['value']) && is_array($this->update_data['value'])) ? array_map('intval', $this->update_data['value']) : [];
+        $this->new_value = $this->update_data['value'];
         if (is_array($attribute_taxonomies) && !empty($attribute_taxonomies)) {
             if (!empty($product_attributes) && isset($product_attributes[strtolower(urlencode($this->update_data['name']))])) {
                 $old_attr = $product_attributes[strtolower(urlencode($this->update_data['name']))];
                 if ($old_attr->get_name() == $this->update_data['name']) {
-                    $value = Product_Helper::apply_operator($old_attr->get_options(), $this->update_data);
-                    if (!empty($value)) {
+                    $this->new_value = Product_Helper::apply_operator($old_attr->get_options(), $this->update_data);
+                    if (!empty($this->new_value)) {
                         // for history
                         $this->update_data['used_for_variations_prev'] = ($old_attr->get_variation()) ? 'yes' : 'no';
                         $this->update_data['attribute_is_visible_prev'] = ($old_attr->get_visible()) ? 'yes' : 'no';
-
                         $attr->set_id($old_attr->get_id());
                         $attr->set_name($old_attr->get_name());
-                        $attr->set_options($value);
+                        $attr->set_options($this->new_value);
                         $attr->set_position($old_attr->get_position());
 
                         if (isset($this->update_data['attribute_is_visible']) && $this->update_data['attribute_is_visible'] != '') {
@@ -165,7 +155,7 @@ class Taxonomy_Handler implements Handler_Interface
                     $attribute_id = $attrs[$attribute_name];
                     $attr->set_id($attribute_id);
                     $attr->set_name($this->update_data['name']);
-                    $attr->set_options($this->update_data['value']);
+                    $attr->set_options($this->new_value);
                     $attr->set_position(count($product_attributes));
                     $attr->set_visible((isset($this->update_data['attribute_is_visible']) && $this->update_data['attribute_is_visible'] == 'yes') ? 1 : 0);
                     $attr->set_variation(isset($this->update_data['used_for_variations']) && $this->update_data['used_for_variations'] == 'yes');

@@ -9,11 +9,11 @@ class Operator
     public static function edit_text($extra = [])
     {
         $operators =  [
-            'text_new' => __('New', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'text_append' => __('Append', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'text_prepend' => __('Prepend', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'text_delete' => __('Delete', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'text_replace' => __('Replace', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            'text_new' => esc_html__('New', 'ithemeland-woo-bulk-product-editor-lite'),
+            'text_append' => esc_html__('Append', 'ithemeland-woo-bulk-product-editor-lite'),
+            'text_prepend' => esc_html__('Prepend', 'ithemeland-woo-bulk-product-editor-lite'),
+            'text_delete' => esc_html__('Delete', 'ithemeland-woo-bulk-product-editor-lite'),
+            'text_replace' => esc_html__('Replace', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
 
         if (!empty($extra) && is_array($extra)) {
@@ -28,49 +28,48 @@ class Operator
     public static function edit_taxonomy()
     {
         return [
-            'taxonomy_append' => __('Append', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'taxonomy_replace' => __('Replace', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'taxonomy_delete' => __('Delete', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            'taxonomy_append' => esc_html__('Append', 'ithemeland-woo-bulk-product-editor-lite'),
+            'taxonomy_replace' => esc_html__('Replace', 'ithemeland-woo-bulk-product-editor-lite'),
+            'taxonomy_delete' => esc_html__('Delete', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
 
     public static function edit_number()
     {
         return [
-            'number_new' => __('Set New', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'number_clear' => __('Clear Value', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'number_formula' => __('Formula', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'increase_by_value' => __('Increase by value', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'decrease_by_value' => __('Decrease by value', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'increase_by_percent' => __('Increase by %', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'decrease_by_percent' => __('Decrease by %', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            'number_new' => esc_html__('Set New', 'ithemeland-woo-bulk-product-editor-lite'),
+            'number_clear' => esc_html__('Clear Value', 'ithemeland-woo-bulk-product-editor-lite'),
+            'number_formula' => esc_html__('Formula', 'ithemeland-woo-bulk-product-editor-lite'),
+            'increase_by_value' => esc_html__('Increase by value', 'ithemeland-woo-bulk-product-editor-lite'),
+            'decrease_by_value' => esc_html__('Decrease by value', 'ithemeland-woo-bulk-product-editor-lite'),
+            'increase_by_percent' => esc_html__('Increase by %', 'ithemeland-woo-bulk-product-editor-lite'),
+            'decrease_by_percent' => esc_html__('Decrease by %', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
 
     public static function edit_regular_price()
     {
         return [
-            'increase_by_value_from_sale' => __('Increase by value (From sale)', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'increase_by_percent_from_sale' => __('Increase by % (From sale)', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            'increase_by_value_from_sale' => esc_html__('Increase by value (From sale)', 'ithemeland-woo-bulk-product-editor-lite'),
+            'increase_by_percent_from_sale' => esc_html__('Increase by % (From sale)', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
 
     public static function edit_sale_price()
     {
         return [
-            'decrease_by_value_from_regular' => __('Decrease by value (From regular)', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'decrease_by_percent_from_regular' => __('Decrease by % (From regular)', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            'decrease_by_value_from_regular' => esc_html__('Decrease by value (From regular)', 'ithemeland-woo-bulk-product-editor-lite'),
+            'decrease_by_percent_from_regular' => esc_html__('Decrease by % (From regular)', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
-
     public static function filter_text()
     {
         return [
-            'like' => __('Like', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'exact' => __('Exact', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'not' => __('Not', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'begin' => __('Begin', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
-            'end' => __('End', 'ithemeland-bulk-product-editing-lite-for-woocommerce'),
+            'like' => esc_html__('Like', 'ithemeland-woo-bulk-product-editor-lite'),
+            'exact' => esc_html__('Exact', 'ithemeland-woo-bulk-product-editor-lite'),
+            'not' => esc_html__('Not', 'ithemeland-woo-bulk-product-editor-lite'),
+            'begin' => esc_html__('Begin', 'ithemeland-woo-bulk-product-editor-lite'),
+            'end' => esc_html__('End', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
 
@@ -83,6 +82,16 @@ class Operator
         ];
     }
 
+    public static function filter_type_select()
+    {
+        return [
+            'like' => esc_html__('Like', 'ithemeland-woo-bulk-product-editor-lite'),
+            'exact' => esc_html__('Exact', 'ithemeland-woo-bulk-product-editor-lite'),
+            'not' => esc_html__('Not', 'ithemeland-woo-bulk-product-editor-lite'),
+            'begin' => esc_html__('Begin', 'ithemeland-woo-bulk-product-editor-lite'),
+            'end' => esc_html__('End', 'ithemeland-woo-bulk-product-editor-lite'),
+        ];
+    }
     public static function round_items()
     {
         return [
@@ -97,6 +106,15 @@ class Operator
             79 => 79,
             89 => 89,
             99 => 99
+        ];
+    }
+
+    public static function get_current_value()
+    {
+        return [
+            // '' => esc_html__('Current Value', 'ithemeland-woo-bulk-product-editor-lite'),
+            'yes' => esc_html__('Yes', 'ithemeland-woo-bulk-product-editor-lite'),
+            'no' => esc_html__('No', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
 }

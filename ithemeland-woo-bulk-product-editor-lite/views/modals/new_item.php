@@ -2,39 +2,38 @@
 
 use wcbel\classes\helpers\Sanitizer;
 
-if (!defined('ABSPATH')) exit; // Exit if accessed directly
 ?>
 
-<div class="wcbel-modal" id="wcbel-modal-new-item">
-    <div class="wcbel-modal-container">
-        <div class="wcbel-modal-box wcbel-modal-box-sm">
-            <div class="wcbel-modal-content">
-                <div class="wcbel-modal-title">
-                    <h2 id="wcbel-new-item-title"></h2>
-                    <button type="button" class="wcbel-modal-close" data-toggle="modal-close">
-                        <i class="wcbel-icon-x"></i>
+<div class="wcbe-modal" id="wcbe-modal-new-item">
+    <div class="wcbe-modal-container">
+        <div class="wcbe-modal-box wcbe-modal-box-sm">
+            <div class="wcbe-modal-content">
+                <div class="wcbe-modal-title">
+                    <h2 id="wcbe-new-item-title"></h2>
+                    <button type="button" class="wcbe-modal-close" data-toggle="modal-close">
+                        <i class="wcbe-icon-x"></i>
                     </button>
                 </div>
-                <div class="wcbel-modal-body">
-                    <div class="wcbel-wrap">
-                        <div class="wcbel-form-group">
-                            <label class="wcbel-label-big" for="wcbel-new-item-count" id="wcbel-new-item-description"></label>
-                            <input type="number" class="wcbel-input-numeric-sm wcbel-m0" id="wcbel-new-item-count" value="1" placeholder="<?php esc_html_e('Number ...', 'ithemeland-bulk-product-editing-lite-for-woocommerce'); ?>">
+                <div class="wcbe-modal-body">
+                    <div class="wcbe-wrap">
+                        <div class="wcbe-form-group">
+                            <label class="wcbe-label-big" for="wcbe-new-item-count" id="wcbe-new-item-description"></label>
+                            <input type="number" class="wcbe-input-numeric-sm wcbe-m0" id="wcbe-new-item-count" value="1" placeholder="<?php esc_html_e('Number ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
                         </div>
-                        <div id="wcbel-new-item-extra-fields">
+                        <div id="wcbe-new-item-extra-fields">
                             <?php if (!empty($new_item_extra_fields)) : ?>
                                 <?php foreach ($new_item_extra_fields as $extra_field) : ?>
-                                    <div class="wcbel-form-group">
-                                        <?php echo wp_kses($extra_field['label'], Sanitizer::allowed_html_tags()); ?>
-                                        <?php echo wp_kses($extra_field['field'], Sanitizer::allowed_html_tags()); ?>
+                                    <div class="wcbe-form-group">
+                                        <?php echo wp_kses($extra_field['label'], Sanitizer::allowed_html()); ?>
+                                        <?php echo wp_kses($extra_field['field'], Sanitizer::allowed_html()); ?>
                                     </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <div class="wcbel-modal-footer">
-                    <button type="button" class="wcbel-button wcbel-button-blue" id="wcbel-create-new-item"><?php esc_html_e('Create', 'ithemeland-bulk-product-editing-lite-for-woocommerce'); ?></button>
+                <div class="wcbe-modal-footer">
+                    <button type="button" class="wcbe-button wcbe-button-blue" id="wcbe-create-new-item"><?php esc_html_e('Create', 'ithemeland-woo-bulk-product-editor-lite'); ?></button>
                 </div>
             </div>
         </div>

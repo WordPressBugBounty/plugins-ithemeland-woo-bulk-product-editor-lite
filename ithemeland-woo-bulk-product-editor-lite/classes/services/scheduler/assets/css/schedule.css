@@ -1,0 +1,277 @@
+#wcbe-float-side-modal-bulk-edit .wcbe-set-schedule-form {
+    display: none;
+}
+
+.wcbe-set-schedule-form label,
+.wcbe-set-schedule-form strong {
+    font-size: 14px;
+}
+
+.wcbe-set-schedule-dependent>div {
+    display: none;
+}
+
+.wcbe-set-schedule-form input[type="number"],
+.wcbe-set-schedule-form input[type="text"],
+.wcbe-set-schedule-form select,
+.wcbe-set-schedule-form textarea,
+.wcbe-set-schedule-form .select2-selection,
+.wcbe-set-schedule-form .select2-container {
+    max-width: 350px !important;
+    width: 350px !important;
+}
+
+.wcbe-set-schedule-form .select2-search__field {
+    width: auto !important;
+}
+
+.wcbe-set-schedule-form .select2-search--inline {
+    width: 10px !important;
+}
+
+.wcbe-set-schedule-form .error {
+    border-color: #c93434;
+}
+
+.wcbe-set-schedule-form .error-message {
+    display: none;
+}
+
+.wcbe-set-schedule-form .error .error-message {
+    display: block;
+}
+
+
+/* jobs list */
+
+.wcbe-float-side-modal-schedule-jobs-table-container {
+    border: 1px #dbdbdb solid;
+}
+
+#wcbe-float-side-modal-schedule-jobs table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+#wcbe-float-side-modal-schedule-jobs table tr {
+    border-bottom: 1px #dbdbdb solid;
+}
+
+#wcbe-float-side-modal-schedule-jobs table th {
+    text-transform: capitalize;
+}
+
+#wcbe-float-side-modal-schedule-jobs table th,
+#wcbe-float-side-modal-schedule-jobs table td {
+    padding: 5px;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+#wcbe-float-side-modal-schedule-jobs table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.wcbe-schedule-jobs-status {
+    font-size: 12px;
+    padding: 0;
+    width: 70px;
+    text-align: center;
+    font-size: 12px !important;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    display: inline-block;
+}
+
+.wcbe-schedule-jobs-status[data-status="pending"] {
+    background-color: #e38e42;
+    color: #fff;
+}
+
+.wcbe-schedule-jobs-status[data-status="running"] {
+    background-color: #b42a7b;
+    color: #fff;
+}
+
+.wcbe-schedule-jobs-status[data-status="done"] {
+    background-color: #1d94c4;
+    color: #fff;
+}
+
+.wcbe-schedule-jobs-status[data-status="completed"] {
+    background-color: #2dac34;
+    color: #fff;
+}
+
+.wcbe-schedule-jobs-status[data-status="incomplete"] {
+    background-color: #ca3939;
+    color: #fff;
+}
+
+.wcbe-schedule-jobs-status[data-status="stopped"] {
+    background-color: #919191;
+    color: #fff;
+}
+
+.wcbe-schedule-jobs-status[data-status="processing"] {
+    background-color: #754be8;
+    color: #fff;
+}
+
+.wcbe-schedule-jobs-list-action-button {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    margin: 0 5px 0 0;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.wcbe-schedule-jobs-list-action-button[data-action="delete"] {
+    color: #444;
+}
+
+.wcbe-schedule-jobs-list-action-button[data-action="stop"] {
+    color: #444;
+}
+
+.wcbe-set-schedule-short-description {
+    width: 100%;
+    display: inline-block;
+    padding-left: 200px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    font-size: 12px;
+    color: #848484;
+    font-style: italic;
+}
+
+.wcbe-tabs-list>li>a {
+    z-index: 2;
+}
+
+.wcbe-jobs-list-button-number {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 9px;
+    width: 12px;
+    height: 12px;
+    line-height: 13px;
+    padding: 0;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    background: #e38e42;
+    color: #fff;
+    text-align: center;
+    z-index: 1;
+}
+
+.wcbe-schedule-jobs-list-navigation-button {
+    position: relative;
+}
+
+.wcbe-schedule-jobs-list-navigation-button i {
+    color: #e38e42;
+}
+
+.wcbe-tabs-list li a[data-content="set_schedule"],
+.wcbe-tabs-list li a.selected[data-content="set_schedule"] {
+    color: #fff;
+    background: #f7b71f;
+    border-radius: 4px 4px 0 0;
+}
+
+.wcbe-schedule-edit-job-loading,
+.wcbe-schedule-job-log-loading {
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+.wcbe-schedule-job-log-info,
+.wcbe-schedule-job-log-table {
+    width: 100%;
+    display: inline-block;
+}
+
+.wcbe-schedule-job-log-info {
+    margin-bottom: 10px;
+}
+
+.wcbe-schedule-job-log-info>div {
+    width: 100%;
+    display: inline-block;
+    line-height: 22px;
+    padding: 3px 0;
+}
+
+.wcbe-schedule-job-log-info>div strong {
+    width: 125px;
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.wcbe-schedule-job-log-info>div span {
+    width: calc(97% - 125px);
+    display: inline-block;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.wcbe-schedule-job-log-info>div span.wcbe-schedule-jobs-status {
+    width: 70px !important;
+}
+
+.wcbe-schedule-job-log-container table {
+    width: 100%;
+    text-align: left;
+}
+
+.wcbe-schedule-job-log-container table th {
+    text-transform: capitalize;
+}
+
+.wcbe-schedule-job-log-container table tbody tr {
+    border-bottom: 1px #e3e3e3 solid;
+}
+
+.wcbe-schedule-job-log-container table td,
+.wcbe-schedule-job-log-container table th {
+    padding: 3px 2px;
+    font-size: 14px;
+}
+
+.wcbe-schedule-edit-job-container {
+    display: none;
+}
+
+.wcbe-bulk-edit-form-schedule-bulk-edit {
+    display: none;
+}
+
+.wcbe-schedule-current-time-update-button {
+    float: right;
+}
+
+.wcbe-schedule-current-time-update-button {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    margin: 0 0 0 7px;
+    cursor: pointer;
+}
+
+.wcbe-schedule-current-time-update-button i {
+    color: #444;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+    margin: 0;
+    vertical-align: middle;
+}

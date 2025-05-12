@@ -2,8 +2,6 @@
 
 namespace wcbel\classes\helpers;
 
-defined('ABSPATH') || exit(); // Exit if accessed directly
-
 class Sanitizer
 {
     public static function array($val)
@@ -26,7 +24,7 @@ class Sanitizer
         return filter_var($input, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     }
 
-    public static function allowed_html_tags()
+    public static function allowed_html()
     {
         $allowed = wp_kses_allowed_html('post');
 
@@ -47,24 +45,41 @@ class Sanitizer
         $allowed['label']['for'] = true;
         $allowed['label']['style'] = true;
 
+        $allowed['option']['data-*'] = true;
+        $allowed['option']['value'] = true;
+        $allowed['option']['selected'] = true;
+        $allowed['option']['disabled'] = true;
+
         $allowed['svg']['width'] = true;
         $allowed['svg']['height'] = true;
         $allowed['svg']['xmlns'] = true;
         $allowed['svg']['version'] = true;
         $allowed['svg']['viewbox'] = true;
+        $allowed['svg']['xmlns:xlink'] = true;
         $allowed['svg']['preserveaspectratio'] = true;
 
         $allowed['path']['d'] = true;
         $allowed['path']['fill'] = true;
 
+        $allowed['g']['stroke-width'] = true;
+        $allowed['g']['fill-rule'] = true;
         $allowed['g']['transform'] = true;
+        $allowed['g']['id'] = true;
         $allowed['g']['stroke'] = true;
         $allowed['g']['fill'] = true;
+        $allowed['g']['stroke-linecap'] = true;
+        $allowed['g']['stroke-linejoin'] = true;
 
-        $allowed['option']['data-*'] = true;
-        $allowed['option']['value'] = true;
-        $allowed['option']['selected'] = true;
-        $allowed['option']['disabled'] = true;
+        $allowed['circle']['cx'] = true;
+        $allowed['circle']['cy'] = true;
+        $allowed['circle']['r'] = true;
+        
+        $allowed['line']['x1'] = true;
+        $allowed['line']['x2'] = true;
+        $allowed['line']['y1'] = true;
+        $allowed['line']['y2'] = true;
+
+        $allowed['polyline']['points'] = true;
 
         $allowed['span']['data-*'] = true;
         $allowed['span']['class'] = true;
@@ -137,20 +152,20 @@ class Sanitizer
         $allowed['tbody']['class'] = true;
         $allowed['tbody']['id'] = true;
 
-        $allowed['tr']['style'] = true;
         $allowed['tr']['data-*'] = true;
         $allowed['tr']['class'] = true;
         $allowed['tr']['id'] = true;
+        $allowed['tr']['style'] = true;
 
-        $allowed['th']['style'] = true;
         $allowed['th']['data-*'] = true;
         $allowed['th']['class'] = true;
         $allowed['th']['id'] = true;
+        $allowed['th']['style'] = true;
 
-        $allowed['td']['style'] = true;
         $allowed['td']['data-*'] = true;
         $allowed['td']['class'] = true;
         $allowed['td']['id'] = true;
+        $allowed['td']['style'] = true;
 
         $allowed['style'] = [];
         $allowed['form']['action'] = true;

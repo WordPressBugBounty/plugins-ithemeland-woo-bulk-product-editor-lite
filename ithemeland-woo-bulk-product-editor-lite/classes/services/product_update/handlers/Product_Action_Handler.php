@@ -4,26 +4,11 @@ namespace wcbel\classes\services\product_update\handlers;
 
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
-use wcbel\classes\services\product_update\Handler_Interface;
+use wcbel\classes\services\product_update\Product_Update_Handler;
 
-class Product_Action_Handler implements Handler_Interface
+class Product_Action_Handler extends Product_Update_Handler
 {
-    private static $instance;
-
     private $product_id;
-
-    public static function get_instance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct()
-    {
-    }
 
     public function update($product_ids, $update_data)
     {
@@ -36,6 +21,9 @@ class Product_Action_Handler implements Handler_Interface
         foreach ($product_ids as $product_id) {
             $this->product_id = intval($product_id);
             $this->{$method}();
+            if (isset($update_data['background_process']) && $update_data['background_process'] === true) {
+                $this->add_completed_task(1);
+            }
         }
 
         return true;

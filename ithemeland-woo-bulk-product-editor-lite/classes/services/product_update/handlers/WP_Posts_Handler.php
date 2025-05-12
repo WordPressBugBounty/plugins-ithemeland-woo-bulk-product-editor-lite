@@ -4,29 +4,13 @@ namespace wcbel\classes\services\product_update\handlers;
 
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
-use wcbel\classes\repositories\History;
-use wcbel\classes\services\product_update\Handler_Interface;
+use wcbel\classes\services\product_update\Product_Update_Handler;
 
-class WP_Posts_Handler implements Handler_Interface
+class WP_Posts_Handler extends Product_Update_Handler
 {
-    private static $instance;
-
     private $post;
     private $update_data;
     private $current_field_value;
-
-    public static function get_instance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    private function __construct()
-    {
-    }
 
     public function update($product_ids, $update_data)
     {
@@ -58,10 +42,13 @@ class WP_Posts_Handler implements Handler_Interface
                 return false;
             }
 
+            if (!empty($this->update_data['background_process'])) {
+                $this->add_completed_task(1);
+            }
+
             // save history item
             if (!empty($this->update_data['history_id'])) {
-                $history_repository = History::get_instance();
-                $history_item_result = $history_repository->save_history_item([
+                $this->save_history_item([
                     'history_id' => $this->update_data['history_id'],
                     'historiable_id' => $this->post->ID,
                     'name' => $this->update_data['name'],
@@ -69,10 +56,9 @@ class WP_Posts_Handler implements Handler_Interface
                     'type' => $this->update_data['type'],
                     'prev_value' => $this->current_field_value,
                     'new_value' => $this->update_data['value'],
+                    'prev_total_count' => 1,
+                    'new_total_count' => 1,
                 ]);
-                if (!$history_item_result) {
-                    return false;
-                }
             }
         }
 

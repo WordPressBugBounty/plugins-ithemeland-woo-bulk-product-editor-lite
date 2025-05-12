@@ -1,8 +1,8 @@
 <?php
 
+namespace wcbel\classes\lib;
 
-namespace wcbef\classes\lib;
-
+defined('ABSPATH') || exit(); // Exit if accessed directly
 
 class WcbeProductsTaxonomyWalker extends \Walker_Category
 {
@@ -29,10 +29,10 @@ class WcbeProductsTaxonomyWalker extends \Walker_Category
 
     function start_el(&$output, $category, $depth = 0, $args = array(), $id = 0)
     {
-        $category_name = esc_attr($category->name);
-        $category_id = ($category->taxonomy != 'product_tag') ? esc_attr(intval($category->term_id)) : esc_attr($category->slug);
+        $category_name = sanitize_text_field($category->name);
+        $category_id = ($category->taxonomy != 'product_tag') ? sanitize_text_field(intval($category->term_id)) : sanitize_text_field($category->slug);
         $checked = (is_array($this->checked) && in_array($category_id, $this->checked)) ? 'checked="checked"' : '';
-        $output .= "<li><label><input type='checkbox' data-category-name='" . esc_attr($category_name) . "' value='" . esc_attr($category_id) . "' " . esc_attr($checked) . ">" . esc_html($category_name) . "</label>";
+        $output .= "<li><label><input type='checkbox' data-category-name='" . sanitize_text_field($category_name) . "' value='" . sanitize_text_field($category_id) . "' " . sanitize_text_field($checked) . ">" . sanitize_text_field($category_name) . "</label>";
     }
 
     function end_el(&$output, $page, $depth = 0, $args = array())
