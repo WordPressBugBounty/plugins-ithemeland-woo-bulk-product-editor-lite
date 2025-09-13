@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\repositories\meta_field;
 
+defined('ABSPATH') || exit();
+
 class Meta_Field_Main
 {
     protected $meta_fields_option_name;

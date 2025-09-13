@@ -1,4 +1,6 @@
 <?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+
 $upload_type = isset($item['upload_type']) ? $item['upload_type'] : 'single';
 $target = $upload_type === 'single' ? 'bulk-edit-image' : 'bulk-edit-gallery';
 ?>

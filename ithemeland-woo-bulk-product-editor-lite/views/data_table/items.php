@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <table id="wcbe-items-list" class="widefat">
     <thead>
         <tr>

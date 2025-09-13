@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\helpers;
 
+defined('ABSPATH') || exit();
+
 use wcbel\classes\repositories\meta_field\Meta_Field_Main;
 
 class Meta_Field

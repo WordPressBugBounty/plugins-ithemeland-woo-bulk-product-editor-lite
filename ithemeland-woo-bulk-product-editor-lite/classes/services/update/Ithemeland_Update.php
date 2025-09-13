@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\services\Update;
 
+defined('ABSPATH') || exit();
+
 class Ithemeland_Update
 {
     public function get_plugins_data()

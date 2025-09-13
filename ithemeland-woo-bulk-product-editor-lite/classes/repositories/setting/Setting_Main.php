@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\repositories\setting;
 
+defined('ABSPATH') || exit();
+
 abstract class Setting_Main
 {
     protected $settings_option_name;

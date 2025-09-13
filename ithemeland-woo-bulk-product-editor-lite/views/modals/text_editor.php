@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div class="wcbe-modal" id="wcbe-modal-text-editor">
     <div class="wcbe-modal-container">
         <div class="wcbe-modal-box wcbe-modal-box-lg">

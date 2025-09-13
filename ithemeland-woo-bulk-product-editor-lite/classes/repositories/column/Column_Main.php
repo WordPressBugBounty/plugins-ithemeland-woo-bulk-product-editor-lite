@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\repositories\column;
 
+defined('ABSPATH') || exit();
+
 class Column_Main
 {
     protected $columns_option_name;

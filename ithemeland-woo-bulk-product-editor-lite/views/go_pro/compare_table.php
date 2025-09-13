@@ -1,6 +1,9 @@
 <?php
 //phpcs:ignore Internal.NoCodeFound 
+
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
 ?>
+
 <div class="wcbe_compare_table">
     <h2 class="wcbe-go-pro-title">Bulk Product Pro: Packed with Tons of Powerful Features</h2>
     <p class="wcbe-go-pro-description">Upgrade now to enjoy advanced capabilities, enhanced features, improved performance, and premium support on demand.</p>

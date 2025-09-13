@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <select id="<?php echo esc_attr($field_id); ?>" class="wcbe-input-md" data-field="value" <?php echo (isset($item['disabled']) && $item['disabled']) ? 'disabled="disabled"' : ''; ?>>
     <?php if (isset($item['first_option'])): ?>
         <option value=""><?php echo esc_html($item['first_option']); ?></option>

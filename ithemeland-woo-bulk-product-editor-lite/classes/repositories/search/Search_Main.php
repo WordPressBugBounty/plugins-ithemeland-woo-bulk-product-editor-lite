@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\repositories\search;
 
+defined('ABSPATH') || exit();
+
 class Search_Main
 {
     protected $filter_profile_option_name;

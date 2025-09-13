@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div id="wcbe-loading" class="wcbe-loading">
     <?php esc_html_e('Loading ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>
 </div>

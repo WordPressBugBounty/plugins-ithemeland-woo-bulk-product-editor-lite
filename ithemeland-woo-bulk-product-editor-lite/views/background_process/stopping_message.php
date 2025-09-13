@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div>
     <span style="display: inline-block; width: auto;"><?php esc_html_e('Stopping ...', 'ithemeland-woo-bulk-product-editor-lite') ?></span>
     <span data-type="loading" style="display: inline-block; width: auto;">

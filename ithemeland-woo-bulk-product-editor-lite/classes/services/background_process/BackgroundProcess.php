@@ -214,7 +214,10 @@ abstract class BackgroundProcess extends WP_Background_Process
     public function delete_all_batches()
     {
         global $wpdb;
-        return $wpdb->query("DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE '" . sanitize_text_field($this->prefix) . "_background_process_batch%'"); //phpcs:ignore
+
+        $like = $wpdb->esc_like($this->prefix . '_background_process_batch') . '%';
+        $query = $wpdb->prepare("DELETE FROM {$wpdb->prefix}options WHERE option_name LIKE %s", $like); //phpcs:ignore
+        return $wpdb->query($query); //phpcs:ignore
     }
 
     public function crash_handler()

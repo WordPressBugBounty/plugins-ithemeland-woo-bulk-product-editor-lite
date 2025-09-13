@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div class="wcbe-modal" id="wcbe-modal-item-duplicate">
     <div class="wcbe-modal-container">
         <div class="wcbe-modal-box wcbe-modal-box-sm">

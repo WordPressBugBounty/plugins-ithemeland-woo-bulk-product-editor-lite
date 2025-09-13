@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\helpers;
 
+defined('ABSPATH') || exit();
+
 class Pagination
 {
     public static function init($current_page, $max_num_pages)

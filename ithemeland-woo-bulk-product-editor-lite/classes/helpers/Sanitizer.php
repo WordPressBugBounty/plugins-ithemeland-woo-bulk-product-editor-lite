@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\helpers;
 
+defined('ABSPATH') || exit();
+
 class Sanitizer
 {
     public static function array($val)

@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <select <?php echo (isset($item['disabled']) && $item['disabled']) ? 'disabled="disabled"' : ''; ?> class="wcbe-input-md <?php echo isset($item['select2']) && $item['select2'] ? 'wcbe-select2-users' : ''; ?>" id="<?php echo esc_attr($field_id); ?>" placeholder="<?php echo isset($item['placeholder']) ? esc_attr($item['placeholder']) : ''; ?>" data-field="value">
     <?php if (!empty($item['options'])): ?>
         <?php foreach ($item['options'] as $key => $value): ?>

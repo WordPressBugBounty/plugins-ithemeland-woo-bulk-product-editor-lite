@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\services\scheduler;
 
+defined('ABSPATH') || exit();
+
 use wcbel\classes\helpers\Render;
 use wcbel\classes\helpers\Sanitizer;
 use wcbel\classes\services\scheduler\model\Schedule_Job;

@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\repositories\history;
 
+defined('ABSPATH') || exit();
+
 use wcbel\classes\helpers\Sanitizer;
 
 class History_Main
@@ -80,37 +82,46 @@ class History_Main
 
     public function get_histories($where = [], $limit = 10, $offset = 0)
     {
-        $where_items = "history.reverted = 0 AND history.sub_system = '{$this->sub_system}' ";
+        global $wpdb;
+
+        $query = "SELECT * FROM {$this->history_table} history WHERE history.reverted = 0 AND history.sub_system = %s";
+        $params = [$this->sub_system];
+
         if (!empty($where)) {
             foreach ($where as $field => $value) {
-                $field = esc_sql($field);
-                $value = esc_sql($value);
                 switch ($field) {
                     case 'operation_type':
-                        $where_items .= " AND history.{$field} = '{$value}'";
+                        $query .= " AND history.operation_type = %s";
+                        $params[] = $value;
                         break;
+
                     case 'user_id':
-                        $where_items .= " AND history.{$field} = {$value}";
+                        $query .= " AND history.user_id = %d";
+                        $params[] = intval($value);
                         break;
+
                     case 'fields':
                         $fields = explode(',', $value);
-                        if (!empty($fields) && is_array($fields)) {
-                            foreach ($fields as $field_item) {
-                                $where_items .= " AND history.{$field} LIKE '%{$field_item}%'";
-                            }
+                        foreach ($fields as $field_item) {
+                            $query .= " AND history.fields LIKE %s";
+                            $params[] = '%' . $wpdb->esc_like($field_item) . '%';
                         }
                         break;
+
                     case 'operation_date':
                         $from = (!empty($value['from'])) ? gmdate('Y-m-d H:i:s', strtotime($value['from'])) : null;
-                        $to = (!empty($value['to'])) ? gmdate('Y-m-d H:i:s', (strtotime($value['to']) + 86400)) : null;
-                        if (!empty($from) || !empty($to)) {
-                            if (!empty($from) & !empty($to)) {
-                                $where_items .= " AND (history.{$field} BETWEEN '{$from}' AND '{$to}')";
-                            } else if (!empty($from)) {
-                                $where_items .= " AND history.{$field} >= '{$from}'";
-                            } else {
-                                $where_items .= " AND history.{$field} < '{$to}'";
-                            }
+                        $to = (!empty($value['to'])) ? gmdate('Y-m-d H:i:s', strtotime($value['to']) + 86400) : null;
+
+                        if ($from && $to) {
+                            $query .= " AND history.operation_date BETWEEN %s AND %s";
+                            $params[] = $from;
+                            $params[] = $to;
+                        } elseif ($from) {
+                            $query .= " AND history.operation_date >= %s";
+                            $params[] = $from;
+                        } elseif ($to) {
+                            $query .= " AND history.operation_date < %s";
+                            $params[] = $to;
                         }
                         break;
                 }
@@ -118,50 +129,59 @@ class History_Main
         }
 
         if (!current_user_can('administrator')) {
-            $user_id = get_current_user_id();
-            $where_items .= " AND history.user_id = {$user_id}";
+            $query .= " AND history.user_id = %d";
+            $params[] = get_current_user_id();
         }
 
-        $limit = intval(sanitize_text_field($limit));
-        $offset = intval(sanitize_text_field($offset));
+        $query .= " ORDER BY history.id DESC LIMIT %d OFFSET %d";
+        $params[] = intval($limit);
+        $params[] = intval($offset);
 
-        $limit_offset = (!empty($offset)) ? "LIMIT {$limit}, {$offset}" : "LIMIT {$limit}";
-        return $this->wpdb->get_results("SELECT * FROM {$this->history_table} history WHERE {$where_items} ORDER BY history.id DESC {$limit_offset}"); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        return $wpdb->get_results($wpdb->prepare($query, ...$params)); //phpcs:ignore
     }
 
     public function get_history_count($where = [])
     {
-        $where_items = "history.reverted = 0 AND history.sub_system = '{$this->sub_system}' ";
+        global $wpdb;
+
+        $query = "SELECT COUNT(id) as count FROM {$this->history_table} history WHERE history.reverted = 0 AND history.sub_system = %s";
+        $params = [$this->sub_system];
+
         if (!empty($where)) {
             foreach ($where as $field => $value) {
-                $field = sanitize_text_field($field);
-                $value = (is_array($value)) ? Sanitizer::array($value) : sanitize_text_field($value);
                 switch ($field) {
                     case 'operation_type':
-                        $where_items .= " AND history.{$field} = '{$value}'";
+                        $query .= " AND history.operation_type = %s";
+                        $params[] = $value;
                         break;
+
                     case 'user_id':
-                        $where_items .= " AND history.{$field} = {$value}";
+                        $query .= " AND history.user_id = %d";
+                        $params[] = intval($value);
                         break;
+
                     case 'fields':
                         $fields = explode(',', $value);
-                        if (!empty($fields) && is_array($fields)) {
-                            foreach ($fields as $field_item) {
-                                $where_items .= " AND history.{$field} LIKE '%{$field_item}%'";
-                            }
+                        foreach ($fields as $field_item) {
+                            $query .= " AND history.fields LIKE %s";
+                            $params[] = '%' . $wpdb->esc_like($field_item) . '%';
                         }
                         break;
+
                     case 'operation_date':
-                        $from = (!empty($value['from'])) ? gmdate('Y-m-d H:i:s', strtotime($value['from'])) : null;
-                        $to = (!empty($value['to'])) ? gmdate('Y-m-d H:i:s', (strtotime($value['to']) + 86400)) : null;
-                        if (!empty($from) || !empty($to)) {
-                            if (!empty($from) & !empty($to)) {
-                                $where_items .= " AND (history.{$field} BETWEEN '{$from}' AND '{$to}')";
-                            } else if (!empty($from)) {
-                                $where_items .= " AND history.{$field} >= '{$from}'";
-                            } else {
-                                $where_items .= " AND history.{$field} < '{$to}'";
-                            }
+                        $from = !empty($value['from']) ? gmdate('Y-m-d H:i:s', strtotime($value['from'])) : null;
+                        $to = !empty($value['to']) ? gmdate('Y-m-d H:i:s', strtotime($value['to']) + 86400) : null;
+
+                        if ($from && $to) {
+                            $query .= " AND history.operation_date BETWEEN %s AND %s";
+                            $params[] = $from;
+                            $params[] = $to;
+                        } elseif ($from) {
+                            $query .= " AND history.operation_date >= %s";
+                            $params[] = $from;
+                        } elseif ($to) {
+                            $query .= " AND history.operation_date < %s";
+                            $params[] = $to;
                         }
                         break;
                 }
@@ -169,21 +189,35 @@ class History_Main
         }
 
         if (!current_user_can('administrator')) {
-            $user_id = get_current_user_id();
-            $where_items .= " AND history.user_id = {$user_id}";
+            $query .= " AND history.user_id = %d";
+            $params[] = get_current_user_id();
         }
 
-        $result = $this->wpdb->get_results("SELECT COUNT(id) as 'count' FROM {$this->history_table} history WHERE {$where_items} ORDER BY history.id DESC"); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        return (!empty($result[0]) && !empty($result[0]->count)) ? $result[0]->count : 0;
+        $prepared_query = $wpdb->prepare($query, ...$params); //phpcs:ignore
+        $result = $wpdb->get_row($prepared_query); //phpcs:ignore
+
+        return (!empty($result) && isset($result->count)) ? intval($result->count) : 0;
     }
 
     public function get_history_items($history_id)
     {
-        return $this->wpdb->get_results($this->wpdb->prepare("SELECT history_items.*, posts.post_title FROM {$this->history_items_table} history_items INNER JOIN {$this->wpdb->prefix}posts posts ON (history_items.historiable_id = posts.ID) WHERE history_id = %d", intval($history_id))); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        global $wpdb;
+
+        $query = "
+            SELECT history_items.*, posts.post_title
+            FROM {$this->history_items_table} history_items
+            INNER JOIN {$wpdb->prefix}posts posts
+                ON history_items.historiable_id = posts.ID
+            WHERE history_items.history_id = %d
+        ";
+
+        return $wpdb->get_results($wpdb->prepare($query, intval($history_id))); //phpcs:ignore
     }
 
     public function get_history_rows($history_id, $params = [])
     {
+        global $wpdb;
+
         $items_table_columns = [
             'id',
             'history_id',
@@ -193,34 +227,39 @@ class History_Main
             'new_value',
         ];
 
-        $limit = '';
+        $limit_offset = '';
         if (!empty($params['limit'])) {
-            $limit .= 'LIMIT ' . intval($params['limit']);
-            if (!empty($params['offset'])) {
-                $limit .= ' OFFSET ' . intval($params['offset']);
-            }
+            $limit = intval($params['limit']);
+            $offset = !empty($params['offset']) ? intval($params['offset']) : 0;
+            $limit_offset = $wpdb->prepare('LIMIT %d OFFSET %d', $limit, $offset);
         }
 
-        $columns_string = '';
+        $columns_string = '*';
         if (!empty($params['columns'])) {
             $columns = array_filter($params['columns'], function ($value) use ($items_table_columns) {
-                return (in_array($value, $items_table_columns));
+                return in_array($value, $items_table_columns);
             });
             if (!empty($columns)) {
-                $columns_string = implode(', ', $columns);
+                $columns_string = implode(', ', array_map('sanitize_key', $columns));
             } else {
                 $columns_string = 'id';
             }
-        } else {
-            $columns_string = '*';
         }
 
         $orderby = '';
-        if (!empty($params['orderby'])) {
-            $orderby = 'ORDER BY id ' . sanitize_text_field($params['orderby']);
+        if (!empty($params['orderby']) && in_array(strtolower($params['orderby']), ['asc', 'desc'])) {
+            $orderby = 'ORDER BY id ' . strtoupper(sanitize_text_field($params['orderby']));
         }
 
-        return $this->wpdb->get_results($this->wpdb->prepare("SELECT {$columns_string} FROM {$this->history_items_table} WHERE history_id = %d {$orderby} {$limit}", intval($history_id))); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared 
+        $query = "
+            SELECT {$columns_string}
+            FROM {$this->history_items_table}
+            WHERE history_id = %d
+            {$orderby}
+            {$limit_offset}
+        ";
+
+        return $wpdb->get_results($wpdb->prepare($query, $history_id)); //phpcs:ignore
     }
 
     public function get_history_rows_count($history_id)
@@ -231,23 +270,32 @@ class History_Main
 
     public function get_history_items_total_count($history_id, $column)
     {
-        if (!in_array($column, ['prev_total_count', 'new_total_count'])) {
+        $allowed_columns = ['prev_total_count', 'new_total_count'];
+
+        if (!in_array($column, $allowed_columns, true)) {
             return false;
         }
 
-        $column = sanitize_text_field($column);
-        $result = $this->wpdb->get_row($this->wpdb->prepare("SELECT SUM($column) AS `total_count` FROM {$this->history_items_table} WHERE history_id = %d", intval($history_id)), ARRAY_A); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared 
+        global $wpdb;
+        $column = sanitize_key($column);
+        $query = "
+            SELECT SUM(`$column`) AS total_count
+            FROM {$this->history_items_table}
+            WHERE history_id = %d
+        ";
+
+        $result = $wpdb->get_row($wpdb->prepare($query, intval($history_id)), ARRAY_A); //phpcs:ignore
         return (!empty($result['total_count'])) ? intval($result['total_count']) : 0;
     }
 
     public function get_latest_history()
     {
-        return $this->wpdb->get_results("SELECT * FROM {$this->history_table} WHERE reverted = 0 AND sub_system = '{$this->sub_system}' ORDER BY id DESC LIMIT 1"); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        return $this->wpdb->get_results($this->wpdb->prepare("SELECT * FROM {$this->history_table} WHERE reverted = 0 AND sub_system = %s ORDER BY id DESC LIMIT 1", sanitize_text_field($this->sub_system))); //phpcs:ignore
     }
 
     public function get_latest_reverted()
     {
-        return $this->wpdb->get_results("SELECT * FROM {$this->history_table} WHERE reverted = 1 AND sub_system = '{$this->sub_system}' ORDER BY id DESC LIMIT 1"); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        return $this->wpdb->get_results($this->wpdb->prepare("SELECT * FROM {$this->history_table} WHERE reverted = 1 AND sub_system = %s ORDER BY id DESC LIMIT 1", sanitize_text_field($this->sub_system))); //phpcs:ignore
     }
 
     public function delete_history($history_id)
@@ -290,7 +338,7 @@ class History_Main
 
     public function update_history($history_id, $where)
     {
-        $result = $this->wpdb->update($this->history_table, $where, [
+        $result = $this->wpdb->update($this->history_table, $where, [ //phpcs:ignore
             'id' => intval($history_id),
         ]);
 
@@ -299,6 +347,6 @@ class History_Main
 
     public function clear_all()
     {
-        $this->wpdb->query("DELETE FROM {$this->history_table} WHERE sub_system = '{$this->sub_system}'"); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $this->wpdb->query($this->wpdb->prepare("DELETE FROM {$this->history_table} WHERE sub_system = %s", sanitize_text_field($this->sub_system))); //phpcs:ignore
     }
 }

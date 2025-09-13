@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\repositories\flush_message;
 
+defined('ABSPATH') || exit();
+
 class Flush_Message
 {
     private $flush_message_option_name;

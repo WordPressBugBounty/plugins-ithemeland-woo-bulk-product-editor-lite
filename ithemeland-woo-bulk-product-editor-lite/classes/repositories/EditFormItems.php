@@ -6,7 +6,6 @@ use wcbel\classes\helpers\Operator;
 
 defined('ABSPATH') || exit();
 
-
 class EditFormItems
 {
     public static function general_tab()
@@ -222,7 +221,7 @@ class EditFormItems
                 'id' => 'regular-price',
                 'label' => esc_html__('Regular price', 'ithemeland-woo-bulk-product-editor-lite'),
                 'update_type' => 'woocommerce_field',
-                'operators' => Operator::edit_regular_price(),
+                'operators' => array_merge(Operator::edit_number(), Operator::edit_regular_price()),
                 'field_type' => 'price',
                 'placeholder' => esc_html__('Regular price', 'ithemeland-woo-bulk-product-editor-lite'),
                 'has_rounding' => true,
@@ -233,7 +232,7 @@ class EditFormItems
                 'id' => 'sale-price',
                 'label' => esc_html__('Sale price', 'ithemeland-woo-bulk-product-editor-lite'),
                 'update_type' => 'woocommerce_field',
-                'operators' => Operator::edit_sale_price(),
+                'operators' => array_merge(Operator::edit_number(), Operator::edit_sale_price()),
                 'field_type' => 'price',
                 'placeholder' => esc_html__('Sale price', 'ithemeland-woo-bulk-product-editor-lite'),
                 'has_rounding' => true,

@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\services\scheduler\model;
 
+defined('ABSPATH') || exit();
+
 use wcbel\classes\helpers\Sanitizer;
 
 class Schedule_Job
@@ -162,26 +164,22 @@ class Schedule_Job
         }
 
         global $wpdb;
-
-        $i = 1;
-        $update_query = '';
-        foreach ($data as $column => $value) {
-            if (is_numeric($value)) {
-                $update_query .= sanitize_text_field($column) . ' = ' . intval($value);
+        foreach ($data as $key => $value) {
+            if (in_array($key, ['stop_date', 'revert_date'])) {
+                $data[$key] = strtotime($value);
+            } elseif (is_array($value)) {
+                $data[$key] = wp_json_encode(Sanitizer::array($value));
             } else {
-                $value = (is_array($value)) ? wp_json_encode(Sanitizer::array($value)) : sanitize_text_field($value);
-                if (in_array($column, ['stop_date', 'revert_date'])) {
-                    $value = strtotime($value);
-                }
-                $update_query .= sanitize_text_field($column) . " = '" . $value . "'";
+                $data[$key] = sanitize_text_field($value);
             }
-            if (count($data) > $i) {
-                $update_query .= ', ';
-            }
-            $i++;
         }
 
-        return (!empty($update_query)) ? $wpdb->query($wpdb->prepare("UPDATE {$this->table_name} SET {$update_query} WHERE id = %d AND identifier = %s", intval($where['id']), sanitize_text_field($where['identifier']))) : false; //phpcs:ignore
+        $where_clause = [
+            'id' => intval($where['id']),
+            'identifier' => sanitize_text_field($where['identifier']),
+        ];
+
+        return $wpdb->update($this->table_name, $data, $where_clause); //phpcs:ignore
     }
 
     public function delete($id, $identifier)
@@ -206,45 +204,64 @@ class Schedule_Job
     {
         global $wpdb;
 
-        $where = '';
+        $where_clauses = [];
+        $params = [];
+
         if (!empty($args['identifier'])) {
-            $where .= ' AND schedule_jobs.identifier = "' . sanitize_text_field($args['identifier']) . '"';
-        }
-        if (!empty($args['status'])) {
-            if (is_array($args['status'])) {
-                $statuses = '';
-                $i = 1;
-                foreach ($args['status'] as $status) {
-                    $statuses .= "'" . sanitize_text_field($status) . "'";
-                    if (count($args['status']) > $i) {
-                        $statuses .= ",";
-                    }
-                    $i++;
-                }
-                $where .= ' AND schedule_jobs.status IN (' . $statuses . ')';
-            } else {
-                $where .= " AND schedule_jobs.status = '" . sanitize_text_field($args['status']) . "'";
-            }
-        }
-        $limit = '';
-        if (!empty($args['limit']) && is_numeric($args['limit'])) {
-            $limit = ' LIMIT ' . intval($args['limit']);
+            $where_clauses[] = 'schedule_jobs.identifier = %s';
+            $params[] = sanitize_text_field($args['identifier']);
         }
 
-        return $wpdb->get_results("SELECT * FROM {$this->table_name} schedule_jobs WHERE 1=1 {$where} ORDER BY schedule_jobs.id DESC {$limit}"); //phpcs:ignore
+        if (!empty($args['status'])) {
+            if (is_array($args['status'])) {
+                $placeholders = implode(',', array_fill(0, count($args['status']), '%s'));
+                $where_clauses[] = "schedule_jobs.status IN ($placeholders)";
+                foreach ($args['status'] as $status) {
+                    $params[] = sanitize_text_field($status);
+                }
+            } else {
+                $where_clauses[] = 'schedule_jobs.status = %s';
+                $params[] = sanitize_text_field($args['status']);
+            }
+        }
+
+        $where_sql = '';
+        if (!empty($where_clauses)) {
+            $where_sql = 'WHERE ' . implode(' AND ', $where_clauses);
+        }
+
+        $limit_sql = '';
+        if (!empty($args['limit']) && is_numeric($args['limit'])) {
+            $limit_sql = ' LIMIT ' . intval($args['limit']);
+        }
+
+        $query = "SELECT * FROM {$this->table_name} schedule_jobs {$where_sql} ORDER BY schedule_jobs.id DESC {$limit_sql}";
+
+        return $wpdb->get_results($wpdb->prepare($query, ...$params)); //phpcs:ignore
     }
 
     public function get_awaiting_count($args)
     {
         global $wpdb;
 
-        $where = '';
+        $where_clauses = [];
+        $params = [];
+
+        $awaiting_statuses = [self::PENDING, self::RUNNING, self::DONE, self::PROCESSING];
+        $status_placeholders = implode(',', array_fill(0, count($awaiting_statuses), '%s'));
+        $where_clauses[] = "schedule_jobs.status IN ($status_placeholders)";
+        $params = array_merge($params, $awaiting_statuses);
+
         if (!empty($args['identifier'])) {
-            $where .= ' AND schedule_jobs.identifier = "' . sanitize_text_field($args['identifier']) . '"';
+            $where_clauses[] = 'schedule_jobs.identifier = %s';
+            $params[] = sanitize_text_field($args['identifier']);
         }
 
-        $awaiting_statuses = '"' . self::PENDING . '", "' . self::RUNNING . '", "' . self::DONE . '", "' . self::PROCESSING . '"';
-        $result = $wpdb->get_row("SELECT COUNT(*) as awaiting_count FROM {$this->table_name} schedule_jobs WHERE schedule_jobs.status IN ({$awaiting_statuses}) {$where}"); //phpcs:ignore
+        $where_sql = (!empty($where_clauses)) ? 'WHERE ' . implode(' AND ', $where_clauses) : '';
+
+        $query = "SELECT COUNT(*) as awaiting_count FROM {$this->table_name} schedule_jobs {$where_sql}";
+        $result = $wpdb->get_row($wpdb->prepare($query, ...$params)); //phpcs:ignore
+
         return (!empty($result->awaiting_count)) ? intval($result->awaiting_count) : 0;
     }
 

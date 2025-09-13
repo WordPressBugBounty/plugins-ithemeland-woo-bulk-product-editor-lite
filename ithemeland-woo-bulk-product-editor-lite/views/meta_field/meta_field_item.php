@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div class="wcbe-meta-fields-right-item">
     <span class="wcbe-meta-fields-name"><?php echo (!empty($meta_field['key'])) ? esc_html($meta_field['key']) : 'No Name!'; ?></span>
     <input type="hidden" class="wcbe_meta_field_key_input" name="meta_field_key[]" value="<?php echo (!empty($meta_field['key'])) ? esc_attr($meta_field['key']) : ''; ?>">

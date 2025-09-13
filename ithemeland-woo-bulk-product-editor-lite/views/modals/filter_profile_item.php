@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <?php if (!empty($filter_item)) : ?>
     <tr class="<?php echo (isset($filter_profile_use_always) && $filter_profile_use_always == $filter_item['key']) ? 'wcbe-filter-profile-loaded' : ''; ?>">
         <td>

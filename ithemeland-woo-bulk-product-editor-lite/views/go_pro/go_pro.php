@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div class="wcbe-go-pro-wrap wcbe-mt64">
     <span class="wcbe-go-pro-top">Limited Period Offer</span>
     <h2 class="wcbe-go-pro-title">Get 25% off on Bulk Post Pro</h2>

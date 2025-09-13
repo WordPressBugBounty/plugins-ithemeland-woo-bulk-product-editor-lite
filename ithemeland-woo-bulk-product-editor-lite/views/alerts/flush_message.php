@@ -1,4 +1,6 @@
 <?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+
 if (!is_array($flush_message) || !isset($flush_message['message'])) {
     return false;
 }

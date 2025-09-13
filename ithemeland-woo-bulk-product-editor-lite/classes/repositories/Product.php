@@ -62,25 +62,24 @@ class Product
 
     public function get_product_ids_by_custom_query($join, $where, $types_in = 'all')
     {
-        switch ($types_in) {
-            case 'all':
-                $types = "'product','product_variation'";
-                break;
-            case 'product':
-                $types = "'product'";
-                break;
-            case 'product_variation':
-                $types = "'product_variation'";
-                break;
-        }
+        $allowed_types = [
+            'all' => ['product', 'product_variation'],
+            'product' => ['product'],
+            'product_variation' => ['product_variation'],
+        ];
 
-        $where = (!empty($where)) ? "AND ({$where})" : '';
-        $query = "SELECT posts.ID, posts.post_parent FROM {$this->wpdb->posts} AS posts {$join} WHERE posts.post_type IN ({$types}) {$where}";
+        $types = isset($allowed_types[$types_in]) ? $allowed_types[$types_in] : ['product'];
+        $placeholders = implode(',', array_fill(0, count($types), '%s'));
+        $where_clause = (!empty($where)) ? " AND ({$where})" : '';
+        $query = $this->wpdb->prepare("SELECT posts.ID, posts.post_parent FROM {$this->wpdb->posts} AS posts {$join} WHERE posts.post_type IN ($placeholders) {$where_clause}", ...$types); //phpcs:ignore
+
         $products = $this->wpdb->get_results($query, ARRAY_N); //phpcs:ignore
         $products = array_unique(Others::array_flatten($products, 'int'));
+
         if (($key = array_search(0, $products)) !== false) {
             unset($products[$key]);
         }
+
         return implode(',', $products);
     }
 
@@ -836,14 +835,29 @@ class Product
 
     public function get_product_ids_with_like_names($product_ids = [])
     {
-        $product_id_query = "";
+        $product_id_clause = '';
+        $placeholders = [];
 
         if (!empty($product_ids)) {
-            $product_ids = implode(',', array_map('intval', $product_ids));
-            $product_id_query = "AND ID IN ($product_ids)";
+            $placeholders = array_map('intval', $product_ids);
+            $placeholders_str = implode(',', array_fill(0, count($placeholders), '%d'));
+            $product_id_clause = "AND ID IN ($placeholders_str)";
         }
 
-        return $this->wpdb->get_results("SELECT GROUP_CONCAT(ID) as product_ids, count(*) as product_count FROM {$this->wpdb->posts} WHERE post_type = 'product' AND post_status != 'trash' {$product_id_query} GROUP BY post_title HAVING product_count > 1 ORDER BY product_count", ARRAY_A); //phpcs:ignore
+        $query = "
+            SELECT GROUP_CONCAT(ID) as product_ids, COUNT(*) as product_count
+            FROM {$this->wpdb->posts}
+            WHERE post_type = 'product' AND post_status != 'trash' {$product_id_clause}
+            GROUP BY post_title
+            HAVING product_count > 1
+            ORDER BY product_count
+        ";
+
+        if (!empty($placeholders)) {
+            $query = $this->wpdb->prepare($query, ...$placeholders); //phpcs:ignore
+        }
+
+        return $this->wpdb->get_results($query, ARRAY_A); //phpcs:ignore
     }
 
     public function get_trash()

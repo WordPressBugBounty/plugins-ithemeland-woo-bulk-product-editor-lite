@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div id="wcbe-processing-loading" class="wcbe-processing-loading" style="<?php echo ((isset($is_processing) && $is_processing) || (!empty($complete_message))) ? 'display: block;' : 'display: none;'; ?>">
     <div class="wcbe-processing-loading-content">
         <span data-type="result_icon" style="display: none;"><i class=""></i></span>

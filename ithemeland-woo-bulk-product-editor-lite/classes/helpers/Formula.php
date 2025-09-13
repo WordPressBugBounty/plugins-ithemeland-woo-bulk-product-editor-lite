@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\helpers;
 
+defined('ABSPATH') || exit();
+
 use KhanhIceTea\Twigeval\Calculator;
 
 class Formula

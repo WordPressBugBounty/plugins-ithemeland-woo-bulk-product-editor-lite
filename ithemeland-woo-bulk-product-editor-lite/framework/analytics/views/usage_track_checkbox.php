@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
+?>
+
 <label>
     <input
         type="checkbox"

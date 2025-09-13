@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\helpers;
 
+defined('ABSPATH') || exit();
+
 class Generator
 {
     public static function license_hash($license_data, $product_id)

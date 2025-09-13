@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">

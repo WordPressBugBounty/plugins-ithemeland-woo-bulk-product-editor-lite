@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\repositories\meta_field;
 
+defined('ABSPATH') || exit();
+
 class ACF_Plugin_Fields
 {
     private static $instance;

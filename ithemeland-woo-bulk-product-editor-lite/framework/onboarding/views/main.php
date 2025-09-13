@@ -1,3 +1,8 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly
+?>
+
+
 <div class="onboarding-section">
     <div class="ithemeland-onboarding-head">
         <img src="<?php echo esc_url(WCBEL_FW_URL . 'onboarding/assets/images/iThemeland-popup-icon.png'); ?>" style="width:250px" alt="onboarding-icon">

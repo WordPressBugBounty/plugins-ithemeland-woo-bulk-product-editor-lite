@@ -2,6 +2,8 @@
 
 namespace wcbel\classes\services\update;
 
+defined('ABSPATH') || exit();
+
 use wcbel\classes\repositories\update_data\Update_Data;
 
 class Update_Service

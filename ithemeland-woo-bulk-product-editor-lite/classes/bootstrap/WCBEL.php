@@ -3,6 +3,7 @@
 namespace wcbel\classes\bootstrap;
 
 defined('ABSPATH') || exit(); // Exit if accessed directly
+
 use wcbel\framework\analytics\AnalyticsTracker;
 use wcbel\framework\onboarding\Onboarding;
 use wcbel\classes\controllers\WCBEL_Ajax;
@@ -185,9 +186,9 @@ class WCBEL
             wp_enqueue_style('wcbel-reset', WCBEL_CSS_URL . 'reset.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-icomoon', WCBEL_CSS_URL . 'icomoon.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-datepicker', WCBEL_CSS_URL . 'bootstrap-material-datetimepicker.css', [], WCBEL_VERSION);
-            wp_enqueue_style('wcbel-select2', WCBEL_CSS_URL . 'select2.min.css', [], WCBEL_VERSION);
+            wp_enqueue_style('wcbel-select2', WCBEL_CSS_URL . 'select2.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-sweetalert', WCBEL_CSS_URL . 'sweetalert.css', [], WCBEL_VERSION);
-            wp_enqueue_style('wcbel-jquery-ui', WCBEL_CSS_URL . 'jquery-ui.min.css', [], WCBEL_VERSION);
+            wp_enqueue_style('wcbel-jquery-ui', WCBEL_CSS_URL . 'jquery-ui.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-tipsy', WCBEL_CSS_URL . 'jquery.tipsy.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-datetimepicker', WCBEL_CSS_URL . 'jquery.datetimepicker.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-main-core', WCBEL_CSS_URL . 'style-core.css', [], WCBEL_VERSION);

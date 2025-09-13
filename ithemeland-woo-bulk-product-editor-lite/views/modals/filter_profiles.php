@@ -1,3 +1,7 @@
+<?php
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
+?>
+
 <div class="wcbe-float-side-modal" id="wcbe-float-side-modal-filter-profiles">
     <div class="wcbe-float-side-modal-container">
         <div class="wcbe-float-side-modal-box">

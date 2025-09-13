@@ -1,6 +1,9 @@
 <?php
 //phpcs:ignore Internal.NoCodeFound 
+
+if (!defined('ABSPATH')) exit; // Exit if accessed directly 
 ?>
+
 <div class="wcbe-go-pro-wrap wcbe-mt64">
     <h2 class="wcbe-go-pro-title">Best WooCommerce Plugins</h2>
     <h2>Get reliable WooCommerce extensions to sell more, manage your store, retain more customers and make better decisions.</h3>
