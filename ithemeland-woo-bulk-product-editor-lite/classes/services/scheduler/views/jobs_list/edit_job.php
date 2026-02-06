@@ -19,7 +19,7 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                                 <img src="<?php echo esc_url(WCBEL_IMAGES_URL . 'loading-2.gif'); ?>" width="20" height="20" />
                             </div>
                             <div class="wcbe-schedule-edit-job-container">
-                                <?php include WCBE_DIR . "classes/services/scheduler/views/job_form/job_form.php"; ?>
+                                <?php include WCBEL_DIR . "classes/services/scheduler/views/job_form/job_form.php"; ?>
                             </div>
                         </div>
                     </div>

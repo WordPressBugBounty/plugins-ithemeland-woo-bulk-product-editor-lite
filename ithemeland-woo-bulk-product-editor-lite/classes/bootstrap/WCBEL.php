@@ -61,9 +61,9 @@ class WCBEL
     {
         if (!defined('WCBE_NAME') && !defined('WBEB_NAME')) {
             if (defined('WBEBL_NAME')) {
-                add_submenu_page('wbebl', esc_html__('Woo Products', 'ithemeland-woo-bulk-product-editor-lite'), esc_html__('Woo Products', 'ithemeland-woo-bulk-product-editor-lite'), 'manage_woocommerce', 'wcbe', ['wcbel\classes\controllers\Woocommerce_Bulk_Edit', 'init'], 1);
+                add_submenu_page('wbebl', esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), 'manage_woocommerce', 'wcbe', ['wcbel\classes\controllers\Woocommerce_Bulk_Edit', 'init'], 1);
             } else {
-                add_menu_page(esc_html__('iT Woo Products', 'ithemeland-woo-bulk-product-editor-lite'), wp_kses('<span style="color: #627ddd;font-weight: 900;">iT</span> Woo Products', Sanitizer::allowed_html()), 'manage_woocommerce', 'wcbe', ['wcbel\classes\controllers\Woocommerce_Bulk_Edit', 'init'], WCBEL_IMAGES_URL . 'wcbel_icon.svg', 2);
+                add_menu_page(esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), wp_kses('PBULK<span style="color: #627ddd;font-weight: 900;">iT</span>', Sanitizer::allowed_html()), 'manage_woocommerce', 'wcbe', ['wcbel\classes\controllers\Woocommerce_Bulk_Edit', 'init'], WCBEL_IMAGES_URL . 'pbulkit-icon-wh20.svg', 59);
             }
         }
 
@@ -181,6 +181,9 @@ class WCBEL
             $setting_repository = Setting::get_instance();
             $meta_field_repository = Meta_Field::get_instance();
             $search_repository = Search::get_instance();
+
+            //fix conflict 
+            wp_dequeue_script('bol-sweetalert.min');
 
             // Styles
             wp_enqueue_style('wcbel-reset', WCBEL_CSS_URL . 'reset.css', [], WCBEL_VERSION);

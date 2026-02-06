@@ -79,6 +79,18 @@ class Product_Update implements Update_Interface
         }
 
         $total_count = count($this->product_ids) * count($this->product_data);
+
+        if ($total_count > $this->max_process_count && ProductBackgroundProcess::is_enable()) {
+            $background_process = ProductBackgroundProcess::get_instance();
+
+            if ($background_process->is_not_queue_empty()) {
+                if (!empty($this->history_id)) {
+                    $this->delete_history($this->history_id);
+                }
+                return false;
+            }
+        }
+
         foreach ($this->product_data as $update_item) {
             $update_result = false;
 
@@ -93,14 +105,6 @@ class Product_Update implements Update_Interface
 
             $class = $this->update_classes[$update_item['type']];
             if ($total_count > $this->max_process_count && ProductBackgroundProcess::is_enable()) {
-                $background_process = ProductBackgroundProcess::get_instance();
-                if ($background_process->is_not_queue_empty()) {
-                    if (!empty($this->history_id)) {
-                        $this->delete_history($this->history_id);
-                    }
-                    return false;
-                }
-
                 foreach ($this->product_ids as $product_id) {
                     $background_process->push_to_queue([
                         'handler' => 'product_update',
@@ -169,7 +173,7 @@ class Product_Update implements Update_Interface
 
     private function get_update_classes()
     {
-        return apply_filters('wcbe_product_update_handlers', [
+        return apply_filters('wcbel_product_update_handlers', [
             'woocommerce_field' => Woocommerce_Handler::class,
             'wp_posts_field' => WP_Posts_Handler::class,
             'meta_field' => Meta_Field_Handler::class,

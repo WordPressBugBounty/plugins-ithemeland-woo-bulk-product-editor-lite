@@ -213,6 +213,7 @@ class EditFormItems
             ]
         ];
     }
+
     public static function pricing_tab()
     {
         return [
@@ -290,10 +291,12 @@ class EditFormItems
             ]
         ];
     }
+
     public static function shipping_tab()
     {
         return [];
     }
+
     public static function stock_tab()
     {
         return [
@@ -348,6 +351,7 @@ class EditFormItems
             ]
         ];
     }
+
     public static function type_tab()
     {
         return [

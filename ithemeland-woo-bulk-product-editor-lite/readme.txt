@@ -1,11 +1,11 @@
-=== Bulk Product Editing For WooCommerce ===
+=== PBULKiT - Bulk Edit WooCommerce Products ===
 Contributors: ithemelandco
 Donate link: https://ithemelandco.com/
 Author URI: https://ithemelandco.com/
 Tags: woocommerce bulk edit, bulk edit products, woocommerce bulk product editing, product editor, woocommerce editor
 Requires at least: 4.4
-Tested up to: 6.8
-Stable tag: 4.0.2
+Tested up to: 6.9
+Stable tag: 4.0.6
 Requires PHP: 8.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -15,14 +15,55 @@ Stop wasting hours editing products one by one. Bulk edit thousands of WooCommer
 
 == Description ==
 
+WooCommerce’s default bulk edit tools are too basic for stores with many products. Managing WooCommerce products one by one is slow, frustrating, and inefficient — especially when your store has hundreds or thousands of products.
 
-Tired of opening endless tabs to update prices, stock, or categories? The **WooCommerce Bulk Product Editing Plugin** gives you a powerful, spreadsheet-style interface to manage your entire catalog with incredible speed and flexibility.
+**<a href="https://ithemelandco.com/plugins/woocommerce-bulk-product-editing/?utm_source=wp.org&utm_medium=web_links&utm_campaign=user-lite-buy">PBULKiT – Bulk Edit WooCommerce Products</a>** replaces WooCommerce’s basic bulk edit tools with a powerful spreadsheet-style editor, allowing you to quickly update prices, stock, categories, attributes, and more — all from one screen.
 
-Whether you're running a sale, updating inventory, or managing complex products, our plugin helps you get hours of work done in just a few clicks. Take back your time and manage your store more efficiently.
+Instead of opening each product individually, **<a href="https://ithemelandco.com/plugins/woocommerce-bulk-product-editing/?utm_source=wp.org&utm_medium=web_links&utm_campaign=user-lite-buy">PBULKiT</a>** lets you **filter, edit, and update multiple products at once**, saving hours of manual work and reducing errors.
+
+Whether you’re running a small store or managing a large product catalog, PBULKiT gives you full control over your WooCommerce products — fast.
+
+PBULKiT allows you to schedule bulk product updates and process large datasets in the background, ensuring smooth performance even on large WooCommerce stores.
 
 [youtube https://youtu.be/hxH94vvsWgg]
 
+
+**🚀 Why Choose PBULKiT?**
+
+✔️ Edit multiple WooCommerce products at the same time
+✔️ Replace slow default WooCommerce bulk editing
+✔️ Spreadsheet-style interface for faster product management
+✔️ Powerful filters to target exactly the products you need
+✔️ Save time and manage large catalogs efficiently
+
 ---
+
+### 📊 Key Features
+
+**📊 Spreadsheet-Style Product Editor**
+* Edit products in a familiar table-based interface
+* Update multiple product fields at once
+* No need to open individual product pages
+
+**🔎 Advanced Product Filters**
+* Filter products by category, price, stock, status, and more
+* Quickly find and edit specific product groups
+* Ideal for large catalogs and frequent updates
+
+**⚡ Fast & Efficient Bulk Editing**
+* Update prices, stock, SKU, and other fields in bulk
+* Apply changes instantly
+* Reduce repetitive manual tasks
+
+**🧩 WooCommerce Compatibility**
+* Works with simple and variable products
+* Compatible with the latest WooCommerce versions
+* Built following WordPress coding standards
+
+**⏱️ Scheduled Bulk Updates**
+* Schedule bulk product changes to run at a specific time
+* Useful for planned price updates, stock changes, or promotions
+* Reduce manual work and avoid last-minute edits
 
 ### ⭐ WHAT YOU CAN DO WITH THE FREE VERSION ⭐
 
@@ -42,11 +83,13 @@ Upgrade to the **[Pro Version](https://ithemelandco.com/plugins/woocommerce-bulk
 * 🎯 **Edit ANY Product Field:** Get unlimited access to bulk edit absolutely every WooCommerce field, including attributes, variations, custom fields, SEO data, and more.
 * bind **Binded Editing:** Edit a variation and have all other variations of that product update automatically. A massive time-saver!
 * 🔄 **Undo / Redo & History:** Never worry about mistakes. View a complete history of all bulk edits and undo any operation with a single click.
+* ⏱️ **Scheduled bulk updates (run changes at a specific time)**
+* ⚙️ **Background processing for heavy bulk operations**
+* 📊 **Optimized for Big Data & large WooCommerce stores**
 * ➕ **Advanced Bulk Form:** Use the powerful bulk form to apply complex changes to prices (e.g., increase by 10%, decrease by $5), text (append, prepend), and more.
 * 📁 **Advanced Custom Fields (ACF) Support:** Directly bulk edit and manage all your ACF custom fields from the main table.
 * 💾 **Save & Load Search Queries:** Save your complex filter settings to run the same edits again in the future instantly.
 * 📊 **Export Products:** Export your entire product catalog or filtered selections to a CSV file.
-
 **[See all 70+ features and become a bulk editing expert!](https://ithemelandco.com/plugins/woocommerce-bulk-product-editing/?utm_source=wp.org&utm_medium=web_links&utm_campaign=user-lite-buy')**
 
 ---
@@ -82,6 +125,23 @@ Absolutely. You can try the full power of the Pro version on our <a href="https:
 
 == Changelog ==
 
+= 4.0.6 =
+* Added Schedule review on Schedule list
+* Tested up to: WP 6.9
+* Tested up to: Woo 10.4.X
+* Fixed Some Issues
+
+= 4.0.5 =
+* Fixed Rank Math Compatible issue
+* Fixed Some Issues
+
+= 4.0.4 =
+* Fixed Some Issues
+
+= 4.0.3 =
+* Tested up to: WP 6.8.3
+* Tested up to: Woo 10.2.X
+* Fixed Some Issues
 
 = 4.0.2 =
 * Fixed some important issues

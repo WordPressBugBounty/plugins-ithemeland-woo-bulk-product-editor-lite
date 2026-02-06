@@ -49,4 +49,5 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 if (defined('WCBE_ACTIVE') && WCBE_ACTIVE) {
     include "edit_job.php";
     include_once "job_log.php";
+    include_once "job_edit_items_modal.php";
 }

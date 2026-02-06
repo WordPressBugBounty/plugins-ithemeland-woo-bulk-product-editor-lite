@@ -131,7 +131,7 @@ class HistoryUndoService
                 }
 
                 $field = unserialize($item->field);
-                if (intval($item->prev_total_count) > self::MAX_PROCESS_COUNT) {
+                if (isset($item->prev_total_count) && intval($item->prev_total_count) > self::MAX_PROCESS_COUNT) {
                     if (!isset($field['action'])) {
                         $field['action'] = 'default';
                     }

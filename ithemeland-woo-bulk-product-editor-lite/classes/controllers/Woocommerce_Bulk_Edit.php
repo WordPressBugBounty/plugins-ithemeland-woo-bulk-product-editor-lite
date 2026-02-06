@@ -133,8 +133,8 @@ class Woocommerce_Bulk_Edit
         $this->plugin_data = [
             'plugin_key' => 'wcbel',
             'version' => WCBEL_VERSION,
-            'title' => esc_html__('WooCommerce Bulk Product Editing Lite', 'ithemeland-woo-bulk-product-editor-lite'),
-            'doc_link' => 'https://ithemelandco.com/Plugins/Documentations/Pro-Bulk-Editing/pro/woocommerce-bulk-variations-editing/documentation.pdf',
+            'title' => WCBEL_LABEL,
+            'doc_link' => 'https://ithemelandco.com/docs/woocommerce-bulk-product-editing/',
             'flush_message' => $this->flush_message_repository->get(),
             'settings' => $settings,
             'count_per_page_items' => $setting_repository->get_count_per_page_items(),

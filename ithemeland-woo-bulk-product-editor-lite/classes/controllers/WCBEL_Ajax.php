@@ -455,7 +455,7 @@ class WCBEL_Ajax
         $update_service->set_update_data([
             'update_type' => 'product',
             'product_ids' => $product_ids,
-            'product_data' => Sanitizer::array($_POST['product_data']), //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            'product_data' => Sanitizer::array($_POST['product_data']), //phpcs:ignore
             'save_history' => true,
         ]);
         $update_result = $update_service->perform();
@@ -2337,8 +2337,6 @@ class WCBEL_Ajax
         $meta_fields = $meta_field_repository->get();
         $custom_fields_tab = Render::html(WCBEL_VIEWS_DIR . 'bulk_edit/filter_form/custom_fields.php', compact('meta_fields', 'acf_fields', 'filter_form_items'));
 
-
-
         $general_tab = Render::html(WCBEL_VIEWS_DIR . 'bulk_edit/filter_form/general.php',  compact('filter_form_items'));
 
         $tax_classes = ['' => esc_html__('Select', 'ithemeland-woo-bulk-product-editor-lite')] + $this->product_repository->get_tax_classes();
@@ -2857,12 +2855,12 @@ class WCBEL_Ajax
     private function get_edit_items()
     {
         $merged_items = [
-            'general'    => EditFormItems::general_tab(),
+            'general' => EditFormItems::general_tab(),
             'taxonomies' => EditFormItems::taxonomies_tab(),
-            'pricing'    => EditFormItems::pricing_tab(),
-            'stock'      => EditFormItems::stock_tab(),
-            'shipping'   => EditFormItems::shipping_tab(),
-            'type'       => EditFormItems::type_tab(),
+            'pricing' => EditFormItems::pricing_tab(),
+            'stock' => EditFormItems::stock_tab(),
+            'shipping' => EditFormItems::shipping_tab(),
+            'type' => EditFormItems::type_tab(),
         ];
 
         foreach ($merged_items as $tab => $items) {
@@ -2875,21 +2873,21 @@ class WCBEL_Ajax
     private function get_filter_items()
     {
         $configs = [
-            'general'     => FilterFormItems::general_tab(),
-            'taxonomies'  => FilterFormItems::taxonomies_tab(),
-            'pricing'     => FilterFormItems::pricing_tab(),
-            'stock'       => FilterFormItems::stock_tab(),
-            'shipping'    => FilterFormItems::shipping_tab(),
-            'type'        => FilterFormItems::type_tab(),
+            'general' => FilterFormItems::general_tab(),
+            'taxonomies' => FilterFormItems::taxonomies_tab(),
+            'pricing' => FilterFormItems::pricing_tab(),
+            'stock' => FilterFormItems::stock_tab(),
+            'shipping' => FilterFormItems::shipping_tab(),
+            'type' => FilterFormItems::type_tab(),
         ];
 
         $merged_items = [
-            'general'    => $configs['general'],
+            'general' => $configs['general'],
             'taxonomies' => $configs['taxonomies'],
-            'pricing'    => $configs['pricing'],
-            'stock'      => $configs['stock'],
-            'shipping'   => $configs['shipping'],
-            'type'       => $configs['type'],
+            'pricing' => $configs['pricing'],
+            'stock' => $configs['stock'],
+            'shipping' => $configs['shipping'],
+            'type' => $configs['type'],
         ];
 
         foreach ($merged_items as $tab => $items) {
@@ -2902,12 +2900,12 @@ class WCBEL_Ajax
     private function new_form_items()
     {
         $merged_items = [
-            'general'    =>  NewFormItems::general_tab(),
+            'general' => NewFormItems::general_tab(),
             'taxonomies' => NewFormItems::taxonomies_tab(),
-            'pricing'    => NewFormItems::pricing_tab(),
-            'stock'      => NewFormItems::stock_tab(),
-            'shipping'   => NewFormItems::shipping_tab(),
-            'type'       => NewFormItems::type_tab(),
+            'pricing' => NewFormItems::pricing_tab(),
+            'stock' => NewFormItems::stock_tab(),
+            'shipping' => NewFormItems::shipping_tab(),
+            'type' => NewFormItems::type_tab(),
         ];
 
         foreach ($merged_items as $tab => $items) {

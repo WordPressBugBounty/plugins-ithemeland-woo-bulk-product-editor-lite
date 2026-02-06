@@ -190,6 +190,12 @@ jQuery(document).ready(function ($) {
         wcbeScheduleGetJobLog($(this).attr("data-id"));
     });
 
+    $(document).on("click", '.wcbe-schedule-jobs-list-action-button[data-action="show_edit_items"]', function (e) {
+        $(".wcbe-schedule-job-edit-items-loading").show();
+        $(".wcbe-schedule-job-edit-items-container").html("");
+        wcbeScheduleGetEditItems($(this).attr("data-id"));
+    });
+
     $(document).on("click", '.wcbe-schedule-jobs-list-action-button[data-action="edit"]', function (e) {
         $(".wcbe-schedule-edit-job-container").hide();
         $(".wcbe-schedule-edit-job-loading").show();
@@ -454,6 +460,30 @@ function wcbeScheduleGetJobData(jobId) {
                     jQuery(".wcbe-schedule-edit-job-apply-button").attr("data-id", response.job.id).prop("disabled", false);
                 }, 150);
             } else {
+            }
+        },
+        error: function () { },
+    });
+}
+
+function wcbeScheduleGetEditItems(jobId) {
+    jQuery.ajax({
+        url: WCBE_SCHEDULE_DATA.ajax_url,
+        type: "post",
+        dataType: "json",
+        data: {
+            action: WCBE_SCHEDULE_DATA.identifier + "_schedule_get_edit_items",
+            nonce: WCBE_SCHEDULE_DATA.ajax_nonce,
+            job_id: jobId,
+        },
+        success: function (response) {
+            jQuery(".wcbe-schedule-job-edit-items-loading").hide();
+            if (response.success && response.edit_items) {
+                jQuery(".wcbe-schedule-job-edit-items-container").html(response.edit_items);
+
+                setTimeout(function () {
+                    wcbeFixModalHeight(jQuery("#wcbe-modal-schedule-job-edit-items"));
+                }, 150);
             }
         },
         error: function () { },

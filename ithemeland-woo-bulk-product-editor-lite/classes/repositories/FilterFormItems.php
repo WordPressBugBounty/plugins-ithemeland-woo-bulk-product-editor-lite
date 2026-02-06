@@ -228,6 +228,7 @@ class FilterFormItems
             ]
         ];
     }
+    
     public static function stock_tab()
     {
         return [

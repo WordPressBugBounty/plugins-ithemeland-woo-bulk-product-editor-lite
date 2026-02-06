@@ -62,6 +62,7 @@ class Operator
             'decrease_by_percent_from_regular' => esc_html__('Decrease by % (From regular)', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
+
     public static function filter_text()
     {
         return [
@@ -92,6 +93,7 @@ class Operator
             'end' => esc_html__('End', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
     }
+
     public static function round_items()
     {
         return [
@@ -116,5 +118,22 @@ class Operator
             'yes' => esc_html__('Yes', 'ithemeland-woo-bulk-product-editor-lite'),
             'no' => esc_html__('No', 'ithemeland-woo-bulk-product-editor-lite'),
         ];
+    }
+
+    public static function get_all_operators_name()
+    {
+        $operators = array_merge(
+            self::edit_text(),
+            self::edit_taxonomy(),
+            self::edit_number(),
+            self::edit_regular_price(),
+            self::edit_sale_price(),
+            self::filter_text(),
+            self::filter_multi_select(),
+            self::filter_type_select(),
+            self::get_current_value(),
+        );
+
+        return $operators;
     }
 }

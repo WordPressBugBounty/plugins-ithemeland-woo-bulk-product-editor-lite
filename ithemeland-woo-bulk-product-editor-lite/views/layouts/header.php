@@ -19,7 +19,7 @@ if (!empty($flush_message)) {
     <div id="wcbe-header">
         <div class="wcbe-plugin-title">
             <span class="wcbe-plugin-name">
-                <img src="<?php echo esc_url(WCBEL_IMAGES_URL . 'wcbe_icon_original.svg'); ?>" alt="">
+                <img src="<?php echo esc_url(WCBEL_IMAGES_URL . 'pbulkit-icon-wh.svg'); ?>" alt="" width="24">
                 <?php echo (defined('WCBE_LABEL')) ? esc_html(WCBE_LABEL) : esc_html(WCBEL_LABEL); ?>
             </span>
         </div>

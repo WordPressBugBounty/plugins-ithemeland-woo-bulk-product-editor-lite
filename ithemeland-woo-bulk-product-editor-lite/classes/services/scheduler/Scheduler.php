@@ -4,8 +4,14 @@ namespace wcbel\classes\services\scheduler;
 
 defined('ABSPATH') || exit();
 
+use wcbel\classes\helpers\Compatible_Helper;
+use wcbel\classes\helpers\Operator;
 use wcbel\classes\helpers\Render;
 use wcbel\classes\helpers\Sanitizer;
+use wcbel\classes\repositories\Column;
+use wcbel\classes\repositories\EditFormItems;
+use wcbel\classes\repositories\FilterFormItems;
+use wcbel\classes\repositories\Product;
 use wcbel\classes\services\scheduler\model\Schedule_Job;
 
 abstract class Scheduler
@@ -42,6 +48,7 @@ abstract class Scheduler
         add_action('wp_ajax_' . $this->identifier . '_schedule_job_edit', [$this, 'edit_job']);
         add_action('wp_ajax_' . $this->identifier . '_schedule_get_job_log', [$this, 'get_job_log_ajax']);
         add_action('wp_ajax_' . $this->identifier . '_schedule_get_job_data', [$this, 'get_job_data']);
+        add_action('wp_ajax_' . $this->identifier . '_schedule_get_edit_items', [$this, 'get_edit_items']);
 
         if (!wp_next_scheduled($this->schedule_hook)) {
             wp_schedule_event(time(), 'itbbc_scheduler_2m', $this->schedule_hook);
@@ -84,6 +91,76 @@ abstract class Scheduler
         wp_send_json([
             'success' => true,
             'job' => $job
+        ]);
+    }
+
+    public function get_edit_items()
+    {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'wcbe_ajax_nonce')) {
+            die();
+        }
+
+        if (empty($_POST['job_id'])) {
+            wp_send_json([
+                'success' => false
+            ]);
+        }
+
+        $job = $this->repository->get_job(intval($_POST['job_id']), $this->identifier);
+        if (empty($job)) {
+            wp_send_json([
+                'success' => false
+            ]);
+        }
+
+        $job->stop_date = (!empty($job->stop_date)) ? gmdate('Y-m-d H:i', $job->stop_date) : '';
+        $job->revert_date = (!empty($job->revert_date)) ? gmdate('Y-m-d H:i', $job->revert_date) : '';
+
+        if (!empty($job->dates)) {
+            $job->dates = json_decode($job->dates, true);
+        }
+
+        $job->filter_items = json_decode($job->filter_items, true);
+        $job->edit_items = json_decode($job->edit_items, true);
+
+        $operators = Operator::get_all_operators_name();
+
+        $grouped_filter_columns = [
+            'general' => FilterFormItems::general_tab(),
+            'taxonomies' => FilterFormItems::taxonomies_tab(),
+            'pricing' => FilterFormItems::pricing_tab(),
+            'stock' => FilterFormItems::stock_tab(),
+            'shipping' => FilterFormItems::shipping_tab(),
+            'type' => FilterFormItems::type_tab(),
+        ];
+        $filter_columns = [];
+        foreach ($grouped_filter_columns as $tab => $items) {
+            $filter_columns = array_merge($filter_columns, apply_filters("wcbel_bulk_filter_form_{$tab}_items", $items));
+        }
+
+        $grouped_edit_columns = [
+            'general' => EditFormItems::general_tab(),
+            'taxonomies' => EditFormItems::taxonomies_tab(),
+            'pricing' => EditFormItems::pricing_tab(),
+            'stock' => EditFormItems::stock_tab(),
+            'shipping' => EditFormItems::shipping_tab(),
+            'type' => EditFormItems::type_tab(),
+        ];
+        $edit_columns = [];
+        foreach ($grouped_edit_columns as $tab => $items) {
+            $edit_columns = array_merge($edit_columns, apply_filters("wcbel_bulk_edit_form_{$tab}_items", $items));
+        }
+
+        $product_repository = Product::get_instance();
+        $taxonomies = $product_repository->get_taxonomies();
+
+        ob_start();
+        include WCBEL_DIR . 'classes/services/scheduler/views/jobs_list/job_edit_items.php';
+        $edit_items = ob_get_clean();
+
+        wp_send_json([
+            'success' => true,
+            'edit_items' => $edit_items
         ]);
     }
 

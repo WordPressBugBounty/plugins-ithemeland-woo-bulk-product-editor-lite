@@ -186,6 +186,7 @@
     border-radius: 4px 4px 0 0;
 }
 
+.wcbe-schedule-job-edit-items-loading,
 .wcbe-schedule-edit-job-loading,
 .wcbe-schedule-job-log-loading {
     width: 100%;
@@ -274,4 +275,53 @@
     font-size: 14px;
     margin: 0;
     vertical-align: middle;
+}
+
+.wcbe-modal-schedule-job-edit-items-table {
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+}
+
+.wcbe-modal-schedule-job-edit-items-table thead tr {
+    background-color: #f6f6f6;
+    border: none;
+}
+
+.wcbe-modal-schedule-job-edit-items-table th {
+    text-transform: capitalize;
+}
+
+.wcbe-modal-schedule-job-edit-items-table th,
+.wcbe-modal-schedule-job-edit-items-table tr,
+.wcbe-modal-schedule-job-edit-items-table td {
+    border: none !important;
+}
+
+.wcbe-modal-schedule-job-edit-items-table th,
+.wcbe-modal-schedule-job-edit-items-table td {
+    padding: 4px;
+}
+
+.wcbe-schedule-job-edit-items-section {
+    width: 100%;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.wcbe-schedule-job-edit-items-section h3 {
+    font-size: 15px;
+    padding-bottom: 5px;
+}
+
+.wcbe-schedule-job-edit-items-selected-product-item {
+    display: inline-block;
+    background-color: #f6f6f6;
+    border: 1px #e3e3e3 solid;
+    padding: 1px 5px;
+    font-size: 13px;
+    margin: 0 3px 3px 0;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
 }
