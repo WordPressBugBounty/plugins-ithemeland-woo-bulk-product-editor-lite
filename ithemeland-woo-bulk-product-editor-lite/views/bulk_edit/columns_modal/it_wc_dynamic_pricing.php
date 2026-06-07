@@ -16,11 +16,11 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                     <div class="wcbe-wrap">
                         <?php
                         if (!empty($wp_roles) && !empty($wp_roles->roles)) :
-                            foreach ($wp_roles->roles as $role_key => $role) :
+                            foreach ($wp_roles->roles as $wcbel_role_key => $wcbel_role) :
                         ?>
                                 <div class="wcbe-form-group">
-                                    <label for="role_<?php echo esc_attr($role_key); ?>"><?php echo esc_html($role['name']); ?></label>
-                                    <input type="number" id="role_<?php echo esc_attr($role_key); ?>" data-type="value" data-name="<?php echo esc_attr($role_key); ?>" placeholder="<?php esc_html_e('Amount ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
+                                    <label for="role_<?php echo esc_attr($wcbel_role_key); ?>"><?php echo esc_html($wcbel_role['name']); ?></label>
+                                    <input type="number" id="role_<?php echo esc_attr($wcbel_role_key); ?>" data-type="value" data-name="<?php echo esc_attr($wcbel_role_key); ?>" placeholder="<?php esc_html_e('Amount ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
                                 </div>
                         <?php
                             endforeach;

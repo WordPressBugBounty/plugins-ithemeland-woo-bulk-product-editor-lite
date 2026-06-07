@@ -228,7 +228,7 @@ class FilterFormItems
             ]
         ];
     }
-    
+
     public static function stock_tab()
     {
         return [
@@ -357,6 +357,19 @@ class FilterFormItems
                 'placeholder_from' => esc_html__('From', 'ithemeland-woo-bulk-product-editor-lite'),
                 'placeholder_to' => esc_html__('To', 'ithemeland-woo-bulk-product-editor-lite'),
                 'disabled' => true
+            ],
+            'pos_product_visibility' => [
+                'name' => 'pos_product_visibility',
+                'id' => 'wcbe-filter-form-pos-product-visibility',
+                'label' => esc_html__('Available for POS', 'ithemeland-woo-bulk-product-editor-lite'),
+                'filter_type' => 'pos_product_visibility',
+                'field_type' => 'select',
+                'options' => [
+                    'yes' => esc_html__('Yes', 'ithemeland-woo-bulk-product-editor-lite'),
+                    'no' => esc_html__('No', 'ithemeland-woo-bulk-product-editor-lite')
+                ],
+                'first_option' => esc_html__('Select', 'ithemeland-woo-bulk-product-editor-lite'),
+                'disabled' => false
             ]
         ];
     }

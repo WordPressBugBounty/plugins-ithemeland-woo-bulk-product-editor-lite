@@ -86,6 +86,10 @@ class WCBEL_Meta_Fields
         }
 
         foreach ($taxonomies as $key => $taxonomy) {
+            if (in_array($key, ['pos_product_visibility'])) {
+                continue;
+            }
+
             $fields[$key] = [
                 'name' => $key,
                 'label' => $taxonomy['label'],

@@ -1,11 +1,11 @@
-=== PBULKiT - Bulk Edit WooCommerce Products ===
+=== PBULKiT - Bulk Edit Products for WooCommerce ===
 Contributors: ithemelandco
 Donate link: https://ithemelandco.com/
 Author URI: https://ithemelandco.com/
 Tags: woocommerce bulk edit, bulk edit products, woocommerce bulk product editing, product editor, woocommerce editor
-Requires at least: 4.4
-Tested up to: 6.9
-Stable tag: 4.0.6
+Requires at least: 5.3
+Tested up to: 7.0
+Stable tag: 4.1.0
 Requires PHP: 8.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,7 @@ Stop wasting hours editing products one by one. Bulk edit thousands of WooCommer
 
 WooCommerce’s default bulk edit tools are too basic for stores with many products. Managing WooCommerce products one by one is slow, frustrating, and inefficient — especially when your store has hundreds or thousands of products.
 
-**<a href="https://ithemelandco.com/plugins/woocommerce-bulk-product-editing/?utm_source=wp.org&utm_medium=web_links&utm_campaign=user-lite-buy">PBULKiT – Bulk Edit WooCommerce Products</a>** replaces WooCommerce’s basic bulk edit tools with a powerful spreadsheet-style editor, allowing you to quickly update prices, stock, categories, attributes, and more — all from one screen.
+**<a href="https://ithemelandco.com/plugins/woocommerce-bulk-product-editing/?utm_source=wp.org&utm_medium=web_links&utm_campaign=user-lite-buy">PBULKiT – Bulk Edit Products for WooCommerce</a>** replaces WooCommerce’s basic bulk edit tools with a powerful spreadsheet-style editor, allowing you to quickly update prices, stock, categories, attributes, and more — all from one screen.
 
 Instead of opening each product individually, **<a href="https://ithemelandco.com/plugins/woocommerce-bulk-product-editing/?utm_source=wp.org&utm_medium=web_links&utm_campaign=user-lite-buy">PBULKiT</a>** lets you **filter, edit, and update multiple products at once**, saving hours of manual work and reducing errors.
 
@@ -124,6 +124,11 @@ Absolutely. You can try the full power of the Pro version on our <a href="https:
 4.  **Compare Lite & Premium:** See the incredible power you unlock with the Pro version.
 
 == Changelog ==
+
+= 4.1.0 =
+* Tested up to: WP 7.0
+* Checked plugin with Plugin Check
+* Fixed Some Issues
 
 = 4.0.6 =
 * Added Schedule review on Schedule list

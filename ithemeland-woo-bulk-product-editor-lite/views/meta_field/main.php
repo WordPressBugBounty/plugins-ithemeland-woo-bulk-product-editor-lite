@@ -75,8 +75,7 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                             <div class="wcbe-meta-fields-buttons">
                                 <div class="wcbe-meta-fields-buttons-left">
                                     <button <?php echo (!defined('WCBE_ACTIVE') || !WCBE_ACTIVE) ? 'disabled="disabled"' : ''; ?> type="submit" value="1" name="save_meta_fields" class="wcbe-button wcbe-button-lg wcbe-button-blue">
-                                        <?php $img = WCBEL_IMAGES_URL . 'save.svg'; ?>
-                                        <img src="<?php echo esc_url($img); ?>" alt="">
+                                        <img src="<?php echo esc_url(WCBEL_IMAGES_URL . 'save.svg'); ?>" alt="">
                                         <span><?php esc_html_e('Save Fields', 'ithemeland-woo-bulk-product-editor-lite'); ?></span>
                                     </button>
                                 </div>

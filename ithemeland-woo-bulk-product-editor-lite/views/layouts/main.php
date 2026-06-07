@@ -18,11 +18,11 @@ include WCBEL_VIEWS_DIR . "layouts/header.php"; ?>
                 <select id="wcbe-quick-per-page" title="The number of products per page">
                     <?php
                     if (!empty($count_per_page_items)) :
-                        $current_value = (!empty($current_settings['count_per_page'])) ? $current_settings['count_per_page'] : $settings['count_per_page'];
-                        foreach ($count_per_page_items as $count_per_page_item) :
+                        $wcbel_current_value = (!empty($current_settings['count_per_page'])) ? $current_settings['count_per_page'] : $settings['count_per_page'];
+                        foreach ($count_per_page_items as $wcbel_count_per_page_item) :
                     ?>
-                            <option value="<?php echo intval($count_per_page_item); ?>" <?php echo ($settings['count_per_page'] == intval($count_per_page_item)) ? 'selected' : ''; ?>>
-                                <?php echo esc_html($count_per_page_item); ?>
+                            <option value="<?php echo intval($wcbel_count_per_page_item); ?>" <?php echo ($settings['count_per_page'] == intval($wcbel_count_per_page_item)) ? 'selected' : ''; ?>>
+                                <?php echo esc_html($wcbel_count_per_page_item); ?>
                             </option>
                     <?php
                         endforeach;

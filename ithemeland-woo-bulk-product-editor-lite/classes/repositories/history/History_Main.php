@@ -4,8 +4,6 @@ namespace wcbel\classes\repositories\history;
 
 defined('ABSPATH') || exit();
 
-use wcbel\classes\helpers\Sanitizer;
-
 class History_Main
 {
     const BULK_OPERATION = 'bulk';
@@ -42,14 +40,14 @@ class History_Main
     {
         $data['sub_system'] = $this->sub_system;
         $format = ['%d', '%s', '%s', '%s', '%s'];
-        $this->wpdb->insert($this->history_table, $data, $format); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $this->wpdb->insert($this->history_table, $data, $format); //phpcs:ignore
         return $this->wpdb->insert_id;
     }
 
     public function create_history_item($data)
     {
         $format = ['%d', '%d', '%s', '%s', '%s', '%d', '%d'];
-        $this->wpdb->insert($this->history_items_table, $data, $format); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $this->wpdb->insert($this->history_items_table, $data, $format); //phpcs:ignore
         return $this->wpdb->insert_id;
     }
 
@@ -264,7 +262,7 @@ class History_Main
 
     public function get_history_rows_count($history_id)
     {
-        $result = $this->wpdb->get_row($this->wpdb->prepare("SELECT COUNT(*) AS `count` FROM {$this->history_items_table} WHERE history_id = %d", intval($history_id)), ARRAY_A); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared 
+        $result = $this->wpdb->get_row($this->wpdb->prepare("SELECT COUNT(*) AS `count` FROM {$this->history_items_table} WHERE history_id = %d", intval($history_id)), ARRAY_A); //phpcs:ignore
         return (!empty($result['count'])) ? intval($result['count']) : 0;
     }
 
@@ -333,7 +331,7 @@ class History_Main
 
     public function get_history($history_id)
     {
-        return $this->wpdb->get_results($this->wpdb->prepare("SELECT * FROM {$this->history_table} WHERE id = %d", intval($history_id))); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared 
+        return $this->wpdb->get_results($this->wpdb->prepare("SELECT * FROM {$this->history_table} WHERE id = %d", intval($history_id))); //phpcs:ignore
     }
 
     public function update_history($history_id, $where)

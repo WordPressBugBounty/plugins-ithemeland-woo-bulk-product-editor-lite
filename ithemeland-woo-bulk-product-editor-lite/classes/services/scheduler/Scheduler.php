@@ -249,6 +249,7 @@ abstract class Scheduler
         }
 
         $schedule_jobs = $this->get_jobs();
+        $identifier = $this->identifier;
         $jobs = Render::html(WCBEL_DIR . 'classes/services/scheduler/views/jobs_list/rows.php', compact('schedule_jobs', 'identifier'));
         $awaiting_jobs = $this->repository->get_awaiting_count([
             'identifier' => $this->identifier

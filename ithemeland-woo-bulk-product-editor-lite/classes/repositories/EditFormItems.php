@@ -85,6 +85,19 @@ class EditFormItems
                 'field_type' => 'number',
                 'placeholder' => esc_html__('Menu order', 'ithemeland-woo-bulk-product-editor-lite')
             ],
+            'pos_product_visibility' => [
+                'name' => 'pos_product_visibility',
+                'id' => 'pos-product-visibility',
+                'label' => esc_html__('Available for POS', 'ithemeland-woo-bulk-product-editor-lite'),
+                'update_type' => 'woocommerce_field',
+                'operators' => [],
+                'field_type' => 'select',
+                'options' => [
+                    '' => esc_html__('Select', 'ithemeland-woo-bulk-product-editor-lite'),
+                    'yes' => esc_html__('Yes', 'ithemeland-woo-bulk-product-editor-lite'),
+                    'no' => esc_html__('No', 'ithemeland-woo-bulk-product-editor-lite')
+                ]
+            ],
             'sold_individually' => [
                 'name' => 'sold_individually',
                 'id' => 'sold-individually',

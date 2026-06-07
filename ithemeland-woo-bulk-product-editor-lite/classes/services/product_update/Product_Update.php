@@ -135,9 +135,9 @@ class Product_Update implements Update_Interface
                     if (!empty($action['hook'])) {
                         if (!empty($action['data'])) {
                             $action['data']['result'] = $update_result;
-                            do_action($action['hook'], $action['data']);
+                            do_action($action['hook'], $action['data']); //phpcs:ignore
                         } else {
-                            do_action($action['hook']);
+                            do_action($action['hook']); //phpcs:ignore
                         }
                     }
                 }

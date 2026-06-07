@@ -47,10 +47,10 @@ if (empty($job) || empty($log) || !is_array($log)) {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($log as $item): ?>
+            <?php foreach ($log as $wcbel_item): ?>
                 <tr>
-                    <td><?php echo esc_html(Job_Presenter::log_action($item['action'])); ?></td>
-                    <td><?php echo esc_html($item['datetime']); ?></td>
+                    <td><?php echo esc_html(Job_Presenter::log_action($wcbel_item['action'])); ?></td>
+                    <td><?php echo esc_html($wcbel_item['datetime']); ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

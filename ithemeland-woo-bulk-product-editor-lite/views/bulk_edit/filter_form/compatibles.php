@@ -9,15 +9,15 @@ if (empty($has_compatible_fields) || empty($compatible_fields_status) || !is_arr
 <!-- tabs title-->
 <ul class="wcbe-sub-tab-titles">
     <?php
-    $i = 1;
-    foreach ($compatible_fields_status as $key => $status) :
-        if (!$status || empty($compatible_tabs_label[$key]) || $key == 'pricing') {
+    $wcbel_i = 1;
+    foreach ($compatible_fields_status as $wcbel_key => $wcbel_status) :
+        if (!$wcbel_status || empty($compatible_tabs_label[$wcbel_key]) || $wcbel_key == 'pricing') {
             continue;
         }
     ?>
-        <li><a href="#" class="wcbe-sub-tab-title <?php echo ($i == 1) ? 'active' : ''; ?>" data-content="<?php echo esc_attr($key); ?>"><?php echo esc_html($compatible_tabs_label[$key]); ?></a></li>
+        <li><a href="#" class="wcbe-sub-tab-title <?php echo ($wcbel_i == 1) ? 'active' : ''; ?>" data-content="<?php echo esc_attr($wcbel_key); ?>"><?php echo esc_html($compatible_tabs_label[$wcbel_key]); ?></a></li>
     <?php
-        $i++;
+        $wcbel_i++;
     endforeach;
     ?>
 </ul>
@@ -25,25 +25,25 @@ if (empty($has_compatible_fields) || empty($compatible_fields_status) || !is_arr
 <!-- tabs content -->
 <div class="wcbe-sub-tab-contents">
     <?php
-    $i = 1;
-    foreach ($compatible_fields_status as $key => $status) :
-        if (!$status || empty($compatible_tabs_label[$key]) || empty($compatibles[$key]) || $key == 'pricing') {
+    $wcbel_i = 1;
+    foreach ($compatible_fields_status as $wcbel_key => $wcbel_status) :
+        if (!$wcbel_status || empty($compatible_tabs_label[$wcbel_key]) || empty($compatibles[$wcbel_key]) || $wcbel_key == 'pricing') {
             continue;
         }
     ?>
-        <div class="wcbe-sub-tab-content" data-content="<?php echo esc_attr($key); ?>" style="<?php echo ($i == 1) ? 'display: block;' : ''; ?>">
+        <div class="wcbe-sub-tab-content" data-content="<?php echo esc_attr($wcbel_key); ?>" style="<?php echo ($wcbel_i == 1) ? 'display: block;' : ''; ?>">
             <?php
-            foreach ($compatibles[$key] as $plugin_key => $data) {
-                if (!$data['status'] || !file_exists($data['filter_fields'])) {
+            foreach ($compatibles[$wcbel_key] as $wcbel_plugin_key => $wcbel_data) {
+                if (!$wcbel_data['status'] || !file_exists($wcbel_data['filter_fields'])) {
                     continue;
                 }
 
-                include $data['filter_fields'];
+                include $wcbel_data['filter_fields'];
             }
             ?>
         </div>
     <?php
-        $i++;
+        $wcbel_i++;
     endforeach;
     ?>
 </div>

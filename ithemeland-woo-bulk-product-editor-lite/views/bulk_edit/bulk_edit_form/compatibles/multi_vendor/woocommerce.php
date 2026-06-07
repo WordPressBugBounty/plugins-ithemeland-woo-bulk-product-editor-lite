@@ -4,13 +4,13 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 use wcbel\classes\helpers\Sanitizer;
 use wcbel\classes\repositories\Product;
 
-$product_repository = Product::get_instance();
-$wc_vendors = $product_repository->get_wc_product_vendors();
-$wc_vendors_options = '';
-if (!empty($wc_vendors)) {
-    foreach ($wc_vendors as $wc_vendor) {
-        if ($wc_vendor instanceof \WP_Term) {
-            $wc_vendors_options .= '<option value="' . esc_attr($wc_vendor->slug) . '">' . esc_html($wc_vendor->name) . '</option>';
+$wcbel_product_repository = Product::get_instance();
+$wcbel_wc_vendors = $wcbel_product_repository->get_wc_product_vendors();
+$wcbel_wc_vendors_options = '';
+if (!empty($wcbel_wc_vendors)) {
+    foreach ($wcbel_wc_vendors as $wcbel_wc_vendor) {
+        if ($wcbel_wc_vendor instanceof \WP_Term) {
+            $wcbel_wc_vendors_options .= '<option value="' . esc_attr($wcbel_wc_vendor->slug) . '">' . esc_html($wcbel_wc_vendor->name) . '</option>';
         }
     }
 }
@@ -46,6 +46,6 @@ if (!empty($wc_vendors)) {
 <div class="wcbe-form-group" data-name="wcpv_product_vendors" data-type="taxonomy">
     <label for="wcbe-bulk-edit-form-wc-vendor"><?php esc_html_e('Vendor', 'ithemeland-woo-bulk-product-editor-lite'); ?></label>
     <select class="wcbe-select2" id="wcbe-bulk-edit-form-wc-vendor" multiple data-field="value">
-        <?php echo wp_kses($wc_vendors_options, Sanitizer::allowed_html()); ?>
+        <?php echo wp_kses($wcbel_wc_vendors_options, Sanitizer::allowed_html()); ?>
     </select>
 </div>

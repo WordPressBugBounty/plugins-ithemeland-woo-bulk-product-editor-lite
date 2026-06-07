@@ -258,9 +258,9 @@ abstract class BackgroundProcess extends WP_Background_Process
                 if (!empty($action['hook'])) {
                     if (!empty($action['data'])) {
                         $action['data']['background_process_result'] = $background_process_result;
-                        do_action($action['hook'], $action['data']);
+                        do_action($action['hook'], $action['data']); //phpcs:ignore
                     } else {
-                        do_action($action['hook']);
+                        do_action($action['hook']); //phpcs:ignore
                     }
                 }
             }

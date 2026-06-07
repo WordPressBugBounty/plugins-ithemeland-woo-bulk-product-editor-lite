@@ -14,18 +14,18 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
     <?php else : ?>
         <select class="wcbe-meta-fields-type wcbe-meta-fields-main-type" data-id="<?php echo (!empty($meta_field['key'])) ? esc_html($meta_field['key']) : ''; ?>" name="meta_field_main_type[]" title="<?php esc_html_e('Select Type', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
             <?php if (!empty($meta_fields_main_types)) : ?>
-                <?php foreach ($meta_fields_main_types as $main_type_name => $main_type_label) : ?>
-                    <option value="<?php echo esc_attr($main_type_name); ?>" <?php echo (isset($meta_field['main_type']) && $meta_field['main_type'] == $main_type_name) ? 'selected' : ''; ?>>
-                        <?php echo esc_html($main_type_label); ?>
+                <?php foreach ($meta_fields_main_types as $wcbel_main_type_name => $wcbel_main_type_label) : ?>
+                    <option value="<?php echo esc_attr($wcbel_main_type_name); ?>" <?php echo (isset($meta_field['main_type']) && $meta_field['main_type'] == $wcbel_main_type_name) ? 'selected' : ''; ?>>
+                        <?php echo esc_html($wcbel_main_type_label); ?>
                     </option>
                 <?php endforeach; ?>
             <?php endif; ?>
         </select>
         <select class="wcbe-meta-fields-type wcbe-meta-fields-sub-type <?php echo (isset($meta_field['main_type']) && $meta_field['main_type'] != 'textinput') ? 'wcbe-hide' : ''; ?>" data-id="<?php echo (!empty($meta_field['key'])) ? esc_attr($meta_field['key']) : ''; ?>" name="meta_field_sub_type[]" title="<?php esc_html_e('Select Type', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
             <?php if (!empty($meta_fields_sub_types)) : ?>
-                <?php foreach ($meta_fields_sub_types as $sub_type_name => $sub_type_label) : ?>
-                    <option value="<?php echo esc_attr($sub_type_name); ?>" <?php echo (isset($meta_field['sub_type']) && $meta_field['sub_type'] == $sub_type_name) ? 'selected' : ''; ?>>
-                        <?php echo esc_html($sub_type_label); ?>
+                <?php foreach ($meta_fields_sub_types as $wcbel_sub_type_name => $wcbel_sub_type_label) : ?>
+                    <option value="<?php echo esc_attr($wcbel_sub_type_name); ?>" <?php echo (isset($meta_field['sub_type']) && $meta_field['sub_type'] == $wcbel_sub_type_name) ? 'selected' : ''; ?>>
+                        <?php echo esc_html($wcbel_sub_type_label); ?>
                     </option>
                 <?php endforeach; ?>
             <?php endif; ?>

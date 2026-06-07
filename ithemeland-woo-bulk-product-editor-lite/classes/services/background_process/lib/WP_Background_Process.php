@@ -227,7 +227,7 @@ abstract class WP_Background_Process extends WP_Async_Request
         $this->start_time = time(); // Set start time of current process.
 
         $lock_duration = (property_exists($this, 'queue_lock_time')) ? $this->queue_lock_time : 60; // 1 minute
-        $lock_duration = apply_filters($this->identifier . '_queue_lock_time', $lock_duration);
+        $lock_duration = apply_filters($this->identifier . '_queue_lock_time', $lock_duration); //phpcs:ignore
 
         set_site_transient($this->identifier . '_process_lock', microtime(), $lock_duration);
     }
@@ -333,7 +333,7 @@ abstract class WP_Background_Process extends WP_Async_Request
             $return = true;
         }
 
-        return apply_filters($this->identifier . '_memory_exceeded', $return);
+        return apply_filters($this->identifier . '_memory_exceeded', $return); //phpcs:ignore
     }
 
     /**
@@ -368,14 +368,14 @@ abstract class WP_Background_Process extends WP_Async_Request
      */
     protected function time_exceeded()
     {
-        $finish = $this->start_time + apply_filters($this->identifier . '_default_time_limit', 20); // 20 seconds
+        $finish = $this->start_time + apply_filters($this->identifier . '_default_time_limit', 20);  //phpcs:ignore
         $return = false;
 
         if (time() >= $finish) {
             $return = true;
         }
 
-        return apply_filters($this->identifier . '_time_exceeded', $return);
+        return apply_filters($this->identifier . '_time_exceeded', $return); //phpcs:ignore
     }
 
     /**
@@ -399,10 +399,10 @@ abstract class WP_Background_Process extends WP_Async_Request
      */
     public function schedule_cron_healthcheck($schedules)
     {
-        $interval = apply_filters($this->identifier . '_cron_interval', 5);
+        $interval = apply_filters($this->identifier . '_cron_interval', 5); //phpcs:ignore
 
         if (property_exists($this, 'cron_interval')) {
-            $interval = apply_filters($this->identifier . '_cron_interval', $this->cron_interval);
+            $interval = apply_filters($this->identifier . '_cron_interval', $this->cron_interval); //phpcs:ignore
         }
 
         // Adds every 5 minutes to the existing schedules.

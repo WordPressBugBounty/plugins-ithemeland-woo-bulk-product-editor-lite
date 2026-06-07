@@ -4,6 +4,8 @@ namespace wcbel\classes\services\product_update\handlers;
 
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
+use Automattic\WooCommerce\Internal\ProductFeed\Integrations\POSCatalog\POSProductVisibilitySync;
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use wcbel\classes\helpers\Product_Helper;
 use wcbel\classes\repositories\Product;
 use wcbel\classes\services\product_update\Product_Update_Handler;
@@ -45,11 +47,16 @@ class Woocommerce_Handler extends Product_Update_Handler
             };
 
             $getter_method = $this->get_woocommerce_getter($this->update_data['name']);
-            if ($getter_method == 'get_date_created') {
-                $date_time = method_exists($product, $getter_method) ? $product->{$getter_method}() : '';
-                $this->current_field_value = (method_exists($date_time, 'date')) ? $date_time->date('Y/m/d H:i') : $date_time;
-            } else {
-                $this->current_field_value = method_exists($product, $getter_method) ? $product->{$getter_method}() : '';
+            switch ($getter_method) {
+                case 'get_date_created':
+                    $date_time = method_exists($product, $getter_method) ? $product->{$getter_method}() : '';
+                    $this->current_field_value = (method_exists($date_time, 'date')) ? $date_time->date('Y/m/d H:i') : $date_time;
+                    break;
+                case 'get_pos_product_visibility':
+                    $this->current_field_value = $this->get_pos_product_visibility();
+                    break;
+                default:
+                    $this->current_field_value = method_exists($product, $getter_method) ? $product->{$getter_method}() : '';
             }
 
             // replace text variable
@@ -195,6 +202,27 @@ class Woocommerce_Handler extends Product_Update_Handler
         return $new_product->save();
     }
 
+    private function set_pos_product_visibility($value)
+    {
+        if (
+            !class_exists('Automattic\WooCommerce\Utilities\FeaturesUtil')
+            || !class_exists('Automattic\WooCommerce\Internal\ProductFeed\Integrations\POSCatalog\POSProductVisibilitySync')
+            || !FeaturesUtil::feature_is_enabled('point_of_sale')
+        ) {
+            return false;
+        }
+
+        $visible_in_pos = ('yes' === $value);
+        wc_get_container()->get(POSProductVisibilitySync::class)->set_product_pos_visibility($this->product->get_id(), $visible_in_pos);
+
+        return $this->product->save();
+    }
+
+    private function get_pos_product_visibility()
+    {
+        return (! has_term('pos-hidden', 'pos_product_visibility', $this->product->get_id())) ? 'yes' : 'no';
+    }
+
     private function get_setter($field_name)
     {
         $methods = $this->get_setter_methods();
@@ -245,6 +273,10 @@ class Woocommerce_Handler extends Product_Update_Handler
             'menu_order' => [
                 'object' => 'product',
                 'method' => 'set_menu_order',
+            ],
+            'pos_product_visibility' => [
+                'object' => 'this',
+                'method' => 'set_pos_product_visibility',
             ],
             'sold_individually' => [
                 'object' => 'product',
@@ -436,6 +468,7 @@ class Woocommerce_Handler extends Product_Update_Handler
             'average_rating' => 'get_average_rating',
             'upsell_ids' => 'get_upsell_ids',
             'cross_sell_ids' => 'get_cross_sell_ids',
+            'pos_product_visibility' => 'get_pos_product_visibility',
         ];
     }
 

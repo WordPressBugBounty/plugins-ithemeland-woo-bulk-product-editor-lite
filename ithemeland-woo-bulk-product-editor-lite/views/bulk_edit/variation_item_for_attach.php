@@ -12,8 +12,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
         <?php if (!empty($attribute_items)) : ?>
             |
             <select title="Select item" name="attribute_item[]" class="wcbe-variations-attaching-variation-attribute-item">
-                <?php foreach ($attribute_items as $item) : ?>
-                    <option value="<?php echo esc_attr($item->term_id); ?>" <?php echo (!empty($attribute_item) && $attribute_item == urldecode($item->term_id)) ? 'selected' : ''; ?>><?php echo esc_html($item->name); ?></option>
+                <?php foreach ($attribute_items as $wcbel_item) : ?>
+                    <option value="<?php echo esc_attr($wcbel_item->term_id); ?>" <?php echo (!empty($attribute_item) && $attribute_item == urldecode($wcbel_item->term_id)) ? 'selected' : ''; ?>><?php echo esc_html($wcbel_item->name); ?></option>
                 <?php endforeach; ?>
             </select>
         <?php endif; ?>

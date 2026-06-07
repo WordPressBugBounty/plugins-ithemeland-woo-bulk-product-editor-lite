@@ -22,8 +22,8 @@ class WCBEL_Top_Banners
         $expire_date = strtotime('2024-12-05 23:59:59');
         $current_time = time();
 
-        if ($expire_date > $current_time && get_option('it_black_friday_banner_dismissed', 'no') == 'no' && empty(apply_filters('it_black_friday_banner', []))) {
-            add_filter('it_black_friday_banner', function ($plugins) {
+        if ($expire_date > $current_time && get_option('ithemelandco_black_friday_banner_dismissed', 'no') == 'no' && empty(apply_filters('ithemelandco_black_friday_banner', []))) { //phpcs:ignore
+            add_filter('ithemelandco_black_friday_banner', function ($plugins) {
                 $plugins['wcbel'] = 'Bulk products lite';
                 return $plugins;
             });
@@ -84,7 +84,7 @@ class WCBEL_Top_Banners
 
     public function black_friday_banner_dismiss()
     {
-        update_option('it_black_friday_banner_dismissed', 'yes');
+        update_option('ithemelandco_black_friday_banner_dismissed', 'yes');
         return wp_safe_redirect(wp_get_referer());
     }
 }

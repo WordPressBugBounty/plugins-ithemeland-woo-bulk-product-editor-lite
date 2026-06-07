@@ -153,7 +153,7 @@ class WCBEL
         }
 
         // load textdomain
-        load_plugin_textdomain('ithemeland-woo-bulk-product-editor-lite', false, WCBEL_LANGUAGES_DIR);
+        // load_plugin_textdomain('ithemeland-woo-bulk-product-editor-lite', false, WCBEL_LANGUAGES_DIR);
     }
 
     public function enqueue_scripts($page)

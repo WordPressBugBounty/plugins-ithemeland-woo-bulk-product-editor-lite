@@ -58,7 +58,7 @@ class Woocommerce_Bulk_Edit
 
     public function print_script()
     {
-        $id_in_url = (isset($_GET['id']) && is_numeric($_GET['id'])) ? intval($_GET['id']) : 0; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $id_in_url = (isset($_GET['id']) && is_numeric($_GET['id'])) ? intval($_GET['id']) : 0; //phpcs:ignore
 
         echo "
         <script>

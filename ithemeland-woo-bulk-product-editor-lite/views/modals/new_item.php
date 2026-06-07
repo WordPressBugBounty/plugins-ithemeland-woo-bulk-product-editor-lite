@@ -23,10 +23,10 @@ use wcbel\classes\helpers\Sanitizer;
                         </div>
                         <div id="wcbe-new-item-extra-fields">
                             <?php if (!empty($new_item_extra_fields)) : ?>
-                                <?php foreach ($new_item_extra_fields as $extra_field) : ?>
+                                <?php foreach ($new_item_extra_fields as $wcbel_extra_field) : ?>
                                     <div class="wcbe-form-group">
-                                        <?php echo wp_kses($extra_field['label'], Sanitizer::allowed_html()); ?>
-                                        <?php echo wp_kses($extra_field['field'], Sanitizer::allowed_html()); ?>
+                                        <?php echo wp_kses($wcbel_extra_field['label'], Sanitizer::allowed_html()); ?>
+                                        <?php echo wp_kses($wcbel_extra_field['field'], Sanitizer::allowed_html()); ?>
                                     </div>
                                 <?php endforeach; ?>
                             <?php endif; ?>

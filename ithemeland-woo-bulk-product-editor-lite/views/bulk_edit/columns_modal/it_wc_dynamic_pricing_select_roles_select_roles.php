@@ -19,9 +19,9 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                             <select id="wcbe-user-roles" class="wcbe-select2" data-placeholder="<?php esc_html_e('Select ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>" multiple>
                                 <?php
                                 if (!empty($wp_roles) && !empty($wp_roles->roles)) :
-                                    foreach ($wp_roles->roles as $role_key => $role) :
+                                    foreach ($wp_roles->roles as $wcbel_role_key => $wcbel_role) :
                                 ?>
-                                        <option value="<?php echo esc_attr($role_key); ?>"><?php echo esc_html($role['name']); ?></option>
+                                        <option value="<?php echo esc_attr($wcbel_role_key); ?>"><?php echo esc_html($wcbel_role['name']); ?></option>
                                 <?php
                                     endforeach;
                                 endif;

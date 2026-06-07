@@ -5,12 +5,12 @@ use wcbel\classes\helpers\Sanitizer;
 if (!defined('ABSPATH')) exit; // Exit if accessed directly 
 
 global $wp_roles;
-$user_roles = $wp_roles->roles;
-$roles_option_html = '';
+$wcbel_user_roles = $wp_roles->roles;
+$wcbel_roles_option_html = '';
 
-if (!empty($user_roles)) {
-    foreach ($user_roles as $key => $role) {
-        $roles_option_html .= '<option value="' . esc_attr($key) . '">' . esc_html($role['name']) . '</option>';
+if (!empty($wcbel_user_roles)) {
+    foreach ($wcbel_user_roles as $wcbel_key => $wcbel_role) {
+        $wcbel_roles_option_html .= '<option value="' . esc_attr($wcbel_key) . '">' . esc_html($wcbel_role['name']) . '</option>';
     }
 }
 ?>
@@ -36,7 +36,7 @@ if (!empty($user_roles)) {
         <?php include WCBEL_VIEWS_DIR . "bulk_edit/bulk_edit_form/operators/taxonomy.php"; ?>
     </select>
     <select multiple="" class="wcbe-select2" data-field="value" id="wcbe-bulk-edit-form-it-wc-dynamic-pricing-hide-price" data-placeholder="Select roles ...">
-        <?php echo wp_kses($roles_option_html, Sanitizer::allowed_html()); ?>
+        <?php echo wp_kses($wcbel_roles_option_html, Sanitizer::allowed_html()); ?>
     </select>
 </div>
 <div class="wcbe-form-group" data-name="it_pricing_product_add_to_cart_user_role" data-sub-name="" data-type="meta_field">
@@ -45,7 +45,7 @@ if (!empty($user_roles)) {
         <?php include WCBEL_VIEWS_DIR . "bulk_edit/bulk_edit_form/operators/taxonomy.php"; ?>
     </select>
     <select multiple="" class="wcbe-select2" data-field="value" id="wcbe-bulk-edit-form-it-wc-dynamic-pricing-hide-add-to-cart" data-placeholder="Select roles ...">
-        <?php echo wp_kses($roles_option_html, Sanitizer::allowed_html()); ?>
+        <?php echo wp_kses($wcbel_roles_option_html, Sanitizer::allowed_html()); ?>
     </select>
 </div>
 <div class="wcbe-form-group" data-name="it_pricing_product_hide_user_role" data-sub-name="" data-type="meta_field">
@@ -54,7 +54,7 @@ if (!empty($user_roles)) {
         <?php include WCBEL_VIEWS_DIR . "bulk_edit/bulk_edit_form/operators/taxonomy.php"; ?>
     </select>
     <select multiple="" class="wcbe-select2" data-field="value" id="wcbe-bulk-edit-form-it-wc-dynamic-pricing-hide-product" data-placeholder="Select roles ...">
-        <?php echo wp_kses($roles_option_html, Sanitizer::allowed_html()); ?>
+        <?php echo wp_kses($wcbel_roles_option_html, Sanitizer::allowed_html()); ?>
     </select>
 </div>
 <div class="wcbe-form-group">
@@ -72,11 +72,11 @@ if (!empty($user_roles)) {
 </div>
 <?php
 if (!empty($wp_roles->roles)) :
-    foreach ($wp_roles->roles as $key => $role) :
+    foreach ($wp_roles->roles as $wcbel_key => $wcbel_role) :
 ?>
-        <div class="wcbe-form-group" data-name="pricing_rules_product" data-sub-name="<?php echo esc_attr($key); ?>" data-type="meta_field">
-            <label for="wcbe-bulk-edit-form-it-wc-dynamic-pricing-role-<?php echo esc_attr($key); ?>"><?php echo esc_html($role['name']); ?></label>
-            <input type="number" class="wcbe-input-md" data-field="value" data-name="<?php echo esc_attr($key); ?>" id="wcbe-bulk-edit-form-it-wc-dynamic-pricing-role-<?php echo esc_attr($key); ?>" placeholder="<?php esc_attr_e('Amount ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
+        <div class="wcbe-form-group" data-name="pricing_rules_product" data-sub-name="<?php echo esc_attr($wcbel_key); ?>" data-type="meta_field">
+            <label for="wcbe-bulk-edit-form-it-wc-dynamic-pricing-role-<?php echo esc_attr($wcbel_key); ?>"><?php echo esc_html($wcbel_role['name']); ?></label>
+            <input type="number" class="wcbe-input-md" data-field="value" data-name="<?php echo esc_attr($wcbel_key); ?>" id="wcbe-bulk-edit-form-it-wc-dynamic-pricing-role-<?php echo esc_attr($wcbel_key); ?>" placeholder="<?php esc_attr_e('Amount ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
         </div>
 <?php
     endforeach;

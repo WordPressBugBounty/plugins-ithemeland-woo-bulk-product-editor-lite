@@ -52,8 +52,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                                             <label for="wcbe-variation-bulk-edit-attributes"><?php esc_html_e('Product Attributes', 'ithemeland-woo-bulk-product-editor-lite'); ?></label>
                                             <select id="wcbe-variation-bulk-edit-attributes" class="wcbe-select2" multiple>
                                                 <?php if (!empty($attributes)) : ?>
-                                                    <?php foreach ($attributes as $attribute) : ?>
-                                                        <option value="<?php echo esc_attr($attribute->attribute_name); ?>"><?php echo esc_html($attribute->attribute_name); ?></option>
+                                                    <?php foreach ($attributes as $wcbel_attribute) : ?>
+                                                        <option value="<?php echo esc_attr($wcbel_attribute->attribute_name); ?>"><?php echo esc_html($wcbel_attribute->attribute_name); ?></option>
                                                     <?php endforeach; ?>
                                                 <?php endif; ?>
                                             </select>
@@ -144,8 +144,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                                                 </label>
                                                 <select id="wcbe-variation-bulk-edit-delete-attributes" class="wcbe-select2" multiple>
                                                     <?php if (!empty($attributes)) : ?>
-                                                        <?php foreach ($attributes as $attribute) : ?>
-                                                            <option value="<?php echo esc_attr($attribute->attribute_name); ?>"><?php echo esc_html($attribute->attribute_name); ?></option>
+                                                        <?php foreach ($attributes as $wcbel_attribute) : ?>
+                                                            <option value="<?php echo esc_attr($wcbel_attribute->attribute_name); ?>"><?php echo esc_html($wcbel_attribute->attribute_name); ?></option>
                                                         <?php endforeach; ?>
                                                     <?php endif; ?>
                                                 </select>
@@ -170,8 +170,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                                             <select id="wcbe-variations-attaching-attributes" class="wcbe-w40p wcbe-mr10" name="attribute_key" title="Select Attribute">
                                                 <option value=""><?php esc_html_e('Select Attribute', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
                                                 <?php if (!empty($attributes)) : ?>
-                                                    <?php foreach ($attributes as $attribute) : ?>
-                                                        <option value="<?php echo esc_attr($attribute->attribute_name); ?>"><?php echo esc_html($attribute->attribute_name); ?></option>
+                                                    <?php foreach ($attributes as $wcbel_attribute) : ?>
+                                                        <option value="<?php echo esc_attr($wcbel_attribute->attribute_name); ?>"><?php echo esc_html($wcbel_attribute->attribute_name); ?></option>
                                                     <?php endforeach; ?>
                                                 <?php endif; ?>
                                             </select>

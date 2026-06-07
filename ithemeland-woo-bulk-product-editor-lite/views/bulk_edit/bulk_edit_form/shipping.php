@@ -9,9 +9,9 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
             <option value=""><?php esc_html_e('Select', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
             <?php
             if (!empty($shipping_classes)) :
-                foreach ($shipping_classes as $key => $value) :
+                foreach ($shipping_classes as $wcbel_key => $wcbel_value) :
             ?>
-                    <option value="<?php echo esc_attr($key); ?>"><?php echo esc_html($value); ?></option>
+                    <option value="<?php echo esc_attr($wcbel_key); ?>"><?php echo esc_html($wcbel_value); ?></option>
             <?php
                 endforeach;
             endif;

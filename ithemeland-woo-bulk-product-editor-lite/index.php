@@ -1,2 +1,2 @@
 <?php
-return;
+defined('ABSPATH') || exit(); // Exit if accessed directly

@@ -95,8 +95,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
             <div class="wcbe-form-group">
                 <label><?php esc_html_e('Select Days', 'ithemeland-woo-bulk-product-editor-lite'); ?></label>
                 <select class="wcbe-select2 wcbe-set-schedule-monthly-days required" multiple>
-                    <?php for ($i = 1; $i <= 31; $i++) : ?>
-                        <option value="<?php echo intval($i); ?>"><?php echo intval($i); ?></option>
+                    <?php for ($wcbel_i = 1; $wcbel_i <= 31; $wcbel_i++) : ?>
+                        <option value="<?php echo intval($wcbel_i); ?>"><?php echo intval($wcbel_i); ?></option>
                     <?php endfor; ?>
                 </select>
             </div>

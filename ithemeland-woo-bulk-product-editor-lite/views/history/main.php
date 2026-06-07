@@ -27,10 +27,10 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                                     <select <?php echo (!defined('WCBE_ACTIVE') || !WCBE_ACTIVE) ? 'disabled="disabled"' : ''; ?> id="wcbe-history-filter-operation">
                                         <option value=""><?php esc_html_e('Select', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
                                         <?php
-                                        if (!empty($history_types = \wcbel\classes\repositories\history\History_Main::get_operation_types())) :
-                                            foreach ($history_types as $history_type_key => $history_type_label) :
+                                        if (!empty($wcbel_history_types = \wcbel\classes\repositories\history\History_Main::get_operation_types())) :
+                                            foreach ($wcbel_history_types as $wcbel_history_type_key => $wcbel_history_type_label) :
                                         ?>
-                                                <option value="<?php echo esc_attr($history_type_key); ?>"><?php echo esc_html($history_type_label); ?></option>
+                                                <option value="<?php echo esc_attr($wcbel_history_type_key); ?>"><?php echo esc_html($wcbel_history_type_label); ?></option>
                                         <?php
                                             endforeach;
                                         endif;

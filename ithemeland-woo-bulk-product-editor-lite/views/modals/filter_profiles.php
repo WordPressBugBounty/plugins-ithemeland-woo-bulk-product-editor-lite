@@ -27,7 +27,7 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                                     </thead>
                                     <tbody>
                                         <?php if (!empty($filters_preset)) : ?>
-                                            <?php foreach ($filters_preset as $filter_item) : ?>
+                                            <?php foreach ($filters_preset as $wcbel_filter_item) : ?>
                                                 <?php include "filter_profile_item.php"; ?>
                                             <?php endforeach; ?>
                                         <?php else : ?>

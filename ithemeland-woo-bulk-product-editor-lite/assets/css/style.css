@@ -1330,3 +1330,13 @@ input::-moz-focus-outer {
     bottom: 0;
     margin: auto;
 }
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="date"],
+select {
+    min-height: 28px !important;
+    line-height: 1 !important;
+}

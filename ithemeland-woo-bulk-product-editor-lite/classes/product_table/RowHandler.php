@@ -99,6 +99,8 @@ class RowHandler
         }
         $output .= '>';
 
+       
+
         if (empty($this->column_data['allowed_type']) || (!empty($this->column_data['allowed_type']) && in_array($this->product_object->get_type(), $this->column_data['allowed_type']))) {
             if ($this->column_data['editable'] === true) {
                 $generated = $this->generate_field();

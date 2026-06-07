@@ -24,7 +24,7 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                         <div class="wcbe-hide">
                             <?php
                             if (file_exists(WCBEL_VIEWS_DIR . 'bulk_edit/columns_modal/yikes_custom_tab_item.php')) {
-                                $duplicate_item = 'yes';
+                                $wcbel_duplicate_item = 'yes';
                                 include WCBEL_VIEWS_DIR . 'bulk_edit/columns_modal/yikes_custom_tab_item.php';
                             }
                             ?>
@@ -43,8 +43,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
         </div>
     </div>
     <?php
-    $saved_tabs = get_option('yikes_woo_reusable_products_tabs');
-    if (!empty($saved_tabs)) :
+    $wcbel_saved_tabs = get_option('yikes_woo_reusable_products_tabs');
+    if (!empty($wcbel_saved_tabs)) :
     ?>
         <div class="wcbe-yikes-saved-tabs">
             <div class="wcbe-yikes-saved-tabs-box">
@@ -54,12 +54,12 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                     <hr>
                 </div>
                 <ul>
-                    <?php foreach ($saved_tabs as $saved_tab) :
-                        if (!empty($saved_tab['tab_slug'])) :
+                    <?php foreach ($wcbel_saved_tabs as $wcbel_saved_tab) :
+                        if (!empty($wcbel_saved_tab['tab_slug'])) :
                     ?>
                             <li>
-                                <?php echo esc_html($saved_tab['tab_slug']); ?>
-                                <button type="button" data-id="<?php echo esc_attr($saved_tab['tab_id']); ?>" class="wcbe-yikes-saved-tab-add"><i class="wcbe-icon-plus1"></i></button>
+                                <?php echo esc_html($wcbel_saved_tab['tab_slug']); ?>
+                                <button type="button" data-id="<?php echo esc_attr($wcbel_saved_tab['tab_id']); ?>" class="wcbe-yikes-saved-tab-add"><i class="wcbe-icon-plus1"></i></button>
                             </li>
                     <?php
                         endif;

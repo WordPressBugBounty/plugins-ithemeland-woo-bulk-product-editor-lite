@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: iThemeland Bulk Product Editing Lite For WooCommerce
+Plugin Name: PBULKiT - Bulk Edit Products for WooCommerce
 Plugin URI: https://ithemelandco.com/plugins/woocommerce-bulk-product-editing
 Description: Editing Date in WordPress is very painful. Be professionals with managing data in the reliable and flexible way by WooCommerce Bulk Product Editor.
 Author: iThemelandco
-Tested up to: WP 6.8.1
+Tested up to: 7.0
 Requires PHP: 8.0.3
 Tags: woocommerce,woocommerce bulk edit,bulk edit,bulk,products bulk editor
 Text Domain: ithemeland-woo-bulk-product-editor-lite
@@ -12,8 +12,8 @@ Domain Path: /languages
 Requires Plugins: woocommerce
 WC requires at least: 3.9
 WC tested up to: 9.8.2
-Requires at least: 4.4
-Version: 4.0.6
+Requires at least: 5.3
+Version: 4.1.0
 License: GPLv3
 Author URI: https://www.ithemelandco.com
 */
@@ -29,7 +29,7 @@ if (defined('WCBEL_NAME')) {
 require_once __DIR__ . '/vendor/autoload.php';
 
 define('WCBEL_NAME', 'ithemeland-woo-bulk-product-editor-lite');
-define('WCBEL_LABEL', 'PBULKiT - Bulk Edit WooCommerce Products Lite');
+define('WCBEL_LABEL', 'PBULKiT - Bulk Edit Products for WooCommerce');
 define('WCBEL_DESCRIPTION', 'Be professionals with managing data in the reliable and flexible way!');
 define('WCBEL_DIR', trailingslashit(plugin_dir_path(__FILE__)));
 define('WCBEL_PLUGIN_MAIN_PAGE', admin_url('admin.php?page=wcbe'));
@@ -46,7 +46,7 @@ define('WCBEL_FW_URL', trailingslashit(WCBEL_URL . 'framework'));
 define('WCBEL_CSS_URL', trailingslashit(WCBEL_ASSETS_URL . 'css'));
 define('WCBEL_IMAGES_URL', trailingslashit(WCBEL_ASSETS_URL . 'images'));
 define('WCBEL_JS_URL', trailingslashit(WCBEL_ASSETS_URL . 'js'));
-define('WCBEL_VERSION', '4.0.6');
+define('WCBEL_VERSION', '4.1.0');
 define('WCBEL_PRO_LINK', 'https://ithemelandco.com/plugins/woocommerce-bulk-product-editing?utm_source=free_plugins&amp;utm_medium=plugin_links&amp;utm_campaign=user-lite-buy#pricing');
 
 register_activation_hook(__FILE__, ['wcbel\classes\bootstrap\WCBEL', 'activate']);

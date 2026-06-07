@@ -411,7 +411,7 @@ jQuery(document).ready(function ($) {
         }
 
         wcbeLoadingStart();
-        
+
         let title = $("#wcbe-bulk-new-form-product-title").val();
         let slug = $("#wcbe-bulk-new-form-product-slug").val();
         let sku = $("#wcbe-bulk-new-form-product-sku").val();
@@ -2795,6 +2795,13 @@ jQuery(document).ready(function ($) {
                                 wcbeScheduleAwaitingCountUpdate(response.awaiting_count);
                             } else {
                                 wcbeLoadingError(response.message && response.message != "" ? response.message : "Error !");
+                            }
+
+                            if (WCBE_DATA.wcbe_settings.close_popup_after_applying == "yes") {
+                                wcbeCloseFloatSideModal();
+                            }
+                            if (WCBE_DATA.wcbe_settings.keep_filled_data_in_bulk_edit_form == "no") {
+                                wcbeResetBulkEditForm();
                             }
                         },
                         error: function () {

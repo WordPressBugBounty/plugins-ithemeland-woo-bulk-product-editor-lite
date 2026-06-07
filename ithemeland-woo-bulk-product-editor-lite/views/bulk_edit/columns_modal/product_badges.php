@@ -18,11 +18,11 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                             <label for="wcbe-modal-product-badge-items"><?php esc_html_e('Product badges', 'ithemeland-woo-bulk-product-editor-lite'); ?></label>
                             <select class="wcbe-select2" id="wcbe-modal-product-badge-items" multiple data-placeholder="<?php esc_html_e('Select ...', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
                                 <?php
-                                $badges = get_posts(['post_type' => 'yith-wcbm-badge', 'posts_per_page' => -1, 'order' => 'ASC']);
-                                if (!empty($badges)) {
-                                    foreach ($badges as $badge) {
-                                        if ($badge instanceof \WP_Post) {
-                                            echo '<option value="' . esc_attr($badge->ID) . '">' . esc_html($badge->post_title) . '</option>';
+                                $wcbel_badges = get_posts(['post_type' => 'yith-wcbm-badge', 'posts_per_page' => -1, 'order' => 'ASC']);
+                                if (!empty($wcbel_badges)) {
+                                    foreach ($wcbel_badges as $wcbel_badge) {
+                                        if ($wcbel_badge instanceof \WP_Post) {
+                                            echo '<option value="' . esc_attr($wcbel_badge->ID) . '">' . esc_html($wcbel_badge->post_title) . '</option>';
                                         }
                                     }
                                 }

@@ -307,6 +307,7 @@ class Product_Filter_Service
             'low_stock_amount' => 'low_stock_amount_filter',
             'manage_stock' => 'manage_stock_filter',
             'menu_order' => 'product_menu_order_filter',
+            'pos_product_visibility' => 'pos_product_visibility_filter',
             'product_type' => 'product_type_filter',
             'product_status' => 'product_status_filter',
             'stock_status' => 'stock_status_filter',
@@ -550,6 +551,18 @@ class Product_Filter_Service
             'field' => 'menu_order',
             'value' => [floatval($item['value']['from']), floatval($item['value']['to'])],
             'operator' => 'between'
+        ];
+    }
+
+    private function pos_product_visibility_filter($item)
+    {
+        $this->query_args['tax_query'][] = [
+            [
+                'taxonomy' => 'pos_product_visibility',
+                'field' => 'slug',
+                'terms' => ['pos-hidden'],
+                'operator' => ($item['value'] === 'yes') ? 'NOT IN' : 'IN'
+            ]
         ];
     }
 

@@ -346,7 +346,7 @@ class Product
         $product_taxonomy = $this->get_product_taxonomies($product_object->get_id());
         $variation_name = ($product_object->get_type() == 'variation') ? "variation_" : '';
         $cog_variable = ($product_object->get_type() == 'variable') ? "_variable" : '';
-
+        $visible_in_pos = (! has_term('pos-hidden', 'pos_product_visibility', $product_object->get_id())) ? 'yes' : 'no';
         $yith_badge = (!empty($post_meta['_yith_wcbm_product_meta'][0])) ? unserialize($post_meta['_yith_wcbm_product_meta'][0]) : [];
         return [
             'id' => $product_object->get_id(),
@@ -396,6 +396,7 @@ class Product
             'weight' => $product_object->get_weight(),
             'backorders' => $product_object->get_backorders(),
             'menu_order' => $product_object->get_menu_order(),
+            'pos_product_visibility' => $visible_in_pos,
             'total_sales' => $product_object->get_total_sales(),
             'review_count' => $product_object->get_review_count(),
             'product_type' => $product_object->get_type(),
@@ -527,11 +528,15 @@ class Product
                         }
                         if (!isset($this->fetch_methods[$column_data['name']]) || !method_exists($product_object, $this->fetch_methods[$column_data['name']])) {
                             $values[$column_data['name']] = '';
+                        } else {
+                            $values[$column_data['name']] = $product_object->{$this->fetch_methods[$column_data['name']]}();
                         }
-                        $values[$column_data['name']] = $product_object->{$this->fetch_methods[$column_data['name']]}();
+                        break;
+                    case 'pos_product_visibility':
+                        $values[$column_data['name']] = (! has_term('pos-hidden', 'pos_product_visibility', $product_object->get_id())) ? 'yes' : 'no';
                         break;
                     case 'taxonomy':
-                        $values[$column_data['name']] =  wc_get_product_term_ids($product_object->get_id(), $column_data['name']);
+                        $values[$column_data['name']] = wc_get_product_term_ids($product_object->get_id(), $column_data['name']);
                         break;
                     case 'meta_field':
                         $values[$column_data['name']] = $product_object->get_meta($column_data['name'], true);

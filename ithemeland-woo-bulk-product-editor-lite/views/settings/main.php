@@ -25,10 +25,10 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                                 <select name="settings[count_per_page]" id="wcbe-settings-count-per-page" title="The number of products per page">
                                     <?php
                                     if (!empty($count_per_page_items)) :
-                                        foreach ($count_per_page_items as $count_per_page_item) :
+                                        foreach ($count_per_page_items as $wcbel_count_per_page_item) :
                                     ?>
-                                            <option value="<?php echo intval(esc_attr($count_per_page_item)); ?>" <?php if (isset($settings['count_per_page']) && $settings['count_per_page'] == intval($count_per_page_item)) : ?> selected <?php endif; ?>>
-                                                <?php echo esc_html($count_per_page_item); ?>
+                                            <option value="<?php echo intval(esc_attr($wcbel_count_per_page_item)); ?>" <?php if (isset($settings['count_per_page']) && $settings['count_per_page'] == intval($wcbel_count_per_page_item)) : ?> selected <?php endif; ?>>
+                                                <?php echo esc_html($wcbel_count_per_page_item); ?>
                                             </option>
                                     <?php
                                         endforeach;

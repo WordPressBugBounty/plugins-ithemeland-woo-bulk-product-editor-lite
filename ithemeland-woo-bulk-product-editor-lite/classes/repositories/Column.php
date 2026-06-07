@@ -778,6 +778,16 @@ class Column extends Column_Main
                 'update_type' => 'woocommerce_field',
                 'fetch_type' => 'woocommerce'
             ],
+            'pos_product_visibility' => [
+                'name' => 'pos_product_visibility',
+                'label' => esc_html__('Available for POS', 'ithemeland-woo-bulk-product-editor-lite'),
+                'editable' => true,
+                'content_type' => 'checkbox_dual_mode',
+                'allowed_type' => ['simple', 'variable'],
+                'field_type' => 'advanced',
+                'update_type' => 'woocommerce_field',
+                'fetch_type' => 'pos_product_visibility'
+            ],
             'virtual' => [
                 'name' => 'virtual',
                 'label' => esc_html__('Virtual', 'ithemeland-woo-bulk-product-editor-lite'),

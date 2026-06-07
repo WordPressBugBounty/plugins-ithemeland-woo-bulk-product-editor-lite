@@ -281,14 +281,14 @@ class WCBEL_Post
             if (!empty($notice) && isset($notice['message'])) {
                 GlobalFlushMessage::set($notice);
             }
-            wp_redirect(WCBE_ACTIVATION_PAGE);
+            wp_safe_redirect(WCBE_ACTIVATION_PAGE);
             die();
         } else {
             if (!empty($notice) && isset($notice['message'])) {
                 $flush_message_repository = new Flush_Message();
                 $flush_message_repository->set($notice);
             }
-            wp_redirect(WCBEL_PLUGIN_MAIN_PAGE);
+            wp_safe_redirect(WCBEL_PLUGIN_MAIN_PAGE);
             die();
         }
     }
