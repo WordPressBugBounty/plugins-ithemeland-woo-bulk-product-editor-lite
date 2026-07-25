@@ -398,7 +398,7 @@ class Column extends Column_Main
                 'name' => 'slug',
                 'label' => esc_html__('Slug', 'ithemeland-woo-bulk-product-editor-lite'),
                 'editable' => true,
-                'content_type' => 'textarea',
+                'content_type' => 'text',
                 'allowed_type' => ['simple', 'composite', 'variable', 'grouped', 'external'],
                 'field_type' => 'general',
                 'update_type' => 'woocommerce_field',

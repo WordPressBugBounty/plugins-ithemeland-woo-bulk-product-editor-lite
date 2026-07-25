@@ -13,7 +13,7 @@ Requires Plugins: woocommerce
 WC requires at least: 3.9
 WC tested up to: 9.8.2
 Requires at least: 5.3
-Version: 4.1.0
+Version: 4.1.1
 License: GPLv3
 Author URI: https://www.ithemelandco.com
 */
@@ -22,7 +22,7 @@ use wcbel\classes\bootstrap\WCBEL;
 
 defined('ABSPATH') || exit();
 
-if (defined('WCBEL_NAME')) {
+if (defined('WCBEL_NAME') || defined('WCBE_WOO_VERSION')) {
     return false;
 }
 
@@ -46,7 +46,7 @@ define('WCBEL_FW_URL', trailingslashit(WCBEL_URL . 'framework'));
 define('WCBEL_CSS_URL', trailingslashit(WCBEL_ASSETS_URL . 'css'));
 define('WCBEL_IMAGES_URL', trailingslashit(WCBEL_ASSETS_URL . 'images'));
 define('WCBEL_JS_URL', trailingslashit(WCBEL_ASSETS_URL . 'js'));
-define('WCBEL_VERSION', '4.1.0');
+define('WCBEL_VERSION', '4.1.1');
 define('WCBEL_PRO_LINK', 'https://ithemelandco.com/plugins/woocommerce-bulk-product-editing?utm_source=free_plugins&amp;utm_medium=plugin_links&amp;utm_campaign=user-lite-buy#pricing');
 
 register_activation_hook(__FILE__, ['wcbel\classes\bootstrap\WCBEL', 'activate']);

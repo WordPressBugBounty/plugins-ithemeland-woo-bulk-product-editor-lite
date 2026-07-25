@@ -131,7 +131,8 @@ function wcbeGetBulkEditData() {
                 (!jQuery.isArray(value) && value != "" && typeof value != "undefined") ||
                 (jQuery(this).find('select[data-field="used_for_variations"]').length > 0 && jQuery(this).find('select[data-field="used_for_variations"]').val() != "") ||
                 (jQuery(this).find('select[data-field="attribute_is_visible"]').length > 0 && jQuery(this).find('select[data-field="attribute_is_visible"]').val() != "") ||
-                jQuery.inArray(jQuery(this).find("[data-field=operator]").val(), ["text_remove_duplicate", "number_clear", "text_clear"]) !== -1
+                jQuery.inArray(jQuery(this).find('[data-field="operator"]').val(), ["text_remove_duplicate", "number_clear", "text_clear"]) !== -1 ||
+                jQuery.inArray(jQuery(this).find('[data-field="round"]').val(), ["upwards", "downwards"]) !== -1
             ) {
                 let name = jQuery(this).attr("data-name");
                 let type = jQuery(this).attr("data-type");

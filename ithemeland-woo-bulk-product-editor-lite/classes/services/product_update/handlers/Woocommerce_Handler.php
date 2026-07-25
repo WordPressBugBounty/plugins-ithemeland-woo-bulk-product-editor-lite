@@ -67,6 +67,10 @@ class Woocommerce_Handler extends Product_Update_Handler
                 $this->update_data['replace'] = Product_Helper::apply_variable($product, $this->update_data['replace']);
             }
 
+            if (!empty($this->update_data['round']) && $this->update_data['value'] == '') {
+                $this->update_data['value'] = $this->current_field_value;
+            }
+
             // set value with operator
             if (!empty($this->update_data['operator'])) {
                 $this->set_value_with_operator();
@@ -481,7 +485,9 @@ class Woocommerce_Handler extends Product_Update_Handler
             $this->update_data['regular_price'] = $this->product->get_regular_price();
         }
 
-        $this->update_data['value'] = Product_Helper::apply_operator($this->current_field_value, $this->update_data);
+        if (isset($this->update_data['value']) && $this->update_data['value'] != '') {
+            $this->update_data['value'] = Product_Helper::apply_operator($this->current_field_value, $this->update_data);
+        }
     }
 
     private function save_history($data = [])

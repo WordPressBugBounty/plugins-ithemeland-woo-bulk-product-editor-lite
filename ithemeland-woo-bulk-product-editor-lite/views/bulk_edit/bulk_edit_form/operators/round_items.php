@@ -3,6 +3,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
 ?>
 
 <option value=""><?php esc_html_e('Round item', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
+<option value="upwards"><?php esc_html_e('Round upwards', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
+<option value="downwards"><?php esc_html_e('Round downwards', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
 <option value="5">5</option>
 <option value="10">10</option>
 <option value="19">19</option>

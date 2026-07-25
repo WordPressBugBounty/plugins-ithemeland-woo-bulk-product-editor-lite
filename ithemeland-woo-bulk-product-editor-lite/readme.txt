@@ -5,7 +5,7 @@ Author URI: https://ithemelandco.com/
 Tags: woocommerce bulk edit, bulk edit products, woocommerce bulk product editing, product editor, woocommerce editor
 Requires at least: 5.3
 Tested up to: 7.0
-Stable tag: 4.1.0
+Stable tag: 4.1.1
 Requires PHP: 8.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -124,6 +124,11 @@ Absolutely. You can try the full power of the Pro version on our <a href="https:
 4.  **Compare Lite & Premium:** See the incredible power you unlock with the Pro version.
 
 == Changelog ==
+
+= 4.1.1 =
+* Tested up to: WP 7.0.2
+* Tested up to: Woo 10.9.4
+* Fixed Some Issues
 
 = 4.1.0 =
 * Tested up to: WP 7.0

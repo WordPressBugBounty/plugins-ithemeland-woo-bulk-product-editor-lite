@@ -25,7 +25,9 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
                             <option value="%">%</option>
                         </select>
                         <select id="wcbe-regular-price-calculator-round" title="<?php esc_attr_e('Rounding', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
-                            <option value=""><?php esc_html_e('no rounding', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
+                            <option value=""><?php esc_html_e('No Rounding', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
+                            <option value="upwards"><?php esc_html_e('Round upwards', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
+                            <option value="downwards"><?php esc_html_e('Round downwards', 'ithemeland-woo-bulk-product-editor-lite'); ?></option>
                             <option value="5">5</option>
                             <option value="10">10</option>
                             <option value="9">9</option>

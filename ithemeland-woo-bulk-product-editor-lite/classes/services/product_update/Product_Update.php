@@ -149,16 +149,22 @@ class Product_Update implements Update_Interface
 
     private function is_valid_update_item($update_item)
     {
-        // has require item ?
         if (
             empty($update_item['name'])
             || empty($update_item['type'])
-            || (empty($update_item['value'])
-                && (!empty($update_item['operator'])
+            || (empty($update_item['value']) && (
+                (
+                    !empty($update_item['operator'])
                     && !in_array($update_item['operator'], ['text_remove_duplicate', 'text_replace', 'number_clear', 'text_clear'])
                     && $update_item['operation'] != 'inline_edit'
                     && empty($update_item['used_for_variations'])
-                    && empty($update_item['attribute_is_visible'])))
+                    && empty($update_item['attribute_is_visible'])
+                )
+                &&
+                (
+                    !empty($update_item['round']) && !in_array($update_item['round'], ['upwards', 'downwards'])
+                )
+            ))
         ) {
             return false;
         }

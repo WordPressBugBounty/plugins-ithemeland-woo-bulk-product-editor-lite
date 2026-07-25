@@ -13,6 +13,12 @@ class Product_Helper
     {
         $division = intval('1' . str_repeat('0', wc_get_price_decimals()));
         switch ($round) {
+            case 'upwards':
+                $value = ceil($value);
+                break;
+            case 'downwards':
+                $value = floor($value);
+                break;
             case 5:
             case 10:
                 $value += floatval($round / $division);
