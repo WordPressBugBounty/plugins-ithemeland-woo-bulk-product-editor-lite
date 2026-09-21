@@ -4,7 +4,7 @@ Plugin Name: PBULKiT - Bulk Edit Products for WooCommerce
 Plugin URI: https://ithemelandco.com/plugins/woocommerce-bulk-product-editing
 Description: Editing Date in WordPress is very painful. Be professionals with managing data in the reliable and flexible way by WooCommerce Bulk Product Editor.
 Author: iThemelandco
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 8.0.3
 Tags: woocommerce,woocommerce bulk edit,bulk edit,bulk,products bulk editor
 Text Domain: ithemeland-woo-bulk-product-editor-lite
@@ -13,12 +13,14 @@ Requires Plugins: woocommerce
 WC requires at least: 3.9
 WC tested up to: 9.8.2
 Requires at least: 5.3
-Version: 4.1.1
+Version: 4.1.2
 License: GPLv3
 Author URI: https://www.ithemelandco.com
 */
 
 use wcbel\classes\bootstrap\WCBEL;
+use wcbel\classes\bootstrap\WCBEL_Bulk_Edit_Prepare;
+use wcbel\framework\renew_license_alert\RenewLicenseAlert;
 
 defined('ABSPATH') || exit();
 
@@ -46,7 +48,7 @@ define('WCBEL_FW_URL', trailingslashit(WCBEL_URL . 'framework'));
 define('WCBEL_CSS_URL', trailingslashit(WCBEL_ASSETS_URL . 'css'));
 define('WCBEL_IMAGES_URL', trailingslashit(WCBEL_ASSETS_URL . 'images'));
 define('WCBEL_JS_URL', trailingslashit(WCBEL_ASSETS_URL . 'js'));
-define('WCBEL_VERSION', '4.1.1');
+define('WCBEL_VERSION', '4.1.2');
 define('WCBEL_PRO_LINK', 'https://ithemelandco.com/plugins/woocommerce-bulk-product-editing?utm_source=free_plugins&amp;utm_medium=plugin_links&amp;utm_campaign=user-lite-buy#pricing');
 
 register_activation_hook(__FILE__, ['wcbel\classes\bootstrap\WCBEL', 'activate']);
@@ -70,4 +72,30 @@ add_action('plugins_loaded', function () {
             die();
         }
     }
+}, PHP_INT_MAX - 10);
+
+add_action('plugins_loaded', function () {
+    if (wcbel_pro_is_active() && !defined('WBEBL_NAME')) {
+        $el_data = get_option('wcbe-pro-el-data');
+        if (!empty($el_data) && !empty($el_data['expire_date'])) {
+            if (time() > strtotime($el_data['expire_date'])) {
+                RenewLicenseAlert::init();
+            } else {
+                RenewLicenseAlert::remove();
+            }
+        }
+
+        WCBEL_Bulk_Edit_Prepare::init();
+    }
 }, PHP_INT_MAX);
+
+if (!function_exists('wcbel_pro_is_active')) {
+    function wcbel_pro_is_active()
+    {
+        $wcbel_active_plugins = apply_filters('active_plugins', get_option('active_plugins', array())); //phpcs:ignore
+        if (is_multisite()) {
+            $wcbel_active_plugins = array_merge($wcbel_active_plugins, get_site_option('active_sitewide_plugins', array()));
+        }
+        return in_array('ithemeland-woocommerce-bulk-product-editing-pro/ithemeland-woocommerce-bulk-product-editing-pro.php', $wcbel_active_plugins, false) || array_key_exists('ithemeland-woocommerce-bulk-product-editing-pro/ithemeland-woocommerce-bulk-product-editing-pro.php', $wcbel_active_plugins);
+    }
+}

@@ -91,6 +91,9 @@ class Product_Update implements Update_Interface
             }
         }
 
+        $performed = false;
+        $successful = true;
+
         foreach ($this->product_data as $update_item) {
             $update_result = false;
 
@@ -100,8 +103,11 @@ class Product_Update implements Update_Interface
 
             // check items
             if (!$this->is_valid_update_item($update_item)) {
+                $successful = false;
                 continue;
             }
+
+            $performed = true;
 
             $class = $this->update_classes[$update_item['type']];
             if ($total_count > $this->max_process_count && ProductBackgroundProcess::is_enable()) {
@@ -118,6 +124,9 @@ class Product_Update implements Update_Interface
             } else {
                 $instance = new $class();
                 $update_result = $instance->update($this->product_ids, $update_item);
+                if ($update_result === false) {
+                    $successful = false;
+                }
             }
         }
 
@@ -144,7 +153,7 @@ class Product_Update implements Update_Interface
             }
         }
 
-        return true;
+        return $this->is_processing === true || ($performed && $successful);
     }
 
     private function is_valid_update_item($update_item)

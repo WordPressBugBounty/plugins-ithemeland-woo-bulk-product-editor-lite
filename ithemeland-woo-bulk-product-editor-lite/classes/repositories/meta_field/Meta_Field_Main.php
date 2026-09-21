@@ -84,6 +84,21 @@ class Meta_Field_Main
             'date_time_picker',
             'time_picker',
             'color_picker',
+            'range',
+            'true_false',
+            'button_group',
+            'oembed',
+            'gallery',
+            'post_object',
+            'relationship',
+            'page_link',
+            'user',
+            'link',
+            'google_map',
+            'group',
+            'repeater',
+            'flexible_content',
+            'clone',
         ];
     }
 

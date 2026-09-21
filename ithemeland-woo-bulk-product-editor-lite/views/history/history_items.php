@@ -24,6 +24,9 @@ if (!empty($histories)) :
                         case 'bulk':
                             echo 'Bulk Operation';
                             break;
+                        case 'ai':
+                            echo 'AI Assistant';
+                            break;
                     }
                     ?>
                 </span>

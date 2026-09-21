@@ -1,0 +1,139 @@
+:root {
+    --wcbel-bg: #f4f7fb;
+    --wcbel-panel: #fff;
+    --wcbel-text: #172033;
+    --wcbel-muted: #6b7280;
+    --wcbel-line: #e5e7eb;
+    --wcbel-purple: #6d3ce7;
+    --wcbel-green: #16a34a;
+    --wcbel-orange: #f97316;
+    --wcbel-red: #dc2626;
+    --wcbel-shadow: 0 10px 30px rgba(20, 30, 55, .08);
+    --wcbel-radius: 16px
+}
+
+.wcbel-license-notice-lite {
+    width: 100%;
+    display: flex;
+    gap: 14px;
+    position: relative;
+    padding: 14px 48px 14px 16px;
+    background: #fff;
+    border: 1px solid var(--wcbel-line);
+    border-left: 4px solid var(--wcbel-red);
+    border-radius: 8px;
+    box-shadow: var(--wcbel-shadow);
+    align-items: center;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.wcbel-license-notice-lite * {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.wcbel-license-notice-lite .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-top: -4px;
+}
+
+.wcbel-license-notice-lite a {
+    text-decoration: none;
+}
+
+.wcbel-license-notice-lite button {
+    font: inherit
+}
+
+.wcbel-license-notice-lite strong {
+    display: block;
+    font-size: 15px
+}
+
+.wcbel-license-notice-lite p {
+    margin: 2px 0 0;
+    color: var(--wcbel-muted)
+}
+
+.wcbel-license-notice-lite-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    white-space: nowrap
+}
+
+.wcbel-license-notice-lite-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--wcbel-line);
+    background: #fff;
+    color: #6b7280;
+    cursor: pointer;
+    display: inline-table;
+    font-size: 16px;
+    font-weight: 900
+}
+
+.wcbel-renew-license-alert-btn-lite {
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px
+}
+
+.wcbel-renew-license-alert-btn-lite-primary {
+    background: var(--wcbel-purple);
+    color: #fff
+}
+
+.wcbel-renew-license-alert-btn-lite-orange {
+    background: var(--wcbel-orange);
+    color: #fff
+}
+
+.wcbel-renew-license-alert-btn-lite-green {
+    background: var(--wcbel-green);
+    color: #fff
+}
+
+.wcbel-renew-license-alert-btn-lite-outline {
+    background: #fff;
+    color: var(--wcbel-text);
+    border: 1px solid #d1d5db
+}
+
+.wcbel-renew-license-alert-btn-lite-danger {
+    background: var(--wcbel-red);
+    color: #fff
+}
+
+.wcbel-renew-license-alert-btn-lite-sm {
+    padding: 8px 12px;
+    font-size: 13px
+}
+
+@media(max-width:760px) {
+    .wcbel-license-notice-lite {
+        align-items: flex-start;
+        flex-wrap: wrap
+    }
+    .wcbel-license-notice-lite-actions {
+        margin-left: 0
+    }
+}

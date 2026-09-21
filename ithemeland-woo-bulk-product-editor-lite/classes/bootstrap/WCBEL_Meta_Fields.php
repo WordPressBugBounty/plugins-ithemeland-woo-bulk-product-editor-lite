@@ -6,6 +6,7 @@ defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\repositories\Meta_Field;
 use wcbel\classes\repositories\Product;
+use wcbel\classes\helpers\Meta_Field as Meta_Field_Helper;
 
 class WCBEL_Meta_Fields
 {
@@ -61,17 +62,12 @@ class WCBEL_Meta_Fields
                     'content_type' => $content_type,
                     'allowed_type' => ['simple', 'composite', 'variable', 'grouped', 'external', 'variation'],
                     'update_type' => 'meta_field',
+                    'filter_type' => 'custom_field',
                     'fetch_type' => 'meta_field'
                 ];
 
                 if (!empty($meta_field['key_value'])) {
-                    $fields[$meta_field['key']]['options'] = [];
-                    $options = explode('|', $meta_field['key_value']);
-                    if (!empty($options)) {
-                        foreach ($options as $key => $value) {
-                            $fields[$meta_field['key']]['options'][sanitize_text_field($key)] = sanitize_text_field($value);
-                        }
-                    }
+                    $fields[$meta_field['key']]['options'] = Meta_Field_Helper::key_value_field_to_array($meta_field['key_value']);
                 }
             }
         }
@@ -96,6 +92,7 @@ class WCBEL_Meta_Fields
                 'editable' => true,
                 'content_type' => 'multi_select',
                 'allowed_type' => ['simple', 'composite', 'variable', 'grouped', 'external', 'variation'],
+                'filter_type' => 'taxonomy',
                 'update_type' => 'taxonomy',
                 'fetch_type' => 'taxonomy'
             ];

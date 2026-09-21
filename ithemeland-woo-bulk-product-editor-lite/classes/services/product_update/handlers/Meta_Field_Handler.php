@@ -6,6 +6,8 @@ defined('ABSPATH') || exit(); // Exit if accessed directly
 
 use wcbel\classes\helpers\Sanitizer;
 use wcbel\classes\helpers\Product_Helper;
+use wcbel\classes\helpers\ACF_Field;
+use wcbel\classes\repositories\meta_field\ACF_Plugin_Fields;
 use wcbel\classes\repositories\Product;
 use wcbel\classes\services\product_update\Product_Update_Handler;
 
@@ -21,7 +23,7 @@ class Meta_Field_Handler extends Product_Update_Handler
     public function update($product_ids, $update_data)
     {
         $this->setter_method = $this->get_setter($update_data['name']);
-        if (empty($this->setter_method) && empty($product_ids) && !is_array($product_ids)) {
+        if (empty($this->setter_method) || empty($product_ids) || !is_array($product_ids)) {
             return false;
         }
 
@@ -139,6 +141,17 @@ class Meta_Field_Handler extends Product_Update_Handler
 
     private function set_default_meta_field()
     {
+        $acf_fields = ACF_Plugin_Fields::get_instance('product')->get_fields();
+        $field = isset($acf_fields[$this->update_data['name']]) ? $acf_fields[$this->update_data['name']] : null;
+        if (is_array($field) && !empty($field['structured'])) {
+            $operator = isset($this->update_data['operator']) ? $this->update_data['operator'] : 'text_new';
+            if ($operator === 'text_clear') {
+                $this->update_data['value'] = [];
+            } elseif ($operator !== '' && $operator !== 'text_new') {
+                return false;
+            }
+            return ACF_Field::update($this->product->get_id(), $field, $this->update_data['value']);
+        }
         // set value with operator
         if (!empty($this->update_data['operator'])) {
             $this->update_data['value'] = Product_Helper::apply_operator($this->current_field_value, $this->update_data);
@@ -149,7 +162,10 @@ class Meta_Field_Handler extends Product_Update_Handler
             $this->update_data['value'] = Product_Helper::apply_variable($this->product, $this->update_data['value']);
         }
 
-        return update_post_meta($this->product->get_id(), esc_sql($this->update_data['name']), esc_sql($this->update_data['value']));
+        if (is_array($field)) {
+            return ACF_Field::update($this->product->get_id(), $field, $this->update_data['value']);
+        }
+        return update_post_meta($this->product->get_id(), esc_sql($this->update_data['name']), $this->update_data['value']);
     }
 
     private function set_allow_combination()

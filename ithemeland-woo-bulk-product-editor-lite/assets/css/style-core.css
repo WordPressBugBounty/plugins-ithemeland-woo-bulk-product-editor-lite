@@ -82,6 +82,8 @@
 #wcbe-main input[type="number"],
 #wcbe-main select {
     height: 34px;
+    min-height: 30px !important;
+    line-height: 1 !important;
     border-radius: 4px !important;
     -webkit-border-radius: 4px !important;
     -moz-border-radius: 4px !important;
@@ -89,6 +91,11 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     font-size: 10pt;
+}
+
+#wcbe-quick-per-page {
+    height: 30px !important;
+    border-color: #bbb !important;
 }
 
 td input[type="text"],
@@ -1715,11 +1722,6 @@ table td label {
     margin: 6px 6px 0 0;
 }
 
-.wcbe-top-nav-filters-per-page select {
-    height: 30px !important;
-    border-color: #bbb !important;
-}
-
 .wcbe-top-nav-filters-per-page,
 .wcbe-top-nav-filters-go-to-page,
 .wcbe-items-pagination {
@@ -2041,7 +2043,7 @@ html[dir="rtl"] .wcbe-modal {
     padding-top: 3px;
     float: left;
     overflow: auto;
-    height: calc(100% - 90px);
+    height: calc(100% - 100px);
     overflow: auto;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -2069,7 +2071,7 @@ html[dir="rtl"] .wcbe-modal {
 
 .wcbe-float-side-modal-content .wcbe-float-side-modal-footer {
     width: 100%;
-    height: 45px;
+    height: 55px;
     border-top: 1px #e5e5e5 solid;
     position: absolute;
     bottom: 0;
@@ -2078,7 +2080,7 @@ html[dir="rtl"] .wcbe-modal {
     margin: auto;
     z-index: 999999;
     background-color: #fff;
-    padding: 5px 12px;
+    padding: 10px 12px;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -3158,6 +3160,12 @@ div[data-content="column-manager"] .wp-picker-container .wp-color-result.button 
 
 .wcbe-sortable-column {
     cursor: pointer;
+    padding-right: 20px !important;
+}
+
+.wcbe-sortable-column[data-column-name="id"],
+.wcbe-sortable-column.wcbe-td-sticky-title {
+    padding-right: 0 !important
 }
 
 .wcbe-modal-product-title {
@@ -3173,6 +3181,7 @@ div[data-content="column-manager"] .wp-picker-container .wp-color-result.button 
     top: 0;
     bottom: 0;
     right: 0;
+    line-height: 1;
     margin: auto;
     display: table
 }
@@ -4307,4 +4316,12 @@ html[dir="rtl"] .wcbe-table-item-selector ul {
 
 .wcbe-bulk-edit-status-filter-item::after {
     display: none !important;
+}
+
+www .wcbe-top-nav-filters-per-page select,
+#wcbe-top-nav-filters-go-to-page {
+    height: 30px !important;
+    min-height: 30px !important;
+    line-height: 1 !important;
+    border-color: #bbb !important;
 }

@@ -159,12 +159,27 @@ class Product_Helper
                 $data['value'] = $old_value;
                 break;
             case 'taxonomy_append':
+                if (!is_array($old_value)) {
+                    $old_value = (!empty($old_value)) ? [$old_value] : [];
+                }
+                if (!is_array($data['value'])) {
+                    $data['value'] = (!empty($data['value'])) ? [$data['value']] : [];
+                }
                 $data['value'] = array_unique(array_merge($old_value, $data['value']));
                 break;
             case 'taxonomy_replace':
+                if (!is_array($data['value'])) {
+                    $data['value'] = (!empty($data['value'])) ? [$data['value']] : [];
+                }
                 $data['value'] = $data['value'];
                 break;
             case 'taxonomy_delete':
+                if (!is_array($old_value)) {
+                    $old_value = (!empty($old_value)) ? [$old_value] : [];
+                }
+                if (!is_array($data['value'])) {
+                    $data['value'] = (!empty($data['value'])) ? [$data['value']] : [];
+                }
                 $data['value'] = array_values(array_diff($old_value, $data['value']));
                 break;
             case 'number_new':

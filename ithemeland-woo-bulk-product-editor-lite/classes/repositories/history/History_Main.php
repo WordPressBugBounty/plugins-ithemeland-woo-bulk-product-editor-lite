@@ -8,6 +8,7 @@ class History_Main
 {
     const BULK_OPERATION = 'bulk';
     const INLINE_OPERATION = 'inline';
+    const AI_ASSISTANT_OPERATION = 'ai';
 
     protected $wpdb;
     protected $sub_system;

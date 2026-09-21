@@ -64,18 +64,26 @@ class WCBEL_Custom_Queries
 
                     $value = (is_array($item['value'])) ? array_map('sanitize_text_field', $item['value']) : trim(sanitize_text_field($item['value']));
                     switch ($item['operator']) {
+                        case 'contains':
                         case 'like':
                             $where .= "AND ({$wpdb->posts}.{$field} LIKE '%{$value}%')";
                             break;
+                        case 'not_contains':
+                            $where .= "AND ({$wpdb->posts}.{$field} NOT LIKE '%{$value}%')";
+                            break;
+                        case '=':
                         case 'exact':
                             $where .= "AND ({$wpdb->posts}.{$field} = '{$value}')";
                             break;
+                        case '!=':
                         case 'not':
                             $where .= "AND ({$wpdb->posts}.{$field} != '{$value}')";
                             break;
+                        case 'starts_with':
                         case 'begin':
                             $where .= "AND ({$wpdb->posts}.{$field} LIKE '{$value}%')";
                             break;
+                        case 'ends_with':
                         case 'end':
                             $where .= "AND ({$wpdb->posts}.{$field} LIKE '%{$value}')";
                             break;
@@ -92,8 +100,14 @@ class WCBEL_Custom_Queries
                         case '>':
                             $where .= "AND ({$wpdb->posts}.{$field} > {$value})";
                             break;
+                        case '>=':
+                            $where .= "AND ({$wpdb->posts}.{$field} >= {$value})";
+                            break;
                         case '<':
                             $where .= "AND ({$wpdb->posts}.{$field} < {$value})";
+                            break;
+                        case '<=':
+                            $where .= "AND ({$wpdb->posts}.{$field} <= {$value})";
                             break;
                         case '>_with_quotation':
                             $where .= "AND ({$wpdb->posts}.{$field} > '{$value}')";
@@ -124,6 +138,7 @@ class WCBEL_Custom_Queries
                     $key = sanitize_text_field($item['key']);
                     $value = (is_array($item['value'])) ? array_map('sanitize_text_field', $item['value']) : sanitize_text_field($item['value']);
                     switch ($item['operator']) {
+                        case 'contains':
                         case 'like':
                             $before = (!empty($item['before_str'])) ? sanitize_text_field($item['before_str']) : '';
                             $after = (!empty($item['after_str'])) ? sanitize_text_field($item['after_str']) : '';
@@ -162,6 +177,7 @@ class WCBEL_Custom_Queries
                                 $where .= "AND ({$postmeta}.meta_key = '{$key}' AND {$postmeta}.meta_value LIKE '%{$before}{$value}{$after}%')";
                             }
                             break;
+                        case 'not_contains':
                         case 'not_like':
                             $before = (!empty($item['before_str'])) ? sanitize_text_field($item['before_str']) : '';
                             $after = (!empty($item['after_str'])) ? sanitize_text_field($item['after_str']) : '';
@@ -181,15 +197,19 @@ class WCBEL_Custom_Queries
                                 $where .= "AND ({$postmeta}.meta_key = '{$key}' AND {$postmeta}.meta_value LIKE '%{$before}{$value}{$after}%')";
                             }
                             break;
+                        case '=':
                         case 'exact':
                             $where .= "AND ({$postmeta}.meta_key = '{$key}' AND {$postmeta}.meta_value = '{$value}')";
                             break;
+                        case '!=':
                         case 'not':
                             $where .= "AND ({$postmeta}.meta_key = '{$key}' AND {$postmeta}.meta_value != '{$value}')";
                             break;
+                        case 'starts_with':
                         case 'begin':
                             $where .= "AND ({$postmeta}.meta_key = '{$key}' AND {$postmeta}.meta_value LIKE '{$value}%')";
                             break;
+                        case 'ends_with':
                         case 'end':
                             $where .= "AND ({$postmeta}.meta_key = '{$key}' AND {$postmeta}.meta_value LIKE '%{$value}')";
                             break;
@@ -212,8 +232,14 @@ class WCBEL_Custom_Queries
                         case 'between_with_quotation':
                             $where .= "AND ({$postmeta}.meta_key = '$key' AND {$postmeta}.meta_value BETWEEN '{$value[0]}' AND '{$value[1]}')";
                             break;
+                        case '<':
+                            $where .= "AND ({$postmeta}.meta_key = '$key' AND {$postmeta}.meta_value < {$value})";
+                            break;
                         case '<=':
                             $where .= "AND ({$postmeta}.meta_key = '$key' AND {$postmeta}.meta_value <= {$value})";
+                            break;
+                        case '>':
+                            $where .= "AND ({$postmeta}.meta_key = '$key' AND {$postmeta}.meta_value > {$value})";
                             break;
                         case '>=':
                             $where .= "AND ({$postmeta}.meta_key = '$key' AND {$postmeta}.meta_value >= {$value})";

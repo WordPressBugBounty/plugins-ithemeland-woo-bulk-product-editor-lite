@@ -4,6 +4,7 @@ namespace wcbel\classes\services\product_update\handlers;
 
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
+use wcbel\classes\helpers\Product_Helper;
 use wcbel\classes\services\product_update\Product_Update_Handler;
 
 class WP_Posts_Handler extends Product_Update_Handler
@@ -32,10 +33,13 @@ class WP_Posts_Handler extends Product_Update_Handler
 
             $this->post = $post;
             $this->current_field_value = (!empty($this->post->{$this->update_data['name']})) ? $this->post->{$this->update_data['name']} : '';
+            $new_value = !empty($this->update_data['operator'])
+                ? Product_Helper::apply_operator($this->current_field_value, $this->update_data)
+                : $this->update_data['value'];
 
             $update_result = wp_update_post([
                 'ID' => intval($product_id),
-                sanitize_text_field($this->update_data['name']) => sanitize_text_field($this->update_data['value'])
+                sanitize_text_field($this->update_data['name']) => sanitize_text_field($new_value)
             ]);
 
             if (!$update_result) {
@@ -55,7 +59,7 @@ class WP_Posts_Handler extends Product_Update_Handler
                     'sub_name' => (!empty($this->update_data['sub_name'])) ? $this->update_data['sub_name'] : '',
                     'type' => $this->update_data['type'],
                     'prev_value' => $this->current_field_value,
-                    'new_value' => $this->update_data['value'],
+                    'new_value' => $new_value,
                     'prev_total_count' => 1,
                     'new_total_count' => 1,
                 ]);

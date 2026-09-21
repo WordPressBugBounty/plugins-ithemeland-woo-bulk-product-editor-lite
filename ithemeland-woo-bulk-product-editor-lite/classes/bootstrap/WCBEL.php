@@ -4,6 +4,7 @@ namespace wcbel\classes\bootstrap;
 
 defined('ABSPATH') || exit(); // Exit if accessed directly
 
+use wcbel\classes\controllers\License_Controller;
 use wcbel\framework\analytics\AnalyticsTracker;
 use wcbel\framework\onboarding\Onboarding;
 use wcbel\classes\controllers\WCBEL_Ajax;
@@ -21,6 +22,7 @@ use wcbel\classes\services\history\HistoryUndoService;
 use wcbel\classes\services\product_delete\ProductDeleteService;
 use wcbel\classes\services\product_duplicate\ProductDuplicateService;
 use wcbel\classes\services\scheduler\Product_Scheduler;
+use wcbel\framework\pro_version_alert\ProVersionAlert;
 
 class WCBEL
 {
@@ -54,6 +56,10 @@ class WCBEL
         if (is_admin()) {
             add_action('admin_menu', [$this, 'add_menu']);
             add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
+
+            if (!defined('WBEBL_NAME')) {
+                ProVersionAlert::init();
+            }
         }
     }
 
@@ -64,49 +70,11 @@ class WCBEL
                 add_submenu_page('wbebl', esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), 'manage_woocommerce', 'wcbe', ['wcbel\classes\controllers\Woocommerce_Bulk_Edit', 'init'], 1);
             } else {
                 add_menu_page(esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), wp_kses('PBULK<span style="color: #627ddd;font-weight: 900;">iT</span>', Sanitizer::allowed_html()), 'manage_woocommerce', 'wcbe', ['wcbel\classes\controllers\Woocommerce_Bulk_Edit', 'init'], WCBEL_IMAGES_URL . 'pbulkit-icon-wh20.svg', 59);
+                add_submenu_page('wcbe', esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), esc_html__('PBULKiT', 'ithemeland-woo-bulk-product-editor-lite'), 'manage_woocommerce', 'wcbe');
+                add_submenu_page('wcbe', esc_html__('License', 'ithemeland-woo-bulk-product-editor-lite'), esc_html__('License', 'ithemeland-woo-bulk-product-editor-lite'), 'manage_woocommerce', 'wcbel-license', [new License_Controller, 'index']);
             }
         }
-
-        // Add "Go Pro" submenu
-        // add_submenu_page(
-        //     'wcbe',
-        //     esc_html__('Go Pro', 'ithemeland-woo-bulk-product-editor-lite'),
-        //     '<img class="wcbe-icon-go-pro" src="' . WCBEL_URL . 'views/go_pro/assets/images/go-pro.png" style="width:20px; height:20px; margin-right:5px; vertical-align:middle;"> ' . esc_html__('Go Pro', 'ithemeland-woo-bulk-product-editor-lite'),
-        //     'manage_options',
-        //     'wcbel_go_pro',
-        //     [$this, 'wcbe_go_pro_page']
-        // );
-
-        // Add "Other Plugins" submenu
-        // add_submenu_page(
-        //     'wcbe',
-        //     esc_html__('Other Plugins', 'ithemeland-woo-bulk-product-editor-lite'),
-        //     esc_html__('Other Plugins', 'ithemeland-woo-bulk-product-editor-lite'),
-        //     'manage_options',
-        //     'wcbel_other_plugins',
-        //     [$this, 'wcbe_other_plugins_page']
-        // );
     }
-
-    // "Go Pro" page callback
-    // public function wcbe_go_pro_page()
-    // {
-    //     include_once WCBEL_VIEWS_DIR . 'go_pro/go_pro.php';
-    //     if (!empty($_GET['page']) && $_GET['page'] == 'wcbel_go_pro') { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
-    //         wp_enqueue_style('wcbe-go-pro', WCBEL_URL . 'views/go_pro/assets/css/style.css', [], WCBEL_VERSION);
-    //         wp_enqueue_style('wcbel-main', WCBEL_CSS_URL . 'style-core.css', [], WCBEL_VERSION);
-    //     }
-    // }
-
-    // "Other Plugins" page callback
-    // public function wcbe_other_plugins_page()
-    // {
-    //     include_once WCBEL_VIEWS_DIR . 'go_pro/other_plugins/other_plugins.php';
-    //     if (!empty($_GET['page']) && $_GET['page'] == 'wcbel_other_plugins') { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
-    //         wp_enqueue_style('wcbe-go-pro', WCBEL_URL . 'views/go_pro/assets/css/style.css', [], WCBEL_VERSION);
-    //         wp_enqueue_style('wcbel-main', WCBEL_CSS_URL . 'style-core.css', [], WCBEL_VERSION);
-    //     }
-    // }
 
     public static function woocommerce_required()
     {
@@ -158,7 +126,7 @@ class WCBEL
 
     public function enqueue_scripts($page)
     {
-        if (!empty($_GET['page']) && $_GET['page'] == 'wcbe') { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (!empty($_GET['page']) && $_GET['page'] == 'wcbe') { //phpcs:ignore
             if (defined('WBEBL_NAME')) {
                 if (\wbebl\framework\onboarding\Onboarding::is_completed()) {
                     $this->main_enqueue_scripts();
@@ -173,11 +141,15 @@ class WCBEL
                 }
             }
         }
+
+        if (!empty($_GET['page']) && $_GET['page'] == 'wcbel-license') { //phpcs:ignore
+            wp_enqueue_style('wcbel-license', WCBEL_CSS_URL . 'license.css', [], WCBEL_VERSION);
+        }
     }
 
     public function main_enqueue_scripts()
     {
-        if (!empty($_GET['page']) && $_GET['page'] == 'wcbe') { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if (!empty($_GET['page']) && $_GET['page'] == 'wcbe') { //phpcs:ignore
             $setting_repository = Setting::get_instance();
             $meta_field_repository = Meta_Field::get_instance();
             $search_repository = Search::get_instance();
@@ -195,7 +167,7 @@ class WCBEL
             wp_enqueue_style('wcbel-tipsy', WCBEL_CSS_URL . 'jquery.tipsy.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-datetimepicker', WCBEL_CSS_URL . 'jquery.datetimepicker.css', [], WCBEL_VERSION);
             wp_enqueue_style('wcbel-main-core', WCBEL_CSS_URL . 'style-core.css', [], WCBEL_VERSION);
-            wp_enqueue_style('wcbel-main', WCBEL_CSS_URL . 'style.css', [], WCBEL_VERSION);
+            wp_enqueue_style('wcbel-main-css', WCBEL_CSS_URL . 'style.css', [], WCBEL_VERSION);
             wp_enqueue_style('wp-color-picker');
 
             // "yith badge management" plugin

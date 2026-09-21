@@ -75,6 +75,10 @@ class RowHandler
                 $this->value = $values[$column_data['name']];
                 if (in_array($column_key, $this->acf_fields_name)) {
                     $this->column_data['content_type'] = Meta_Field_Helper::get_field_type_by_acf_type($this->acf_fields[$column_key])['column_type'];
+                    if (in_array($this->acf_fields[$column_key]['type'], ['group', 'repeater', 'flexible_content', 'clone', 'link', 'google_map'], true)) {
+                        $this->column_data['editable'] = false;
+                        $this->value = \wcbel\classes\helpers\ACF_Field::display_value($this->value, $this->acf_fields[$column_key]);
+                    }
                 }
                 $this->decoded_column_key = (substr($this->column_key, 0, 3) == 'pa_') ? strtolower(urlencode($this->column_key)) : urlencode($this->column_key);
                 $output .= $this->get_field();
@@ -217,6 +221,7 @@ class RowHandler
             'checkbox' => 'checkbox_dual_mode_field',
             'radio' => 'radio_field',
             'file' => 'select_custom_field_files_field',
+            'acf_file' => 'file_field',
             'select_files' => 'select_files_field',
             'select_author' => 'select_author_field',
             'select_products' => 'select_products_field',
@@ -418,6 +423,17 @@ class RowHandler
     private function select_field()
     {
         $output = "<select class='wcbe-inline-edit-action' data-field='" . esc_attr($this->column_key) . "' data-item-id='" . esc_attr($this->product_object->get_id()) . "' title='Select " . esc_attr($this->column_data['label']) . "' data-field-type='" . esc_attr($this->field_type) . "'>";
+        $has_resolved_custom_options = false;
+        if (isset($this->column_data['field_type']) && $this->column_data['field_type'] === 'custom_field') {
+            if (empty($this->meta_fields)) $this->meta_fields = $this->get_meta_fields();
+            if (!empty($this->acf_fields[$this->decoded_column_key]['choices'])) {
+                $this->column_data['options'] = $this->acf_fields[$this->decoded_column_key]['choices'];
+                $has_resolved_custom_options = true;
+            } elseif (!empty($this->meta_fields[$this->column_data['name']]['key_value'])) {
+                $this->column_data['options'] = Meta_Field_Helper::key_value_field_to_array($this->meta_fields[$this->column_data['name']]['key_value']);
+                $has_resolved_custom_options = true;
+            }
+        }
         if (isset($this->column_data['options']) && is_array($this->column_data['options'])) {
             $product_repository = Product::get_instance();
             switch ($this->column_key) {
@@ -466,7 +482,7 @@ class RowHandler
                         $selected = ($option_key == $this->value) ? 'selected' : '';
                     }
                 }
-                $output .= "<option value='{$option_key}' $selected>{$option_value}</option>";
+                $output .= "<option value='" . esc_attr($option_key) . "' " . esc_attr($selected) . ">" . esc_html($option_value) . "</option>";
             }
         } else {
             if ($this->column_data['field_type'] == 'custom_field') {
@@ -479,14 +495,14 @@ class RowHandler
                     if (!empty($options) && is_array($options)) {
                         foreach ($options as $option_key => $option_value) {
                             $selected = isset($this->value) && $this->value == $option_key ? 'selected' : '';
-                            $output .= "<option value='{$option_key}' $selected>{$option_value}</option>";
+                            $output .= "<option value='" . esc_attr($option_key) . "' " . esc_attr($selected) . ">" . esc_html($option_value) . "</option>";
                         }
                     }
                 }
             }
         }
 
-        if (!empty($this->acf_fields[$this->decoded_column_key]['choices']) && is_array($this->acf_fields[$this->decoded_column_key]['choices'])) {
+        if (!$has_resolved_custom_options && !empty($this->acf_fields[$this->decoded_column_key]['choices']) && is_array($this->acf_fields[$this->decoded_column_key]['choices'])) {
             foreach ($this->acf_fields[$this->decoded_column_key]['choices'] as $choice_key => $choice_value) {
                 $selected = isset($this->value) && $this->value == $choice_key ? 'selected' : '';
                 $output .= "<option value='" . esc_attr($choice_key) . "' $selected>" . esc_html($choice_value) . "</option>";
@@ -574,9 +590,18 @@ class RowHandler
     {
         $values = '';
 
+        if (isset($this->acf_fields[$this->column_key]) && empty($this->acf_fields[$this->column_key]['taxonomy'])) {
+            $raw_values = maybe_unserialize($this->value);
+            $raw_values = is_array($raw_values) ? $raw_values : ($raw_values === '' ? [] : [$raw_values]);
+            $choices = !empty($this->acf_fields[$this->column_key]['choices']) ? $this->acf_fields[$this->column_key]['choices'] : [];
+            $labels = [];
+            foreach ($raw_values as $raw_value) $labels[] = isset($choices[$raw_value]) ? $choices[$raw_value] : $raw_value;
+            return '<span class="wcbe-td160" data-full-text="' . esc_attr(implode(', ', $labels)) . '">' . esc_html(implode(', ', $labels)) . '</span>';
+        }
+
         if (isset($this->acf_fields[$this->column_key]['taxonomy'])) {
             $taxonomy = esc_attr($this->acf_fields[$this->column_key]['taxonomy']);
-            $checked_ids = !is_array($this->value) ? unserialize($this->value) : $this->value;
+            $checked_ids = !is_array($this->value) ? maybe_unserialize($this->value) : $this->value;
             if (!empty($checked_ids)) {
                 $checked = get_terms([
                     'taxonomy' => $this->acf_taxonomy_name,

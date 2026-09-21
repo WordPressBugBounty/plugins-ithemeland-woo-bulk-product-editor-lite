@@ -76,6 +76,37 @@ class Product_Filter_Service
         ];
     }
 
+    public function filter_items_validate($filter_items)
+    {
+        if (empty($filter_items) || !is_array($filter_items)) {
+            return;
+        }
+
+        $errors = [];
+        foreach ($filter_items as $item) {
+            if (!isset($item['name'])) {
+                $errors[] = 'Field name is not available.';
+            }
+            if (!isset($item['filter_type'])) {
+                $errors[] = 'Field type is not available.';
+            }
+            if (!isset($item['operator'])) {
+                $errors[] = 'Filter operator is not available.';
+            }
+            if (!isset($item['value'])) {
+                $errors[] = 'Filter value is not available.';
+            }
+            if (!isset($this->field_methods[$item['filter_type']]) || !method_exists($this, $this->field_methods[$item['filter_type']])) {
+                $errors[] = 'Field type is not available.';
+            }
+        }
+
+        return [
+            'is_valid' => (empty($errors)),
+            'errors' => $errors
+        ];
+    }
+
     private function create_query($data, $args)
     {
         $this->query_args = $args;
@@ -224,59 +255,59 @@ class Product_Filter_Service
                 break;
             case 'regular_price':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_price'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_price'; //phpcs:ignore 
                 break;
             case 'sale_price':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_price'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_price'; //phpcs:ignore 
                 break;
             case 'sku':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_sku'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_sku'; //phpcs:ignore 
                 break;
             case 'manage_stock':
                 $this->query_args['orderby'] = 'meta_value';
-                $this->query_args['meta_key'] = '_manage_stock'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_manage_stock'; //phpcs:ignore 
                 break;
             case 'stock_quantity':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_stock'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_stock'; //phpcs:ignore 
                 break;
             case 'stock_status':
                 $this->query_args['orderby'] = 'meta_value';
-                $this->query_args['meta_key'] = '_stock_status'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_stock_status'; //phpcs:ignore 
                 break;
             case 'width':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_width'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_width'; //phpcs:ignore 
                 break;
             case 'height':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_height'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_height'; //phpcs:ignore 
                 break;
             case 'length':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_length'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_length'; //phpcs:ignore 
                 break;
             case 'weight':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_weight'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_weight'; //phpcs:ignore 
                 break;
             case 'review_count':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_wc_review_count'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_wc_review_count'; //phpcs:ignore 
                 break;
             case 'average_rating':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_wc_average_rating'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_wc_average_rating'; //phpcs:ignore 
                 break;
             case 'date_on_sale_from':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_sale_price_dates_from'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_sale_price_dates_from'; //phpcs:ignore 
                 break;
             case 'date_on_sale_to':
                 $this->query_args['orderby'] = 'meta_value_num';
-                $this->query_args['meta_key'] = '_sale_price_dates_to'; //phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+                $this->query_args['meta_key'] = '_sale_price_dates_to'; //phpcs:ignore 
                 break;
         }
     }
@@ -343,6 +374,7 @@ class Product_Filter_Service
             '_yith_wcbm_product_meta_-_start_date' => 'yith_wcbm_product_meta_start_date_filter',
             '_yith_wcbm_product_meta_-_end_date' => 'yith_wcbm_product_meta_end_date_filter',
             'custom_field' => 'product_custom_fields_filter',
+            'featured_image' => 'featured_image_filter',
         ];
     }
 
@@ -460,20 +492,12 @@ class Product_Filter_Service
 
     private function product_regular_price_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'product_regular_price',
-            'query_arg_key' => '_regular_price',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_regular_price', $item);
     }
 
     private function product_sale_price_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'product_sale_price',
-            'query_arg_key' => '_sale_price',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_sale_price', $item);
     }
 
     private function shipping_class_filter($item)
@@ -484,56 +508,32 @@ class Product_Filter_Service
 
     private function product_width_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'product_width',
-            'query_arg_key' => '_width',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_width', $item);
     }
 
     private function product_height_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'product_height',
-            'query_arg_key' => '_height',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_height', $item);
     }
 
     private function product_length_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'product_length',
-            'query_arg_key' => '_length',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_length', $item);
     }
 
     private function product_weight_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'product_weight',
-            'query_arg_key' => '_weight',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_weight', $item);
     }
 
     private function stock_quantity_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'stock_quantity',
-            'query_arg_key' => '_stock',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_stock', $item);
     }
 
     private function low_stock_amount_filter($item)
     {
-        $this->set_from_to_meta_query([
-            'filter_key' => 'low_stock_amount',
-            'query_arg_key' => '_low_stock_amount',
-            'value' => $item['value']
-        ]);
+        $this->set_numeric_meta_query('_low_stock_amount', $item);
     }
 
     private function manage_stock_filter($item)
@@ -1121,10 +1121,13 @@ class Product_Filter_Service
 
     private function product_custom_fields_filter($item)
     {
+        $acf_fields = \wcbel\classes\repositories\meta_field\ACF_Plugin_Fields::get_instance('product')->get_fields();
+        $acf_field = isset($acf_fields[$item['name']]) ? $acf_fields[$item['name']] : null;
         switch ($item['field_type']) {
             case 'date':
-                $from = (!empty($item['value']['from'])) ? gmdate('Y/m/d', strtotime($item['value']['from'])) : null;
-                $to = (!empty($item['value']['to'])) ? gmdate('Y/m/d', strtotime($item['value']['to'])) : null;
+                $date_format = is_array($acf_field) && isset($acf_field['type']) && $acf_field['type'] === 'date_picker' ? 'Ymd' : 'Y/m/d';
+                $from = (!empty($item['value']['from'])) ? gmdate($date_format, strtotime($item['value']['from'])) : null;
+                $to = (!empty($item['value']['to'])) ? gmdate($date_format, strtotime($item['value']['to'])) : null;
 
                 if (!empty($from) & !empty($to)) {
                     $value = [$from, $to];
@@ -1147,6 +1150,7 @@ class Product_Filter_Service
                 }
                 break;
             case 'time':
+            case 'time_picker':
                 $from = (!empty($item['value']['from'])) ? gmdate('H:i', strtotime($item['value']['from'])) : null;
                 $to = (!empty($item['value']['to'])) ? gmdate('H:i', strtotime($item['value']['to'])) : null;
 
@@ -1212,6 +1216,9 @@ class Product_Filter_Service
             case 'textinput':
             case 'password':
             case 'url':
+            case 'color_picker':
+            case 'editor':
+            case 'array':
                 if (!empty($item['value'])) {
                     $this->query_args['meta_query'][] = [
                         'key' => $item['name'],
@@ -1220,8 +1227,22 @@ class Product_Filter_Service
                     ];
                 }
                 break;
+            case 'date_time_picker':
+                $from = (!empty($item['value']['from'])) ? gmdate('Y-m-d H:i:s', strtotime($item['value']['from'])) : null;
+                $to = (!empty($item['value']['to'])) ? gmdate('Y-m-d H:i:s', strtotime($item['value']['to'])) : null;
+                if ($from || $to) {
+                    $this->query_args['meta_query'][] = ['key' => $item['name'], 'value' => ($from && $to) ? [$from, $to] : ($from ?: $to), 'compare' => ($from && $to) ? 'BETWEEN' : ($from ? '>=' : '<='), 'type' => 'DATETIME'];
+                }
+                break;
             case 'checkbox':
                 if (!empty($item['value'])) {
+                    if (is_array($acf_field) && isset($acf_field['type']) && $acf_field['type'] === 'true_false') {
+                        $truthy = $item['value'] === 'yes';
+                        $this->query_args['meta_query'][] = $truthy
+                            ? ['key' => $item['name'], 'value' => '1', 'compare' => '=']
+                            : ['relation' => 'OR', ['key' => $item['name'], 'value' => '0', 'compare' => '='], ['key' => $item['name'], 'compare' => 'NOT EXISTS']];
+                        break;
+                    }
                     switch ($item['value']) {
                         case 'yes':
                             $this->query_args['meta_query'][] = [
@@ -1256,7 +1277,94 @@ class Product_Filter_Service
                     ];
                 }
                 break;
+            case 'multi_select':
+                $values = isset($item['value']) ? (array) $item['value'] : [];
+                $values = array_values(array_filter($values, static function ($value) {
+                    return $value !== '' && $value !== null;
+                }));
+                if ($values) {
+                    $query = ['relation' => 'OR'];
+                    foreach ($values as $value) $query[] = ['key' => $item['name'], 'value' => '"' . $value . '"', 'compare' => 'LIKE'];
+                    $this->query_args['meta_query'][] = $query;
+                }
+                break;
         }
+    }
+
+    private function featured_image_filter($item)
+    {
+        $value = strtolower(trim((string) $item['value']));
+        $has_image = !in_array($value, ['', '0', 'false', 'no', 'none', 'missing', 'without'], true);
+        if (in_array($item['operator'], ['!=', 'not_in'], true)) {
+            $has_image = !$has_image;
+        }
+
+        if ($has_image) {
+            $this->query_args['meta_query'][] = [
+                'relation' => 'AND',
+                [
+                    'key' => '_thumbnail_id',
+                    'compare' => 'EXISTS',
+                ],
+                [
+                    'key' => '_thumbnail_id',
+                    'value' => 0,
+                    'compare' => '>',
+                    'type' => 'NUMERIC',
+                ],
+            ];
+            return;
+        }
+
+        $this->query_args['meta_query'][] = [
+            'relation' => 'OR',
+            [
+                'key' => '_thumbnail_id',
+                'compare' => 'NOT EXISTS',
+            ],
+            [
+                'key' => '_thumbnail_id',
+                'value' => ['', '0'],
+                'compare' => 'IN',
+            ],
+        ];
+    }
+
+    private function set_numeric_meta_query($meta_key, $item)
+    {
+        $operator = isset($item['operator']) ? $item['operator'] : '';
+        $value = isset($item['value']) ? $item['value'] : '';
+
+        if (in_array($operator, ['>', '>=', '<', '<=', '=', '!='], true)) {
+            if (is_array($value)) {
+                if (in_array($operator, ['>', '>='], true)) {
+                    $value = isset($value['from']) ? $value['from'] : '';
+                } elseif (in_array($operator, ['<', '<='], true)) {
+                    $value = isset($value['to']) ? $value['to'] : '';
+                } else {
+                    $value = isset($value['from']) && $value['from'] !== '' ? $value['from'] : (isset($value['to']) ? $value['to'] : '');
+                }
+            }
+
+            if ($value !== '' && is_numeric($value)) {
+                $this->query_args['meta_query'][] = [
+                    'key' => $meta_key,
+                    'value' => $value,
+                    'compare' => $operator,
+                    'type' => 'DECIMAL',
+                ];
+            }
+            return;
+        }
+
+        if (!is_array($value)) {
+            $value = ['from' => $value, 'to' => $value];
+        }
+
+        $this->set_from_to_meta_query([
+            'query_arg_key' => $meta_key,
+            'value' => $value,
+        ]);
     }
 
     private function get_tax_query($taxonomy, $terms, $operator = null, $field = null)
@@ -1344,6 +1452,7 @@ class Product_Filter_Service
                     'compare' => 'NOT IN'
                 ];
                 break;
+            case 'contains':
             case 'like':
                 $meta_query = [
                     'key' => $meta_key,
@@ -1351,6 +1460,14 @@ class Product_Filter_Service
                     'compare' => 'LIKE'
                 ];
                 break;
+            case 'not_contains':
+                $meta_query = [
+                    'key' => $meta_key,
+                    'value' => $value,
+                    'compare' => 'NOT LIKE'
+                ];
+                break;
+            case '=':
             case 'exact':
                 $meta_query = [
                     'key' => $meta_key,
@@ -1358,6 +1475,7 @@ class Product_Filter_Service
                     'compare' => '='
                 ];
                 break;
+            case '!=':
             case 'not':
                 $meta_query = [
                     'key' => $meta_key,
@@ -1365,6 +1483,7 @@ class Product_Filter_Service
                     'compare' => '!='
                 ];
                 break;
+            case 'starts_with':
             case 'begin':
                 $meta_query = [
                     'key' => $meta_key,
@@ -1372,6 +1491,7 @@ class Product_Filter_Service
                     'compare' => 'RLIKE'
                 ];
                 break;
+            case 'ends_with':
             case 'end':
                 $meta_query = [
                     'key' => $meta_key,

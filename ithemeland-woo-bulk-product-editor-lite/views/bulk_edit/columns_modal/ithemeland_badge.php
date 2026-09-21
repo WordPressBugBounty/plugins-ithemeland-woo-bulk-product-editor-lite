@@ -2,7 +2,8 @@
 if (!defined('ABSPATH')) exit; // Exit if accessed directly 
 ?>
 
-<?php $ithemeland_badge_plugin_url = (function_exists('iThemeland_WooCommerce_Advanced_Product_Labels_Pro')) ? plugins_url('/', iThemeland_WooCommerce_Advanced_Product_Labels_Pro()->file) : ''; ?>
+<?php $ithemeland_badge_plugin_url = (function_exists('iThemeland_WooCommerce_Advanced_Product_Labels_Pro')) ? plugins_url('/', iThemeland_WooCommerce_Advanced_Product_Labels_Pro()->file) : ''; //phpcs:ignore  
+?>
 <div class="wcbe-modal" id="wcbe-modal-ithemeland-badge">
     <div class="wcbe-modal-container">
         <div class="wcbe-modal-box wcbe-modal-box-lg">

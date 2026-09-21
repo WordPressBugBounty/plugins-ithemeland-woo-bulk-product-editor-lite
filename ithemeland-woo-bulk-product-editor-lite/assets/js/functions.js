@@ -730,6 +730,7 @@ function wcbeResetFilterForm() {
 }
 
 function wcbeResetFilters() {
+    window.wcbeAiFilterActive = false;
     wcbeResetFilterForm();
     wcbeResetQuickSearchForm();
     jQuery(".wcbe-reset-filter-form").closest("li").hide();
@@ -991,6 +992,10 @@ function wcbeCheckResetFilterButton() {
                 }
             }
         );
+    }
+
+    if (window.wcbeAiFilterActive === true) {
+        jQuery(".wcbe-reset-filter-form").closest("li").show();
     }
 }
 

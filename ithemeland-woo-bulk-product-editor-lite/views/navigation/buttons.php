@@ -342,6 +342,8 @@ if (!defined('ABSPATH')) exit; // Exit if accessed directly
     </a>
 </li>
 
+<?php do_action('wcbe_navigation_buttons_after_settings'); ?>
+
 <li style="display: none;">
     <a href="#" class="wcbe-tab-icon-red wcbe-reset-filter-form" title="<?php esc_attr_e('Reset Filter', 'ithemeland-woo-bulk-product-editor-lite'); ?>">
         <svg width="16px" height="16px" fill="#dc3545" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">

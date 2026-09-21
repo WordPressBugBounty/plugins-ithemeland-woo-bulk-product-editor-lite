@@ -233,14 +233,14 @@ class WCBEL_Ajax
         }
 
         if (isset($_POST['filter_data'])) {
-            $filter_data = Sanitizer::array($_POST['filter_data']); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            $filter_data = Sanitizer::array($_POST['filter_data']); //phpcs:ignore 
             $search_repository = Search::get_instance();
             $search_repository->update_current_data([
                 'last_filter_data' => $filter_data
             ]);
 
             if (!empty($_POST['option_values'])) {
-                $search_repository->update_option_values(Sanitizer::array($_POST['option_values'])); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                $search_repository->update_option_values(Sanitizer::array($_POST['option_values'])); //phpcs:ignore 
             }
 
             $current_page = !empty($_POST['current_page']) ? intval($_POST['current_page']) : 1;
@@ -2676,7 +2676,7 @@ class WCBEL_Ajax
 
         $acf = ACF_Plugin_Fields::get_instance('product');
         $acf_fields = $acf->get_fields();
-        if (empty($acf_fields[$field_name]) && !empty($acf_fields[$field_name]['taxonomy'])) {
+        if (empty($acf_fields[$field_name]) || empty($acf_fields[$field_name]['taxonomy'])) {
             $this->make_response([
                 'success' => false,
             ]);
@@ -2686,6 +2686,7 @@ class WCBEL_Ajax
         if (empty($product_terms)) {
             $product_terms = [];
         }
+        $product_terms = is_array($product_terms) ? $product_terms : [$product_terms];
         $terms = get_terms([
             'taxonomy' => $acf_fields[$field_name]['taxonomy'],
             'hide_empty' => false,
@@ -2695,7 +2696,7 @@ class WCBEL_Ajax
         $items = '';
         if (!empty($terms)) {
             foreach ($terms as $term_id => $term_label) {
-                $items .= '<option value="' . $term_id . '" ' . ((in_array($term_id, $product_terms)) ? 'selected' : '') . '>' . $term_label . '</option>';
+                $items .= '<option value="' . esc_attr($term_id) . '" ' . ((in_array((string) $term_id, array_map('strval', $product_terms), true)) ? 'selected' : '') . '>' . esc_html($term_label) . '</option>';
             }
         }
 

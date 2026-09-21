@@ -1,0 +1,395 @@
+:root {
+    --wcbel-bg: #f4f7fb;
+    --wcbel-panel: #fff;
+    --wcbel-text: #172033;
+    --wcbel-muted: #6b7280;
+    --wcbel-line: #e5e7eb;
+    --wcbel-purple: #6d3ce7;
+    --wcbel-green: #16a34a;
+    --wcbel-orange: #f97316;
+    --wcbel-red: #dc2626;
+    --wcbel-shadow: 0 10px 30px rgba(20, 30, 55, .08);
+    --wcbel-radius: 16px;
+}
+
+.wcbel-license-page * {
+    box-sizing: border-box
+}
+
+.wcbel-license-page body {
+    margin: 0;
+    background: var(--wcbel-bg);
+    color: var(--wcbel-text);
+    font: 14px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.wcbel-license-page a {
+    text-decoration: none;
+}
+
+.wcbel-license-page button {
+    font: inherit
+}
+
+.wcbel-license-page {
+    max-width: 100%;
+    margin: 20px auto 40px;
+    padding: 0 18px 0 0;
+}
+
+.wcbel-license-page .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.wcbel-license-shell {
+    background: #fff;
+    border: 1px solid var(--wcbel-line);
+    border-radius: 20px;
+    box-shadow: var(--wcbel-shadow);
+    padding: 26px
+}
+
+.wcbel-license-page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px
+}
+
+.wcbel-license-page-head h1 {
+    margin: 0;
+    font-size: 24px
+}
+
+.wcbel-license-page-head p {
+    margin: 3px 0 0;
+    color: var(--wcbel-muted)
+}
+
+.wcbel-license-product-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #ede9fe, #fff);
+    display: grid;
+    place-items: center;
+    border: 1px solid #ddd6fe;
+    font-size: 28px
+}
+
+.wcbel-license-card {
+    max-width: 100%;
+    background: #fff;
+    border: 1px solid var(--wcbel-line);
+    border-radius: var(--wcbel-radius);
+    padding: 20px;
+    box-shadow: 0 5px 18px rgba(20, 30, 55, .04);
+    margin-bottom: 16px
+}
+
+.wcbel-license-btn-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap
+}
+
+.wcbel-license-btn {
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px
+}
+
+.wcbel-license-btn-primary {
+    background: var(--wcbel-purple);
+    color: #fff
+}
+
+.wcbel-license-btn-success {
+    background: var(--wcbel-green);
+    color: #fff
+}
+
+.wcbel-license-btn-orange {
+    background: var(--wcbel-orange);
+    color: #fff
+}
+
+.wcbel-license-btn-outline {
+    background: #fff;
+    color: var(--wcbel-text);
+    border: 1px solid #d1d5db
+}
+
+.wcbel-license-btn-danger {
+    background: var(--wcbel-red);
+    color: #fff
+}
+
+.wcbel-license-btn-sm {
+    padding: 8px 12px;
+    font-size: 13px
+}
+
+h2,
+h3 {
+    margin-top: 0
+}
+
+.wcbel-license-comparison {
+    width: 100%;
+    border-collapse: collapse
+}
+
+.wcbel-license-comparison th,
+.wcbel-license-comparison td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--wcbel-line);
+    text-align: left
+}
+
+.wcbel-license-comparison th {
+    background: #f8fafc
+}
+
+.wcbel-license-yes {
+    color: var(--wcbel-green);
+    font-weight: 900
+}
+
+.wcbel-license-no {
+    color: var(--wcbel-red);
+    font-weight: 900
+}
+
+.wcbel-license-benefit-grid,
+.wcbel-license-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px
+}
+
+.wcbel-license-mini-card {
+    border: 1px solid var(--wcbel-line);
+    border-radius: 13px;
+    padding: 16px;
+    text-align: center;
+    background: #fff
+}
+
+.wcbel-license-mini-card .wcbel-license-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 10px;
+    background: #f3f4f6;
+    font-size: 21px
+}
+
+.wcbel-license-mini-card strong {
+    display: block;
+    font-size: 16px
+}
+
+.wcbel-license-mini-card span {
+    display: block;
+    color: var(--wcbel-muted);
+    font-size: 13px;
+    margin-top: 4px
+}
+
+.wcbel-license-demo-banner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px;
+    align-items: center;
+    background: linear-gradient(135deg, #faf5ff, #fff);
+    border-color: #ddd6fe
+}
+
+.wcbel-license-demo-visual {
+    width: 180px;
+    height: 96px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #d8b4fe, #6d3ce7);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 34px;
+    font-weight: 900
+}
+
+.wcbel-license-license-meta {
+    margin: 16px 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+    gap: 12px
+}
+
+.wcbel-license-license-meta div {
+    padding: 12px;
+    border: 1px solid #dcfce7;
+    border-radius: 10px;
+    background: #fff
+}
+
+.wcbel-license-license-meta small {
+    display: block;
+    color: var(--wcbel-muted)
+}
+
+.wcbel-license-license-meta strong {
+    display: block;
+    margin-top: 3px
+}
+
+.wcbel-license-stat-value {
+    font-size: 24px!important
+}
+
+.wcbel-license-positive-note {
+    margin-top: 14px;
+    padding: 13px 15px;
+    border-radius: 10px;
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    color: #5b21b6;
+    font-weight: 700
+}
+
+.wcbel-license-new-list {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 20px;
+    align-items: center
+}
+
+.wcbel-license-gift-art {
+    height: 130px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #ede9fe, #c4b5fd);
+    display: grid;
+    place-items: center;
+    font-size: 70px
+}
+
+.wcbel-license-new-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 9px
+}
+
+.wcbel-license-new-list li::before {
+    content: "✓";
+    color: var(--wcbel-green);
+    font-weight: 900;
+    margin-right: 8px
+}
+
+.wcbel-license-urgent {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    background: #fff7ed;
+    border-color: #fdba74
+}
+
+.wcbel-license-urgent-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: var(--wcbel-red);
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    font-weight: 900
+}
+
+.wcbel-license-urgent h3 {
+    margin: 0 0 4px
+}
+
+.wcbel-license-urgent p {
+    margin: 0;
+    color: #7c2d12
+}
+
+@media(max-width:760px) {
+    .wcbel-license-page {
+        padding: 0 10px
+    }
+    .wcbel-license-shell {
+        padding: 16px
+    }
+    .wcbel-license--wcbel-notice {
+        align-items: flex-start;
+        flex-wrap: wrap
+    }
+    .wcbel-license-notice-actions {
+        margin-left: 0
+    }
+    .wcbel-license-benefit-grid,
+    .wcbel-license-stats-grid {
+        grid-template-columns: repeat(2, 1fr)
+    }
+    .wcbel-license-demo-banner,
+    .wcbel-license-new-list,
+    .wcbel-license-urgent {
+        grid-template-columns: 1fr
+    }
+}
+
+.wcbel-license-hero-free {
+    display: grid;
+    grid-template-columns: 86px 1fr auto;
+    gap: 18px;
+    align-items: center
+}
+
+.wcbel-license-hero-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 36px;
+    background: #fff7ed
+}
+
+.wcbel-license-hero-free h2 {
+    margin: 0 0 6px
+}
+
+.wcbel-license-hero-free p {
+    margin: 0;
+    color: var(--wcbel-muted)
+}
+
+.wcbel-license-limit-box {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    color: #9a3412;
+    font-weight: 800
+}
+
+@media(max-width:760px) {
+    .wcbel-license-hero-free {
+        grid-template-columns: 1fr
+    }
+}

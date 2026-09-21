@@ -181,6 +181,11 @@ class Column extends Column_Main
                 if (isset($columns[$column_key]['fetch_type'])) {
                     $active_columns['fields'][$column_key]['fetch_type'] = $columns[$column_key]['fetch_type'];
                 }
+                if (isset($columns[$column_key]['options'])) {
+                    $active_columns['fields'][$column_key]['options'] = $columns[$column_key]['options'];
+                } else {
+                    unset($active_columns['fields'][$column_key]['options']);
+                }
             }
 
             $this->set_active_columns($active_columns['name'], $active_columns['fields']);
