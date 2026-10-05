@@ -32,6 +32,7 @@ class Woocommerce_Handler extends Product_Update_Handler
             return false;
         }
 
+        $updated = 0;
         foreach ($product_ids as $product_id) {
             $product = $this->product_repository->get_product(intval($product_id));
             if (!($product instanceof \WC_Product)) {
@@ -73,7 +74,9 @@ class Woocommerce_Handler extends Product_Update_Handler
 
             // set value with operator
             if (!empty($this->update_data['operator'])) {
-                $this->set_value_with_operator();
+                if (!$this->set_value_with_operator()) {
+                    continue;
+                }
             }
 
             // run update method
@@ -82,6 +85,7 @@ class Woocommerce_Handler extends Product_Update_Handler
                 if (method_exists(${$this->setter_method['object']}, 'save')) {
                     ${$this->setter_method['object']}->save();
                 }
+                $updated++;
             } catch (\Exception $e) {
                 continue;
             }
@@ -96,7 +100,7 @@ class Woocommerce_Handler extends Product_Update_Handler
             }
         }
 
-        return true;
+        return $updated > 0;
     }
 
     private function set_product_regular_price($value)
@@ -483,11 +487,30 @@ class Woocommerce_Handler extends Product_Update_Handler
         }
         if ($this->update_data['name'] == 'sale_price') {
             $this->update_data['regular_price'] = $this->product->get_regular_price();
+            $empty_sale_price_operations = [
+                'increase_by_value',
+                'decrease_by_value',
+                'increase_by_percent',
+                'decrease_by_percent',
+            ];
+            if ($this->current_field_value === '' && in_array($this->update_data['operator'], $empty_sale_price_operations, true)) {
+                return false;
+            }
+
+            $regular_price_operations = [
+                'decrease_by_value_from_regular',
+                'decrease_by_percent_from_regular',
+            ];
+            if ($this->update_data['regular_price'] === '' && in_array($this->update_data['operator'], $regular_price_operations, true)) {
+                return false;
+            }
         }
 
         if (isset($this->update_data['value']) && $this->update_data['value'] != '') {
             $this->update_data['value'] = Product_Helper::apply_operator($this->current_field_value, $this->update_data);
         }
+
+        return true;
     }
 
     private function save_history($data = [])

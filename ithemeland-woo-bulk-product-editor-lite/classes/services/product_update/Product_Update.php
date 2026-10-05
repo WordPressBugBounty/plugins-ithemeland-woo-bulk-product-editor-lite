@@ -92,7 +92,7 @@ class Product_Update implements Update_Interface
         }
 
         $performed = false;
-        $successful = true;
+        $completed = false;
 
         foreach ($this->product_data as $update_item) {
             $update_result = false;
@@ -103,7 +103,6 @@ class Product_Update implements Update_Interface
 
             // check items
             if (!$this->is_valid_update_item($update_item)) {
-                $successful = false;
                 continue;
             }
 
@@ -121,11 +120,12 @@ class Product_Update implements Update_Interface
                     $background_process->save();
                 }
                 $this->is_processing = true;
+                $completed = true;
             } else {
                 $instance = new $class();
                 $update_result = $instance->update($this->product_ids, $update_item);
-                if ($update_result === false) {
-                    $successful = false;
+                if ($update_result !== false) {
+                    $completed = true;
                 }
             }
         }
@@ -153,7 +153,12 @@ class Product_Update implements Update_Interface
             }
         }
 
-        return $this->is_processing === true || ($performed && $successful);
+        if (!$completed && !empty($this->history_id)) {
+            $this->delete_history($this->history_id);
+            $this->history_id = 0;
+        }
+
+        return $this->is_processing === true || ($performed && $completed);
     }
 
     private function is_valid_update_item($update_item)
@@ -161,7 +166,7 @@ class Product_Update implements Update_Interface
         if (
             empty($update_item['name'])
             || empty($update_item['type'])
-            || (empty($update_item['value']) && (
+            || ((!array_key_exists('value', $update_item) || $update_item['value'] === '' || $update_item['value'] === null) && (
                 (
                     !empty($update_item['operator'])
                     && !in_array($update_item['operator'], ['text_remove_duplicate', 'text_replace', 'number_clear', 'text_clear'])
