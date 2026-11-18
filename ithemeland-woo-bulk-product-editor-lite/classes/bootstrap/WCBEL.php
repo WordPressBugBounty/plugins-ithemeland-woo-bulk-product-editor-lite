@@ -44,6 +44,7 @@ class WCBEL
 
         AnalyticsTracker::register();
         Onboarding::register();
+        AiInterest::register();
         WCBEL_Ajax::register_callback();
         WCBEL_Post::register_callback();
         WCBEL_Meta_Fields::init();

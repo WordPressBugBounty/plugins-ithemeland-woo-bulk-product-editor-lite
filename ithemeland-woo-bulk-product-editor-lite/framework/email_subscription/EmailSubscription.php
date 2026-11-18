@@ -15,7 +15,7 @@ class EmailSubscription
         $this->service_url = "http://usage-tracking.ithemelandco.com/index.php";
     }
 
-    public function add_subscription($data)
+    public function add_subscription($data, $mark_sent = true)
     {
         $data['service'] = 'email_subscription';
         $data['active_plugins'] = ActivePlugins::get();
@@ -44,7 +44,9 @@ class EmailSubscription
         $body = wp_remote_retrieve_body($response);
         $response_data = json_decode($body, true);
 
-        self::sent($data['type']);
+        if ($mark_sent) {
+            self::sent($data['type']);
+        }
 
         return is_array($response_data) ? $response_data : [
             'success' => false,
